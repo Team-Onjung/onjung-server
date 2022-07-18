@@ -1,24 +1,28 @@
 package com.onjung.onjung.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Table(name = "User")
 @DynamicInsert
+@NoArgsConstructor
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(length = 20, nullable = false)
@@ -46,12 +50,10 @@ public class User {
 
 //    프로필 이미지
     @Column(name ="profile_img", length = 256)
-    @ColumnDefault("기본 이미지")
     private String profileImg;
 
 //    프로필 소개
     @Column(name ="profile_intro", length = 256)
-    @ColumnDefault("안녕하세요:)")
     private String profileIntro;
 
 //    전화번호
@@ -59,13 +61,11 @@ public class User {
     private String phone;
 
 //    휴면 계정 여부(DEFAULT = 0)
-    @ColumnDefault("0")
-    @Column(name ="is_active")
+    @Column(name ="is_active", columnDefinition = "boolean default false")
     private Boolean isActive;
 
 //    계정 정지 여부 (DEFAULT = 0)
-    @ColumnDefault("0")
-    @Column(name ="is_blocked")
+    @Column(name ="is_blocked", columnDefinition = "boolean default false")
     private Boolean isBlocked;
 
 //    사용자 닉네임 (UNIQUE)
@@ -74,19 +74,18 @@ public class User {
 
 //    생년월일
     @NotNull
-    private LocalDateTime birth;
+    private LocalDate birth;
 
 //    대학교
     @Column(length = 20, nullable = false)
     private String university;
 
 //    대학생 인증 여부
-    @ColumnDefault("0")
-    @Column(name ="is_university")
+    @Column(name ="is_university", columnDefinition = "boolean default false")
     private Boolean isUniversity;
 
     @Builder
-    public void saveUserEntitiy(
+    public User(
                 String email,
                 String uuid,
                 String location_id,
@@ -95,7 +94,7 @@ public class User {
                 String profileIntro,
                 String phone,
                 String username,
-                LocalDateTime birth,
+                LocalDate birth,
                 String university) {
 
         this.email = email;
