@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class FeedRequestDto {
 
-//    이후에 변경필요
+//    이후에 삭제 또는 변경필요
     User writer;
 
     String title;

@@ -16,28 +16,28 @@ public class ClientFeedService implements FeedService{
 
     private final ClientFeedRepository clientFeedRepository;
 
+    @Transactional
+    public void createFeed(FeedRequestDto feedRequestDto){
+        try {
+            ClientFeed feed = ClientFeed.builder()
+                    .writer(feedRequestDto.getWriter())
+                    .title(feedRequestDto.getTitle())
+                    .body(feedRequestDto.getBody())
+                    .itemId(feedRequestDto.getItemId())
+                    .build();
+
+            clientFeedRepository.save(feed);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     public List<ClientFeed> readAllFeed(){
         return clientFeedRepository.findAll();
     }
 
     public Optional<ClientFeed> readFeed(Long feedId){
         return clientFeedRepository.findById(feedId);
-    }
-
-    @Transactional
-    public void createFeed(FeedRequestDto feedRequestDto){
-        try {
-            ClientFeed feed = ClientFeed.builder()
-                            .writer(feedRequestDto.getWriter())
-                            .title(feedRequestDto.getTitle())
-                            .body(feedRequestDto.getBody())
-                            .itemId(feedRequestDto.getItemId())
-                            .build();
-
-            clientFeedRepository.save(feed);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
     }
 
     @Transactional

@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface FeedController {
 
+    void createFeed(FeedRequestDto requestDto);
+
     List readAllFeed();
 
     Optional readFeed(Long feedId);
-
-    void createFeed(FeedRequestDto requestDto);
 
     void updateFeed(Long feedId, FeedRequestDto requestDto);
 

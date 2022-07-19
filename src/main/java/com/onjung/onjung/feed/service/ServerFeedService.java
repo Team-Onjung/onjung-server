@@ -16,15 +16,6 @@ public class ServerFeedService implements FeedService{
 
     private final ServerFeedRepository serverFeedRepository;
 
-    public List<ServerFeed> readAllFeed(){
-        return serverFeedRepository.findAll();
-    }
-
-    public Optional<ServerFeed> readFeed(Long feedId){
-
-        return serverFeedRepository.findById(feedId);
-    }
-
     @Transactional
     public void createFeed(FeedRequestDto feedRequestDto){
         try {
@@ -39,6 +30,15 @@ public class ServerFeedService implements FeedService{
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public List<ServerFeed> readAllFeed(){
+        return serverFeedRepository.findAll();
+    }
+
+    public Optional<ServerFeed> readFeed(Long feedId){
+
+        return serverFeedRepository.findById(feedId);
     }
 
     public void patchFeed(Long feedId, FeedRequestDto requestDto){

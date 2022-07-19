@@ -17,6 +17,15 @@ public class ClientFeedController implements FeedController{
 
     private final ClientFeedService feedService;
 
+    @PostMapping("/feed")
+    public void createFeed(@Valid @RequestBody FeedRequestDto requestDto) {
+        try {
+            feedService.createFeed(requestDto);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     @GetMapping("/feed")
     public List<ClientFeed> readAllFeed(){
 
@@ -27,15 +36,6 @@ public class ClientFeedController implements FeedController{
     public Optional<ClientFeed> readFeed(@PathVariable("{feedId}") Long feedId){
 
         return feedService.readFeed(feedId);
-    }
-
-    @PostMapping("/feed")
-    public void createFeed(@Valid @RequestBody FeedRequestDto requestDto) {
-        try {
-            feedService.createFeed(requestDto);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
     }
 
     @PatchMapping("/feed/{feedId}")

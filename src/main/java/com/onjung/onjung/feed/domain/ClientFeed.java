@@ -54,7 +54,7 @@ public class ClientFeed implements Feed{
     //    수령 안됨(가능) / 수령 대기(예약) / 수령 중(배송 중)/ 수령 취소/ 수령 완료
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private Status status=Status.STATUS_POSSIBLE;
 
     @Builder
     public ClientFeed(
