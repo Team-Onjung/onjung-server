@@ -1,18 +1,18 @@
 package com.onjung.onjung.user.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.onjung.onjung.feed.domain.ClientFeed;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,6 +25,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToMany(mappedBy = "writer")
+    private List<ClientFeed> clientFeeds;
+
     @Column(length = 20, nullable = false)
     private String email;
 
@@ -32,7 +35,7 @@ public class User {
     @Column(length = 32, nullable = false)
     private String uuid;
 
-//    주소 Table에서 입력한 후 받아오는 값
+//    주소 Table에서 입력한 후 받아오는 값, 이후 수정 필요
     @NotNull
     private String location_id;
 
