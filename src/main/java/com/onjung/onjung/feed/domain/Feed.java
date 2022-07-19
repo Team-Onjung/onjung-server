@@ -2,8 +2,8 @@ package com.onjung.onjung.feed.domain;
 
 public interface Feed {
 
-    public abstract void addCnt();
+    void addCnt();
 
-    public abstract void changeStatus(Status status);
+    void changeStatus(Status status);
 
 }

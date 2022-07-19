@@ -1,48 +1,19 @@
 package com.onjung.onjung.feed.service;
 
-import com.onjung.onjung.feed.domain.ClientFeed;
-import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
-import com.onjung.onjung.feed.repository.FeedRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-@Service
-@RequiredArgsConstructor
-public class FeedService {
+import java.util.List;
+import java.util.Optional;
 
-    private final FeedRepository feedRepository;
+public interface FeedService {
 
-    @Transactional
-    public void saveClientFeed(FeedRequestDto feedRequestDto){
-        try {
-            ClientFeed feed = ClientFeed.builder()
-                            .writer(feedRequestDto.getWriter())
-                            .title(feedRequestDto.getTitle())
-                            .body(feedRequestDto.getBody())
-                            .itemId(feedRequestDto.getItemId())
-                            .build();
+    List readAllFeed();
 
-            feedRepository.save(feed);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+    Optional readFeed(Long feedId);
 
-    @Transactional
-    public void saveServerFeed(FeedRequestDto feedRequestDto){
-        try {
-            ServerFeed feed = ServerFeed.builder()
-                    .writer(feedRequestDto.getWriter())
-                    .title(feedRequestDto.getTitle())
-                    .body(feedRequestDto.getBody())
-                    .itemId(feedRequestDto.getItemId())
-                    .build();
+    void createFeed(FeedRequestDto feedRequestDto);
 
-            feedRepository.save(feed);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+    void patchFeed(Long feedId, FeedRequestDto requestDto);
+
+    void deleteFeed(Long feedId);
 }

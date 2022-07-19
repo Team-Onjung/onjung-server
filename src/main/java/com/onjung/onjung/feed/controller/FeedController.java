@@ -1,41 +1,19 @@
 package com.onjung.onjung.feed.controller;
 
 import com.onjung.onjung.feed.dto.FeedRequestDto;
-import com.onjung.onjung.feed.service.FeedService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 
-@RestController
-@RequiredArgsConstructor
-@RequestMapping("/feed")
-public class FeedController {
+public interface FeedController {
 
-    private final FeedService feedService;
+    List readAllFeed();
 
-    @PostMapping("/client")
-    public void createClientFeed(@Valid @RequestBody FeedRequestDto requestDto) {
-        try {
-            feedService.saveClientFeed(requestDto);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+    Optional readFeed(Long feedId);
 
-        return;
-    }
+    void createFeed(FeedRequestDto requestDto);
 
-    @PostMapping("/server")
-    public void createServerFeed(@Valid @RequestBody FeedRequestDto requestDto) {
-        try {
-            feedService.saveServerFeed(requestDto);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+    void updateFeed(Long feedId, FeedRequestDto requestDto);
 
-        return;
-    }
+    void deleteFeed (Long feedId);
 }

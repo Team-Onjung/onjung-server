@@ -4,6 +4,7 @@ import com.onjung.onjung.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "ClientFeed")
 @DynamicInsert
 @NoArgsConstructor
@@ -46,7 +48,7 @@ public class ClientFeed implements Feed{
     private String body;
 
     //    방문자 수
-    @Column(columnDefinition = "long default 1L")
+    @Column(columnDefinition = "bigint default 0")
     private long visitedCnt;
 
     //    수령 안됨(가능) / 수령 대기(예약) / 수령 중(배송 중)/ 수령 취소/ 수령 완료
