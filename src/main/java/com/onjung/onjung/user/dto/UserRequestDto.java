@@ -1,18 +1,13 @@
 package com.onjung.onjung.user.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 public class UserRequestDto {
 
-    @NotBlank
     String email;
 
     String uuid;
