@@ -22,7 +22,7 @@ public class UserService {
             User user= User.builder()
                     .email(userRequestDto.getEmail())
                     .uuid(userRequestDto.getUuid())
-                    .location_id(userRequestDto.getLocation_id())
+                    .locationId(userRequestDto.getLocation_id())
                     .provider(userRequestDto.getProvider())
                     .profileImg(userRequestDto.getProfileImg())
                     .profileIntro(userRequestDto.getProfileIntro())

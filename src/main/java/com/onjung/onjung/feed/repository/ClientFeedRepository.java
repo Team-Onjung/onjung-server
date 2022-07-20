@@ -10,5 +10,7 @@ import java.util.Optional;
 @Repository
 public interface ClientFeedRepository extends JpaRepository<ClientFeed,Long> {
 
+    Optional<ClientFeed> findById(Long id);
+
     Optional<ClientFeed> findByTitle(String title);
 }

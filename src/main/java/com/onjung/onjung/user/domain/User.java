@@ -1,6 +1,5 @@
 package com.onjung.onjung.user.domain;
 
-import com.onjung.onjung.feed.domain.ClientFeed;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -25,9 +23,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "writer")
-    private List<ClientFeed> clientFeeds;
-
     @Column(length = 20, nullable = false)
     private String email;
 
@@ -37,7 +32,7 @@ public class User {
 
 //    주소 Table에서 입력한 후 받아오는 값, 이후 수정 필요
     @NotNull
-    private String location_id;
+    private String locationId;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -91,7 +86,7 @@ public class User {
     public User(
                 String email,
                 String uuid,
-                String location_id,
+                String locationId,
                 String provider,
                 String profileImg,
                 String profileIntro,
@@ -102,7 +97,7 @@ public class User {
 
         this.email = email;
         this.uuid = uuid;
-        this.location_id = location_id;
+        this.locationId = locationId;
         this.provider = provider;
         this.profileImg = profileImg;
         this.profileIntro = profileIntro;
