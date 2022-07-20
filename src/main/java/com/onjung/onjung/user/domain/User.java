@@ -23,6 +23,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //    사용자 닉네임 (UNIQUE)
+    @Column(length = 20, unique = true, nullable = false)
+    private String username;
+
     @Column(length = 20, nullable = false)
     private String email;
 
@@ -58,17 +62,13 @@ public class User {
     @Column(length = 30, nullable = false)
     private String phone;
 
-//    휴면 계정 여부(DEFAULT = 0)
-    @Column(name ="is_active", columnDefinition = "boolean default false")
+//    휴면 계정 여부(DEFAULT = 1)
+    @Column(name ="is_active")
     private Boolean isActive;
 
 //    계정 정지 여부 (DEFAULT = 0)
-    @Column(name ="is_blocked", columnDefinition = "boolean default false")
+    @Column(name ="is_blocked")
     private Boolean isBlocked;
-
-//    사용자 닉네임 (UNIQUE)
-    @Column(length = 20, unique = true, nullable = false)
-    private String username;
 
 //    생년월일
     @NotNull
@@ -78,9 +78,16 @@ public class User {
     @Column(length = 20, nullable = false)
     private String university;
 
-//    대학생 인증 여부
-    @Column(name ="is_university", columnDefinition = "boolean default false")
+//    대학생 인증 여부 (DEFAULT = 0)
+    @Column(name ="is_university")
     private Boolean isUniversity;
+
+    @PrePersist
+    public void setDefault(){
+        this.isActive = this.isActive == null ? true : this.isActive;
+        this.isBlocked = this.isBlocked == null ? false : this.isBlocked;
+        this.isUniversity = this.isUniversity == null ? false : this.isUniversity;
+    }
 
     @Builder
     public User(

@@ -40,7 +40,7 @@ public class UserService {
     }
 
     public void validateDuplicateMember(User user){
-        Optional<User> findMember = userRepository.findByEmail(user.getEmail());
+        Optional<User> findMember = userRepository.findByUsername(user.getUsername());
         if (findMember.isPresent()){
             throw new DuplicatedUserException();
         }
