@@ -4,6 +4,8 @@ import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.service.ServerFeedService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,12 +20,13 @@ public class SeverFeedController implements FeedController{
     private final ServerFeedService feedService;
 
     @PostMapping("/feed")
-    public void createFeed(@Valid @RequestBody FeedRequestDto requestDto) {
+    public ResponseEntity createFeed(@Valid @RequestBody FeedRequestDto requestDto) {
         try {
             feedService.createFeed(requestDto);
         }catch (Exception e){
-            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("requested data is wrong");
         }
+        return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
     @GetMapping("/feed")

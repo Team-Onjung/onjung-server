@@ -2,10 +2,14 @@ package com.onjung.onjung.feed.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onjung.onjung.feed.domain.ClientFeed;
+import com.onjung.onjung.feed.domain.Status;
+import com.onjung.onjung.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,34 +36,36 @@ public class ClientFeedControllerTest {
     @BeforeEach
     void createFeed() throws Exception {
 
-//        Map<String, Object> data = new HashMap<>();
-//
-//        data.put("email","email");
-//        data.put("uuid", "uuid");
-//        data.put("location_id","location_id");
-//        data.put("provider","provider");
-//        data.put("profileImg","profileImg");
-//        data.put("profileIntro","profileIntro");
-//        data.put("phone","phone");
-//        data.put("username","username");
-//        data.put("birth","2022-07-18");
-//        data.put("university","university");
-//
-//        ObjectMapper objectMapper=new ObjectMapper();
-////        System.out.println("this.mockMvc = " + mockMvc);
-//
-//        ResultActions resultActions=mockMvc.perform(post("/client/feed")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(data)))
-//                .andExpect(status().isOk());
+        Map<String, Object> data = new HashMap<>();
+
+        User testUser=new User();
+
+        data.put("title","title");
+        data.put("body", "body");
+        data.put("itemId","itemId");
+
+        ObjectMapper objectMapper=new ObjectMapper();
+
+        //성공 로직
+        ResultActions SuccessedResultActions=mockMvc.perform(post("/client/feed")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(data)))
+                .andExpect(status().isOk());
+
+        //실패로직
+        data.remove("title");
+        ResultActions FailedResultActions=mockMvc.perform(post("/client/feed")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(data)))
+                .andExpect(status().isBadRequest());
     }
 
-//    @Test
-//    void readAllFeed() throws Exception {
-//        ResultActions resultActions=mockMvc.perform(get("/client/feed")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                        .andExpect(status().isOk());
-//    }
+    @Test
+    void readAllFeed() throws Exception {
+        ResultActions resultActions=mockMvc.perform(get("/client/feed")
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk());
+    }
 
 //    @Test
 //    void readFeed() {

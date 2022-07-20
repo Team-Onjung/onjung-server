@@ -23,7 +23,7 @@ public class ClientFeed implements Feed{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-<span class="nc" id="L26">    private Long id;</span>
+<span class="fc" id="L26">    private Long id;</span>
 
     @ManyToOne
     @JoinColumn(name = &quot;writer_id&quot;)
@@ -31,7 +31,7 @@ public class ClientFeed implements Feed{
 
     //이후 아이템 완성시 수정필요
     @NotNull
-<span class="nc" id="L34">    private String itemId;</span>
+<span class="fc" id="L34">    private String itemId;</span>
 
     @CreationTimestamp
     @Column(name = &quot;created_at&quot;)
@@ -45,37 +45,41 @@ public class ClientFeed implements Feed{
 <span class="nc" id="L45">    private String title;</span>
 
     @NotNull
-<span class="nc" id="L48">    private String body;</span>
+<span class="fc" id="L48">    private String body;</span>
 
     //    방문자 수
     @Column(columnDefinition = &quot;bigint default 0&quot;)
 <span class="nc" id="L52">    private long visitedCnt;</span>
 
     //    수령 안됨(가능) / 수령 대기(예약) / 수령 중(배송 중)/ 수령 취소/ 수령 완료
-<span class="pc" id="L55">    @NotNull</span>
+    @NotNull
     @Enumerated(EnumType.STRING)
-<span class="nc" id="L57">    private Status status=Status.STATUS_POSSIBLE;</span>
+<span class="fc" id="L57">    private Status status;</span>
 
-<span class="nc" id="L59">    @Builder</span>
+    @PrePersist
+    public void setDefault(){
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        this.status = this.status == null ? Status.STATUS_POSSIBLE : this.status;</span>
+<span class="fc" id="L62">    }</span>
+
+<span class="pc" id="L64">    @Builder</span>
     public ClientFeed(
                       User writer,
                       String title,
                       String body,
                       String itemId,
-<span class="nc" id="L65">                      Status status) {</span>
-<span class="nc" id="L66">        this.writer = writer;</span>
-<span class="nc" id="L67">        this.itemId = itemId;</span>
-<span class="nc" id="L68">        this.title = title;</span>
-<span class="nc" id="L69">        this.body = body;</span>
-<span class="nc" id="L70">        this.status = status;</span>
-<span class="nc" id="L71">    }</span>
+<span class="fc" id="L70">                      Status status) {</span>
+<span class="fc" id="L71">        this.writer = writer;</span>
+<span class="fc" id="L72">        this.itemId = itemId;</span>
+<span class="fc" id="L73">        this.title = title;</span>
+<span class="fc" id="L74">        this.body = body;</span>
+<span class="fc" id="L75">    }</span>
 
     public void addCnt(){
-<span class="nc" id="L74">        this.visitedCnt+=1;</span>
-<span class="nc" id="L75">    }</span>
+<span class="nc" id="L78">        this.visitedCnt+=1;</span>
+<span class="nc" id="L79">    }</span>
 
     public void changeStatus(Status status){
-<span class="nc" id="L78">        this.status=status;</span>
-<span class="nc" id="L79">    }</span>
+<span class="nc" id="L82">        this.status=status;</span>
+<span class="nc" id="L83">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

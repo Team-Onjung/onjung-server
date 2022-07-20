@@ -7,22 +7,18 @@ import lombok.Getter;
 @Getter
 public class FeedRequestDto {
 
-//    이후에 삭제 또는 변경필요
-<span class="nc" id="L11">    User writer;</span>
+<span class="fc" id="L10">    String title;</span>
 
-<span class="nc" id="L13">    String title;</span>
-
-<span class="nc" id="L15">    String body;</span>
+<span class="fc" id="L12">    String body;</span>
 
 //    이후에 변경필요
-<span class="nc" id="L18">    String itemId;</span>
+<span class="fc" id="L15">    String itemId;</span>
 
-<span class="nc" id="L20">    @Builder</span>
-<span class="nc" id="L21">    public FeedRequestDto(User writer, String title, String body, String itemId) {</span>
-<span class="nc" id="L22">        this.writer = writer;</span>
-<span class="nc" id="L23">        this.title = title;</span>
-<span class="nc" id="L24">        this.body = body;</span>
-<span class="nc" id="L25">        this.itemId = itemId;</span>
-<span class="nc" id="L26">    }</span>
+<span class="nc" id="L17">    @Builder</span>
+<span class="fc" id="L18">    public FeedRequestDto(String title, String body, String itemId) {</span>
+<span class="fc" id="L19">        this.title = title;</span>
+<span class="fc" id="L20">        this.body = body;</span>
+<span class="fc" id="L21">        this.itemId = itemId;</span>
+<span class="fc" id="L22">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

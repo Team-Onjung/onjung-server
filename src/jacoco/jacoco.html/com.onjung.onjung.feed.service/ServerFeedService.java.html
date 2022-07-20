@@ -3,7 +3,11 @@
 import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.repository.ServerFeedRepository;
+import com.onjung.onjung.user.domain.User;
+import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,61 +15,60 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-<span class="nc" id="L14">@RequiredArgsConstructor</span>
+<span class="fc" id="L18">@RequiredArgsConstructor</span>
 public class ServerFeedService implements FeedService{
 
     private final ServerFeedRepository serverFeedRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public void createFeed(FeedRequestDto feedRequestDto){
+        //임시로 유저 객체 저장, 이후 회원가입한 회원에 한해 저장하는걸로 수정.
+<span class="nc" id="L27">        Optional&lt;User&gt; requestUser=userRepository.findByUsername(&quot;username&quot;);</span>
         try {
-<span class="nc" id="L22">            ServerFeed feed = ServerFeed.builder()</span>
-<span class="nc" id="L23">                    .writer(feedRequestDto.getWriter())</span>
-<span class="nc" id="L24">                    .title(feedRequestDto.getTitle())</span>
-<span class="nc" id="L25">                    .body(feedRequestDto.getBody())</span>
-<span class="nc" id="L26">                    .itemId(feedRequestDto.getItemId())</span>
-<span class="nc" id="L27">                    .build();</span>
-
-<span class="nc" id="L29">            serverFeedRepository.save(feed);</span>
-<span class="nc" id="L30">        }catch (Exception e){</span>
-<span class="nc" id="L31">            e.printStackTrace();</span>
-<span class="nc" id="L32">        }</span>
-<span class="nc" id="L33">    }</span>
+<span class="nc" id="L29">            ServerFeed feed = ServerFeed.builder()</span>
+<span class="nc" id="L30">                    .writer(requestUser.get())</span>
+<span class="nc" id="L31">                    .title(feedRequestDto.getTitle())</span>
+<span class="nc" id="L32">                    .body(feedRequestDto.getBody())</span>
+<span class="nc" id="L33">                    .itemId(feedRequestDto.getItemId())</span>
+<span class="nc" id="L34">                    .build();</span>
+<span class="nc" id="L35">            serverFeedRepository.save(feed);</span>
+<span class="nc" id="L36">        }catch (Exception e){</span>
+<span class="nc" id="L37">            e.printStackTrace();</span>
+<span class="nc" id="L38">        }</span>
+<span class="nc" id="L39">    }</span>
 
     public List&lt;ServerFeed&gt; readAllFeed(){
-<span class="nc" id="L36">        return serverFeedRepository.findAll();</span>
+<span class="nc" id="L42">        return serverFeedRepository.findAll();</span>
     }
 
     public Optional&lt;ServerFeed&gt; readFeed(Long feedId){
 
-<span class="nc" id="L41">        return serverFeedRepository.findById(feedId);</span>
+<span class="nc" id="L47">        return serverFeedRepository.findById(feedId);</span>
     }
 
     public void patchFeed(Long feedId, FeedRequestDto requestDto){
-<span class="nc" id="L45">        final Optional&lt;ServerFeed&gt; serverFeed= serverFeedRepository.findById(feedId);</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">        if(serverFeed.isPresent()){</span>
-<span class="nc bnc" id="L47" title="All 2 branches missed.">            if(requestDto.getWriter()!=null){</span>
-<span class="nc" id="L48">                serverFeed.get().setWriter(requestDto.getWriter());</span>
+<span class="nc" id="L51">        final Optional&lt;ServerFeed&gt; serverFeed= serverFeedRepository.findById(feedId);</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if(serverFeed.isPresent()){</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">            if(requestDto.getTitle()!=null){</span>
+<span class="nc" id="L54">                serverFeed.get().setTitle(requestDto.getTitle());</span>
             }
-<span class="nc bnc" id="L50" title="All 2 branches missed.">            if(requestDto.getTitle()!=null){</span>
-<span class="nc" id="L51">                serverFeed.get().setTitle(requestDto.getTitle());</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">            if(requestDto.getBody()!=null){</span>
+<span class="nc" id="L57">                serverFeed.get().setBody(requestDto.getBody());</span>
             }
-<span class="nc bnc" id="L53" title="All 2 branches missed.">            if(requestDto.getBody()!=null){</span>
-<span class="nc" id="L54">                serverFeed.get().setBody(requestDto.getBody());</span>
-            }
-<span class="nc bnc" id="L56" title="All 2 branches missed.">            if(requestDto.getItemId()!=null){</span>
-<span class="nc" id="L57">                serverFeed.get().setItemId(requestDto.getItemId());</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">            if(requestDto.getItemId()!=null){</span>
+<span class="nc" id="L60">                serverFeed.get().setItemId(requestDto.getItemId());</span>
             }
         }
-<span class="nc" id="L60">        serverFeedRepository.save(serverFeed.get());</span>
-<span class="nc" id="L61">        return;</span>
+<span class="nc" id="L63">        serverFeedRepository.save(serverFeed.get());</span>
+<span class="nc" id="L64">        return;</span>
     }
 
     public void deleteFeed(Long feedId){
-<span class="nc" id="L65">        Optional&lt;ServerFeed&gt; serverFeed=serverFeedRepository.findById(feedId);</span>
-<span class="nc bnc" id="L66" title="All 2 branches missed.">        if(serverFeed.isPresent()){</span>
-<span class="nc" id="L67">            serverFeedRepository.delete(serverFeed.get());</span>
+<span class="nc" id="L68">        Optional&lt;ServerFeed&gt; serverFeed=serverFeedRepository.findById(feedId);</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        if(serverFeed.isPresent()){</span>
+<span class="nc" id="L70">            serverFeedRepository.delete(serverFeed.get());</span>
         }
-<span class="nc" id="L69">    }</span>
+<span class="nc" id="L72">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

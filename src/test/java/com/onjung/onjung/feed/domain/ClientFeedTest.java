@@ -16,7 +16,6 @@ public class ClientFeedTest {
                 .body("테스트 코드입니다.")
                 .writer(testUser)
                 .itemId("테스트 코드입니다.")
-                .status(Status.STATUS_POSSIBLE)
                 .build();
 
         Assertions.assertEquals(clientFeed.getTitle(),"테스트 코드입니다.");
