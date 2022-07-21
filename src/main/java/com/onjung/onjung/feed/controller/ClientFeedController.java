@@ -4,6 +4,9 @@ import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.service.ClientFeedService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,34 +27,40 @@ public class ClientFeedController implements FeedController{
         try {
             feedService.createFeed(requestDto);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("requested data is wrong");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exception raised in ClientFeedController/createFeed");
         }
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
     @GetMapping("/feed")
     public List<ClientFeed> readAllFeed(){
-
         return feedService.readAllFeed();
     }
 
     @GetMapping("/feed/{feedId}")
-    public Optional<ClientFeed> readFeed(@PathVariable("feedId") Long feedId){
-//        System.out.println("feedId = " + feedId);
-
-        return feedService.readFeed(feedId);
-    }
-
-    @PatchMapping("/feed/{feedId}")
-    public void updateFeed(@PathVariable("feedId") Long feedId, @Valid @RequestBody FeedRequestDto requestDto) {
+    @Cacheable(value = "clientFeedCaching", key = "#feedId")
+    public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) {
         try {
-            feedService.patchFeed(feedId, requestDto);
-        }catch (Exception e){
-            e.printStackTrace();
+            Optional<ClientFeed> feed = feedService.readFeed(feedId);
+            return ResponseEntity.status(HttpStatus.OK).body(feed);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exception raised in ClientFeedController/readFeed");
         }
     }
 
+    @PatchMapping("/feed/{feedId}")
+    @CachePut(value = "clientFeedCaching", key = "#feedId")
+    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @Valid @RequestBody FeedRequestDto requestDto) {
+        try {
+            feedService.patchFeed(feedId, requestDto);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exception raised in ClientFeedController/updateFeed");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("ok");
+    }
+
     @DeleteMapping("/feed/{feedId}")
+    @CacheEvict(value = "clientFeedCaching", key = "#feedId")
     public void deleteFeed (@PathVariable("feedId") Long feedId){
         feedService.deleteFeed(feedId);
     }

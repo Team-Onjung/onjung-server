@@ -12,9 +12,9 @@ public interface FeedController {
 
     List readAllFeed();
 
-    Optional readFeed(Long feedId);
+    ResponseEntity readFeed(Long feedId);
 
-    void updateFeed(Long feedId, FeedRequestDto requestDto);
+    ResponseEntity updateFeed(Long feedId, FeedRequestDto requestDto);
 
     void deleteFeed (Long feedId);
 }

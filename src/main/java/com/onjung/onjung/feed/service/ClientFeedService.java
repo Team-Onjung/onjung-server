@@ -1,13 +1,13 @@
 package com.onjung.onjung.feed.service;
 
+import com.onjung.onjung.exception.DataNotFoundException;
+import com.onjung.onjung.exception.InvalidParameterException;
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,9 +53,8 @@ public class ClientFeedService implements FeedService{
                     .build();
 
             clientFeedRepository.save(feed);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new Exception("저장이 실패했습니다.");
+        }catch (IllegalArgumentException e){
+            throw new InvalidParameterException();
         }
     }
 
@@ -64,25 +63,36 @@ public class ClientFeedService implements FeedService{
     }
 
     public Optional<ClientFeed> readFeed(Long feedId){
-        return clientFeedRepository.findById(feedId);
+        Optional<ClientFeed> feed=clientFeedRepository.findById(feedId);
+        if (feed.isPresent()){
+            return feed;
+        }else {
+            throw new DataNotFoundException();
+        }
     }
 
     @Transactional
     public void patchFeed(Long feedId, FeedRequestDto requestDto){
         final Optional<ClientFeed> clientFeed= clientFeedRepository.findById(feedId);
-        if(clientFeed.isPresent()){
-            if(requestDto.getTitle()!=null){
-                clientFeed.get().setTitle(requestDto.getTitle());
+        try {
+            if(clientFeed.isPresent()){
+                if(requestDto.getTitle()!=null){
+                    clientFeed.get().setTitle(requestDto.getTitle());
+                }
+                if(requestDto.getBody()!=null){
+                    clientFeed.get().setBody(requestDto.getBody());
+                }
+                if(requestDto.getItemId()!=null){
+                    clientFeed.get().setItemId(requestDto.getItemId());
+                }
+                clientFeedRepository.save(clientFeed.get());
+            }else {
+                throw new DataNotFoundException();
             }
-            if(requestDto.getBody()!=null){
-                clientFeed.get().setBody(requestDto.getBody());
-            }
-            if(requestDto.getItemId()!=null){
-                clientFeed.get().setItemId(requestDto.getItemId());
-            }
+
+        }catch (IllegalArgumentException e){
+            throw new InvalidParameterException();
         }
-        clientFeedRepository.save(clientFeed.get());
-        return;
     }
 
     public void deleteFeed(Long feedId){
