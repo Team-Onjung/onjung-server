@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-<span class="nc" id="L18">@Setter</span>
+<span class="pc" id="L18">@Setter</span>
 @Table(name = &quot;ClientFeed&quot;)
 @DynamicInsert
 <span class="fc" id="L21">@NoArgsConstructor</span>
@@ -27,7 +27,7 @@ public class ClientFeed implements Feed{
 
     @ManyToOne
     @JoinColumn(name = &quot;writer_id&quot;)
-<span class="nc" id="L30">    private User writer;</span>
+<span class="fc" id="L30">    private User writer;</span>
 
     //이후 아이템 완성시 수정필요
     @NotNull
@@ -35,21 +35,21 @@ public class ClientFeed implements Feed{
 
     @CreationTimestamp
     @Column(name = &quot;created_at&quot;)
-<span class="nc" id="L38">    private LocalDateTime createdAt;</span>
+<span class="fc" id="L38">    private LocalDateTime createdAt;</span>
 
     @UpdateTimestamp
     @Column(name = &quot;updated_at&quot;)
-<span class="nc" id="L42">    private LocalDateTime updatedAt;</span>
+<span class="fc" id="L42">    private LocalDateTime updatedAt;</span>
 
     @Column(length = 32, nullable = false)
-<span class="nc" id="L45">    private String title;</span>
+<span class="fc" id="L45">    private String title;</span>
 
     @NotNull
 <span class="fc" id="L48">    private String body;</span>
 
     //    방문자 수
     @Column(columnDefinition = &quot;bigint default 0&quot;)
-<span class="nc" id="L52">    private long visitedCnt;</span>
+<span class="fc" id="L52">    private long visitedCnt;</span>
 
     //    수령 안됨(가능) / 수령 대기(예약) / 수령 중(배송 중)/ 수령 취소/ 수령 완료
     @NotNull
@@ -75,11 +75,11 @@ public class ClientFeed implements Feed{
 <span class="fc" id="L75">    }</span>
 
     public void addCnt(){
-<span class="nc" id="L78">        this.visitedCnt+=1;</span>
-<span class="nc" id="L79">    }</span>
+<span class="fc" id="L78">        this.visitedCnt+=1;</span>
+<span class="fc" id="L79">    }</span>
 
     public void changeStatus(Status status){
-<span class="nc" id="L82">        this.status=status;</span>
-<span class="nc" id="L83">    }</span>
+<span class="fc" id="L82">        this.status=status;</span>
+<span class="fc" id="L83">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

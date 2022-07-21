@@ -19,32 +19,32 @@ public class UserService {
     @Transactional
     public void saveUser(UserRequestDto userRequestDto){
         try {
-<span class="nc" id="L22">            User user= User.builder()</span>
-<span class="nc" id="L23">                    .email(userRequestDto.getEmail())</span>
-<span class="nc" id="L24">                    .uuid(userRequestDto.getUuid())</span>
-<span class="nc" id="L25">                    .locationId(userRequestDto.getLocation_id())</span>
-<span class="nc" id="L26">                    .provider(userRequestDto.getProvider())</span>
-<span class="nc" id="L27">                    .profileImg(userRequestDto.getProfileImg())</span>
-<span class="nc" id="L28">                    .profileIntro(userRequestDto.getProfileIntro())</span>
-<span class="nc" id="L29">                    .phone(userRequestDto.getPhone())</span>
-<span class="nc" id="L30">                    .username(userRequestDto.getUsername())</span>
-<span class="nc" id="L31">                    .birth(userRequestDto.getBirth())</span>
-<span class="nc" id="L32">                    .university(userRequestDto.getUniversity())</span>
-<span class="nc" id="L33">                    .build();</span>
+<span class="fc" id="L22">            User user= User.builder()</span>
+<span class="fc" id="L23">                    .email(userRequestDto.getEmail())</span>
+<span class="fc" id="L24">                    .uuid(userRequestDto.getUuid())</span>
+<span class="fc" id="L25">                    .locationId(userRequestDto.getLocation_id())</span>
+<span class="fc" id="L26">                    .provider(userRequestDto.getProvider())</span>
+<span class="fc" id="L27">                    .profileImg(userRequestDto.getProfileImg())</span>
+<span class="fc" id="L28">                    .profileIntro(userRequestDto.getProfileIntro())</span>
+<span class="fc" id="L29">                    .phone(userRequestDto.getPhone())</span>
+<span class="fc" id="L30">                    .username(userRequestDto.getUsername())</span>
+<span class="fc" id="L31">                    .birth(userRequestDto.getBirth())</span>
+<span class="fc" id="L32">                    .university(userRequestDto.getUniversity())</span>
+<span class="fc" id="L33">                    .build();</span>
 
-<span class="nc" id="L35">            validateDuplicateMember(user);</span>
-<span class="nc" id="L36">            userRepository.save(user);</span>
+<span class="fc" id="L35">            validateDuplicateMember(user);</span>
+<span class="fc" id="L36">            userRepository.save(user);</span>
 <span class="nc" id="L37">        }catch (Exception e){</span>
 <span class="nc" id="L38">            e.printStackTrace();</span>
-<span class="nc" id="L39">        }</span>
-<span class="nc" id="L40">    }</span>
+<span class="fc" id="L39">        }</span>
+<span class="fc" id="L40">    }</span>
 
     public void validateDuplicateMember(User user){
-<span class="nc" id="L43">        Optional&lt;User&gt; findMember = userRepository.findByUsername(user.getUsername());</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (findMember.isPresent()){</span>
+<span class="fc" id="L43">        Optional&lt;User&gt; findMember = userRepository.findByUsername(user.getUsername());</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        if (findMember.isPresent()){</span>
 <span class="nc" id="L45">            throw new DuplicatedUserException();</span>
         }
-<span class="nc" id="L47">    }</span>
+<span class="fc" id="L47">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -22,7 +22,6 @@ public class ClientFeedTest {
         Assertions.assertEquals(clientFeed.getBody(),"테스트 코드입니다.");
         Assertions.assertEquals(clientFeed.getWriter(),testUser);
         Assertions.assertEquals(clientFeed.getItemId(),"테스트 코드입니다.");
-        Assertions.assertEquals(clientFeed.getStatus(),Status.STATUS_POSSIBLE);
     }
 
     @Test
@@ -37,9 +36,11 @@ public class ClientFeedTest {
     @Test
     void changeStatus() {
         ClientFeed clientFeed=new ClientFeed();
-        Assertions.assertEquals(clientFeed.getStatus(),Status.STATUS_POSSIBLE);
 
         clientFeed.changeStatus(Status.STATUS_CANCELED);
         Assertions.assertEquals(clientFeed.getStatus(),Status.STATUS_CANCELED);
+
+        clientFeed.changeStatus(Status.STATUS_POSSIBLE);
+        Assertions.assertEquals(clientFeed.getStatus(),Status.STATUS_POSSIBLE);
     }
 }

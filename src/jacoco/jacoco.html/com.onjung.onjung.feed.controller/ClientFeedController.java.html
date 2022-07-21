@@ -32,27 +32,28 @@ public class ClientFeedController implements FeedController{
     @GetMapping(&quot;/feed&quot;)
     public List&lt;ClientFeed&gt; readAllFeed(){
 
-<span class="nc" id="L35">        return feedService.readAllFeed();</span>
+<span class="fc" id="L35">        return feedService.readAllFeed();</span>
     }
 
     @GetMapping(&quot;/feed/{feedId}&quot;)
-    public Optional&lt;ClientFeed&gt; readFeed(@PathVariable(&quot;{feedId}&quot;) Long feedId){
+    public Optional&lt;ClientFeed&gt; readFeed(@PathVariable(&quot;feedId&quot;) Long feedId){
+//        System.out.println(&quot;feedId = &quot; + feedId);
 
-<span class="nc" id="L41">        return feedService.readFeed(feedId);</span>
+<span class="fc" id="L42">        return feedService.readFeed(feedId);</span>
     }
 
     @PatchMapping(&quot;/feed/{feedId}&quot;)
-    public void updateFeed(@PathVariable(&quot;{feedId}&quot;) Long feedId, @Valid @RequestBody FeedRequestDto requestDto) {
+    public void updateFeed(@PathVariable(&quot;feedId&quot;) Long feedId, @Valid @RequestBody FeedRequestDto requestDto) {
         try {
-<span class="nc" id="L47">            feedService.patchFeed(feedId, requestDto);</span>
-<span class="nc" id="L48">        }catch (Exception e){</span>
-<span class="nc" id="L49">            e.printStackTrace();</span>
-<span class="nc" id="L50">        }</span>
-<span class="nc" id="L51">    }</span>
+<span class="fc" id="L48">            feedService.patchFeed(feedId, requestDto);</span>
+<span class="nc" id="L49">        }catch (Exception e){</span>
+<span class="nc" id="L50">            e.printStackTrace();</span>
+<span class="fc" id="L51">        }</span>
+<span class="fc" id="L52">    }</span>
 
     @DeleteMapping(&quot;/feed/{feedId}&quot;)
-    public void deleteFeed (@PathVariable(&quot;{feedId}&quot;) Long feedId){
-<span class="nc" id="L55">        feedService.deleteFeed(feedId);</span>
-<span class="nc" id="L56">    }</span>
+    public void deleteFeed (@PathVariable(&quot;feedId&quot;) Long feedId){
+<span class="fc" id="L56">        feedService.deleteFeed(feedId);</span>
+<span class="fc" id="L57">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

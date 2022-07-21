@@ -36,13 +36,14 @@ public class ClientFeedController implements FeedController{
     }
 
     @GetMapping("/feed/{feedId}")
-    public Optional<ClientFeed> readFeed(@PathVariable("{feedId}") Long feedId){
+    public Optional<ClientFeed> readFeed(@PathVariable("feedId") Long feedId){
+//        System.out.println("feedId = " + feedId);
 
         return feedService.readFeed(feedId);
     }
 
     @PatchMapping("/feed/{feedId}")
-    public void updateFeed(@PathVariable("{feedId}") Long feedId, @Valid @RequestBody FeedRequestDto requestDto) {
+    public void updateFeed(@PathVariable("feedId") Long feedId, @Valid @RequestBody FeedRequestDto requestDto) {
         try {
             feedService.patchFeed(feedId, requestDto);
         }catch (Exception e){
@@ -51,7 +52,7 @@ public class ClientFeedController implements FeedController{
     }
 
     @DeleteMapping("/feed/{feedId}")
-    public void deleteFeed (@PathVariable("{feedId}") Long feedId){
+    public void deleteFeed (@PathVariable("feedId") Long feedId){
         feedService.deleteFeed(feedId);
     }
 }

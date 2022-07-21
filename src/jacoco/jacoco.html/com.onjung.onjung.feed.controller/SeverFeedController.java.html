@@ -36,13 +36,13 @@ public class SeverFeedController implements FeedController{
     }
 
     @GetMapping(&quot;/feed/{feedId}&quot;)
-    public Optional&lt;ServerFeed&gt; readFeed(@PathVariable(&quot;{feedId}&quot;) Long feedId){
+    public Optional&lt;ServerFeed&gt; readFeed(@PathVariable(&quot;feedId&quot;) Long feedId){
 
 <span class="nc" id="L41">        return feedService.readFeed(feedId);</span>
     }
 
     @PatchMapping(&quot;/feed/{feedId}&quot;)
-    public void updateFeed(@PathVariable(&quot;{feedId}&quot;) Long feedId, @Valid @RequestBody FeedRequestDto requestDto) {
+    public void updateFeed(@PathVariable(&quot;feedId&quot;) Long feedId, @Valid @RequestBody FeedRequestDto requestDto) {
         try {
 <span class="nc" id="L47">            feedService.patchFeed(feedId, requestDto);</span>
 <span class="nc" id="L48">        }catch (Exception e){</span>
@@ -51,7 +51,7 @@ public class SeverFeedController implements FeedController{
 <span class="nc" id="L51">    }</span>
 
     @DeleteMapping(&quot;/feed/{feedId}&quot;)
-    public void deleteFeed (@PathVariable(&quot;{feedId}&quot;) Long feedId){
+    public void deleteFeed (@PathVariable(&quot;feedId&quot;) Long feedId){
 <span class="nc" id="L55">        feedService.deleteFeed(feedId);</span>
 <span class="nc" id="L56">    }</span>
 }
