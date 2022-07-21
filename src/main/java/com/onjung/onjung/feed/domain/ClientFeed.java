@@ -66,8 +66,7 @@ public class ClientFeed implements Feed{
                       User writer,
                       String title,
                       String body,
-                      String itemId,
-                      Status status) {
+                      String itemId) {
         this.writer = writer;
         this.itemId = itemId;
         this.title = title;

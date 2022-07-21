@@ -1,10 +1,11 @@
 package com.onjung.onjung.feed.service;
 
 import com.onjung.onjung.feed.domain.ClientFeed;
+import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.domain.Status;
 import com.onjung.onjung.feed.repository.ClientFeedRepository;
+import com.onjung.onjung.feed.repository.ServerFeedRepository;
 import com.onjung.onjung.user.domain.User;
-
 import com.onjung.onjung.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,12 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class ClientFeedServiceTest {
-
+class ServerFeedServiceTest {
     @Autowired
-    private ClientFeedRepository clientFeedRepository;
+    private ServerFeedRepository serverFeedRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -53,19 +55,19 @@ class ClientFeedServiceTest {
 
         userRepository.save(testUser);
 
-        ClientFeed testclientFeed= ClientFeed.builder()
+        ServerFeed testserverFeed= ServerFeed.builder()
                 .title(name)
                 .body("테스트 코드입니다.")
                 .writer(testUser)
                 .itemId("테스트 코드입니다.")
                 .build();
 
-        clientFeedRepository.save(testclientFeed);
+        serverFeedRepository.save(testserverFeed);
 
-        Optional<ClientFeed> savedFeed= clientFeedRepository.findByTitle(name);
+        Optional<ServerFeed> savedFeed= serverFeedRepository.findByTitle(name);
 
         org.assertj.core.api.Assertions
-                .assertThat(testclientFeed).isSameAs(savedFeed.get());
+                .assertThat(testserverFeed).isSameAs(savedFeed.get());
         org.assertj.core.api.Assertions
                 .assertThat(savedFeed.get().getId()).isNotNull();
     }
@@ -74,14 +76,14 @@ class ClientFeedServiceTest {
     @Test
     void readAllFeed() {
         org.assertj.core.api.Assertions
-                .assertThat(clientFeedRepository.findAll().get(0).getStatus())
+                .assertThat(serverFeedRepository.findAll().get(0).getStatus())
                 .isEqualTo(Status.STATUS_POSSIBLE);
     }
 
     @Test
     void readFeed() {
-        Long id=clientFeedRepository.findAll().get(0).getId();
-        Optional<ClientFeed> feed=clientFeedRepository.findById(id);
+        Long id=serverFeedRepository.findAll().get(0).getId();
+        Optional<ServerFeed> feed=serverFeedRepository.findById(id);
 
         org.assertj.core.api.Assertions
                 .assertThat(feed.get().getStatus())
@@ -90,17 +92,17 @@ class ClientFeedServiceTest {
 
     @Test
     void patchFeed() {
-        Long feedId=clientFeedRepository.findAll().get(0).getId();
+        Long feedId=serverFeedRepository.findAll().get(0).getId();
 
-        final Optional<ClientFeed> clientFeed= clientFeedRepository.findById(feedId);
+        final Optional<ServerFeed> clientFeed= serverFeedRepository.findById(feedId);
         if(clientFeed.isPresent()){
             clientFeed.get().setTitle("수정완료했습니다.");
             clientFeed.get().setBody("수정완료했습니다.");
             clientFeed.get().setItemId("수정완료했습니다.");
         }
-        clientFeedRepository.save(clientFeed.get());
+        serverFeedRepository.save(clientFeed.get());
 
-        final Optional<ClientFeed> patchedClientFeed= clientFeedRepository.findById(feedId);
+        final Optional<ServerFeed> patchedClientFeed= serverFeedRepository.findById(feedId);
         org.assertj.core.api.Assertions
                 .assertThat(patchedClientFeed.get().getTitle())
                 .isEqualTo("수정완료했습니다.");
@@ -108,16 +110,16 @@ class ClientFeedServiceTest {
 
     @Test
     void deleteFeed() {
-        int repoSize=clientFeedRepository.findAll().size();
-        Long feedId=clientFeedRepository.findAll().get(0).getId();
+        int repoSize=serverFeedRepository.findAll().size();
+        Long feedId=serverFeedRepository.findAll().get(0).getId();
 
-        Optional<ClientFeed> clientFeed=clientFeedRepository.findById(feedId);
+        Optional<ServerFeed> clientFeed=serverFeedRepository.findById(feedId);
         if(clientFeed.isPresent()){
-            clientFeedRepository.delete(clientFeed.get());
+            serverFeedRepository.delete(clientFeed.get());
         }
 
         org.assertj.core.api.Assertions
-                .assertThat(clientFeedRepository.findAll().size())
+                .assertThat(serverFeedRepository.findAll().size())
                 .isEqualTo(repoSize-1);
     }
 }

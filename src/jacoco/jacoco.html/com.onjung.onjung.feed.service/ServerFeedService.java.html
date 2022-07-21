@@ -11,64 +11,84 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-<span class="fc" id="L18">@RequiredArgsConstructor</span>
+<span class="fc" id="L19">@RequiredArgsConstructor</span>
 public class ServerFeedService implements FeedService{
 
     private final ServerFeedRepository serverFeedRepository;
     private final UserRepository userRepository;
 
     @Transactional
-    public void createFeed(FeedRequestDto feedRequestDto){
+    public void createFeed(FeedRequestDto feedRequestDto) throws Exception {
         //임시로 유저 객체 저장, 이후 회원가입한 회원에 한해 저장하는걸로 수정.
-<span class="nc" id="L27">        Optional&lt;User&gt; requestUser=userRepository.findByUsername(&quot;username&quot;);</span>
+<span class="fc" id="L28">        LocalDate birthDate= LocalDate.ofYearDay(2022,1);</span>
+<span class="fc" id="L29">        String name=Double.toString(Math.random());</span>
+
+<span class="fc" id="L31">        User testUser=User.builder()</span>
+<span class="fc" id="L32">                .email(&quot;email&quot;)</span>
+<span class="fc" id="L33">                .birth(birthDate)</span>
+<span class="fc" id="L34">                .locationId(&quot;locationId&quot;)</span>
+<span class="fc" id="L35">                .phone(&quot;phone&quot;)</span>
+<span class="fc" id="L36">                .profileImg(&quot;profileImg&quot;)</span>
+<span class="fc" id="L37">                .profileIntro(&quot;profileIntro&quot;)</span>
+<span class="fc" id="L38">                .provider(&quot;provider&quot;)</span>
+<span class="fc" id="L39">                .university(&quot;university&quot;)</span>
+<span class="fc" id="L40">                .username(name)</span>
+<span class="fc" id="L41">                .uuid(&quot;uuid&quot;)</span>
+<span class="fc" id="L42">                .build();</span>
+<span class="fc" id="L43">        userRepository.save(testUser);</span>
+
+<span class="fc" id="L45">        Optional&lt;User&gt; savedUser= userRepository.findByUsername(name);</span>
+
         try {
-<span class="nc" id="L29">            ServerFeed feed = ServerFeed.builder()</span>
-<span class="nc" id="L30">                    .writer(requestUser.get())</span>
-<span class="nc" id="L31">                    .title(feedRequestDto.getTitle())</span>
-<span class="nc" id="L32">                    .body(feedRequestDto.getBody())</span>
-<span class="nc" id="L33">                    .itemId(feedRequestDto.getItemId())</span>
-<span class="nc" id="L34">                    .build();</span>
-<span class="nc" id="L35">            serverFeedRepository.save(feed);</span>
-<span class="nc" id="L36">        }catch (Exception e){</span>
-<span class="nc" id="L37">            e.printStackTrace();</span>
-<span class="nc" id="L38">        }</span>
-<span class="nc" id="L39">    }</span>
+<span class="fc" id="L48">            ServerFeed feed = ServerFeed.builder()</span>
+<span class="fc" id="L49">                    .writer(savedUser.get())</span>
+<span class="fc" id="L50">                    .title(feedRequestDto.getTitle())</span>
+<span class="fc" id="L51">                    .body(feedRequestDto.getBody())</span>
+<span class="fc" id="L52">                    .itemId(feedRequestDto.getItemId())</span>
+<span class="fc" id="L53">                    .build();</span>
+<span class="fc" id="L54">            serverFeedRepository.save(feed);</span>
+<span class="fc" id="L55">        }catch (Exception e){</span>
+<span class="fc" id="L56">            e.printStackTrace();</span>
+<span class="fc" id="L57">            throw new Exception(&quot;저장이 실패했습니다.&quot;);</span>
+<span class="fc" id="L58">        }</span>
+<span class="fc" id="L59">    }</span>
 
     public List&lt;ServerFeed&gt; readAllFeed(){
-<span class="nc" id="L42">        return serverFeedRepository.findAll();</span>
+<span class="fc" id="L62">        return serverFeedRepository.findAll();</span>
     }
 
     public Optional&lt;ServerFeed&gt; readFeed(Long feedId){
 
-<span class="nc" id="L47">        return serverFeedRepository.findById(feedId);</span>
+<span class="fc" id="L67">        return serverFeedRepository.findById(feedId);</span>
     }
 
     public void patchFeed(Long feedId, FeedRequestDto requestDto){
-<span class="nc" id="L51">        final Optional&lt;ServerFeed&gt; serverFeed= serverFeedRepository.findById(feedId);</span>
-<span class="nc bnc" id="L52" title="All 2 branches missed.">        if(serverFeed.isPresent()){</span>
-<span class="nc bnc" id="L53" title="All 2 branches missed.">            if(requestDto.getTitle()!=null){</span>
-<span class="nc" id="L54">                serverFeed.get().setTitle(requestDto.getTitle());</span>
+<span class="fc" id="L71">        final Optional&lt;ServerFeed&gt; serverFeed= serverFeedRepository.findById(feedId);</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if(serverFeed.isPresent()){</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">            if(requestDto.getTitle()!=null){</span>
+<span class="fc" id="L74">                serverFeed.get().setTitle(requestDto.getTitle());</span>
             }
-<span class="nc bnc" id="L56" title="All 2 branches missed.">            if(requestDto.getBody()!=null){</span>
-<span class="nc" id="L57">                serverFeed.get().setBody(requestDto.getBody());</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">            if(requestDto.getBody()!=null){</span>
+<span class="fc" id="L77">                serverFeed.get().setBody(requestDto.getBody());</span>
             }
-<span class="nc bnc" id="L59" title="All 2 branches missed.">            if(requestDto.getItemId()!=null){</span>
-<span class="nc" id="L60">                serverFeed.get().setItemId(requestDto.getItemId());</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">            if(requestDto.getItemId()!=null){</span>
+<span class="fc" id="L80">                serverFeed.get().setItemId(requestDto.getItemId());</span>
             }
         }
-<span class="nc" id="L63">        serverFeedRepository.save(serverFeed.get());</span>
-<span class="nc" id="L64">        return;</span>
+<span class="fc" id="L83">        serverFeedRepository.save(serverFeed.get());</span>
+<span class="fc" id="L84">        return;</span>
     }
 
     public void deleteFeed(Long feedId){
-<span class="nc" id="L68">        Optional&lt;ServerFeed&gt; serverFeed=serverFeedRepository.findById(feedId);</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">        if(serverFeed.isPresent()){</span>
-<span class="nc" id="L70">            serverFeedRepository.delete(serverFeed.get());</span>
+<span class="fc" id="L88">        Optional&lt;ServerFeed&gt; serverFeed=serverFeedRepository.findById(feedId);</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if(serverFeed.isPresent()){</span>
+<span class="fc" id="L90">            serverFeedRepository.delete(serverFeed.get());</span>
         }
-<span class="nc" id="L72">    }</span>
+<span class="fc" id="L92">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -66,20 +66,19 @@ public class ClientFeed implements Feed{
                       User writer,
                       String title,
                       String body,
-                      String itemId,
-<span class="fc" id="L70">                      Status status) {</span>
-<span class="fc" id="L71">        this.writer = writer;</span>
-<span class="fc" id="L72">        this.itemId = itemId;</span>
-<span class="fc" id="L73">        this.title = title;</span>
-<span class="fc" id="L74">        this.body = body;</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L69">                      String itemId) {</span>
+<span class="fc" id="L70">        this.writer = writer;</span>
+<span class="fc" id="L71">        this.itemId = itemId;</span>
+<span class="fc" id="L72">        this.title = title;</span>
+<span class="fc" id="L73">        this.body = body;</span>
+<span class="fc" id="L74">    }</span>
 
     public void addCnt(){
-<span class="fc" id="L78">        this.visitedCnt+=1;</span>
-<span class="fc" id="L79">    }</span>
+<span class="fc" id="L77">        this.visitedCnt+=1;</span>
+<span class="fc" id="L78">    }</span>
 
     public void changeStatus(Status status){
-<span class="fc" id="L82">        this.status=status;</span>
-<span class="fc" id="L83">    }</span>
+<span class="fc" id="L81">        this.status=status;</span>
+<span class="fc" id="L82">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

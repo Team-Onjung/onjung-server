@@ -56,6 +56,11 @@ public class ServerFeed implements Feed{
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @PrePersist
+    public void setDefault(){
+        this.status = this.status == null ? Status.STATUS_POSSIBLE : this.status;
+    }
+
     @Builder
     public ServerFeed(
             User writer,

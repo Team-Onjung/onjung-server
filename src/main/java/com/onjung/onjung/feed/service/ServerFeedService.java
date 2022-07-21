@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,12 +23,30 @@ public class ServerFeedService implements FeedService{
     private final UserRepository userRepository;
 
     @Transactional
-    public void createFeed(FeedRequestDto feedRequestDto){
+    public void createFeed(FeedRequestDto feedRequestDto) throws Exception {
         //임시로 유저 객체 저장, 이후 회원가입한 회원에 한해 저장하는걸로 수정.
-        Optional<User> requestUser=userRepository.findByUsername("username");
+        LocalDate birthDate= LocalDate.ofYearDay(2022,1);
+        String name=Double.toString(Math.random());
+
+        User testUser=User.builder()
+                .email("email")
+                .birth(birthDate)
+                .locationId("locationId")
+                .phone("phone")
+                .profileImg("profileImg")
+                .profileIntro("profileIntro")
+                .provider("provider")
+                .university("university")
+                .username(name)
+                .uuid("uuid")
+                .build();
+        userRepository.save(testUser);
+
+        Optional<User> savedUser= userRepository.findByUsername(name);
+
         try {
             ServerFeed feed = ServerFeed.builder()
-                    .writer(requestUser.get())
+                    .writer(savedUser.get())
                     .title(feedRequestDto.getTitle())
                     .body(feedRequestDto.getBody())
                     .itemId(feedRequestDto.getItemId())
@@ -35,6 +54,7 @@ public class ServerFeedService implements FeedService{
             serverFeedRepository.save(feed);
         }catch (Exception e){
             e.printStackTrace();
+            throw new Exception("저장이 실패했습니다.");
         }
     }
 
