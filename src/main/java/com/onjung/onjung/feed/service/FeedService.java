@@ -12,7 +12,7 @@ public interface FeedService {
 
     List readAllFeed();
 
-    Optional readFeed(Long feedId);
+    Optional readFeed(Long feedId) throws InterruptedException;
 
     void patchFeed(Long feedId, FeedRequestDto requestDto);
 

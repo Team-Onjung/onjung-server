@@ -1,10 +1,8 @@
 package com.onjung.onjung.feed.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.onjung.onjung.user.domain.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -13,19 +11,22 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
+
 @Entity
 @Getter
 @Setter
 @Table(name = "ClientFeed")
 @DynamicInsert
 @NoArgsConstructor
+@EqualsAndHashCode
 public class ClientFeed implements Feed{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch=FetchType.LAZY, optional=false)
     @JoinColumn(name = "writer_id")
     private User writer;
 

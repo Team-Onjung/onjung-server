@@ -1,10 +1,7 @@
 package com.onjung.onjung.feed.domain;
 
 import com.onjung.onjung.user.domain.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -19,6 +16,7 @@ import java.time.LocalDateTime;
 @Table(name = "ServerFeed")
 @DynamicInsert
 @NoArgsConstructor
+@EqualsAndHashCode
 public class ServerFeed implements Feed{
 
     @Id

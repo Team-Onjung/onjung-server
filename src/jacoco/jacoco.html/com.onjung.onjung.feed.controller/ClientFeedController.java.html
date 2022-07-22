@@ -22,38 +22,41 @@ public class ClientFeedController implements FeedController{
     @PostMapping(&quot;/feed&quot;)
     public ResponseEntity createFeed(@Valid @RequestBody FeedRequestDto requestDto) {
         try {
-<span class="fc" id="L25">            feedService.createFeed(requestDto);</span>
-<span class="fc" id="L26">        }catch (Exception e){</span>
-<span class="fc" id="L27">            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(&quot;requested data is wrong&quot;);</span>
-<span class="fc" id="L28">        }</span>
-<span class="fc" id="L29">        return ResponseEntity.status(HttpStatus.OK).body(&quot;ok&quot;);</span>
+<span class="nc" id="L25">            feedService.createFeed(requestDto);</span>
+<span class="nc" id="L26">        }catch (Exception e){</span>
+<span class="nc" id="L27">            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(&quot;Exception raised in ClientFeedController/createFeed&quot;);</span>
+<span class="nc" id="L28">        }</span>
+<span class="nc" id="L29">        return ResponseEntity.status(HttpStatus.OK).body(&quot;ok&quot;);</span>
     }
 
     @GetMapping(&quot;/feed&quot;)
     public List&lt;ClientFeed&gt; readAllFeed(){
-
-<span class="fc" id="L35">        return feedService.readAllFeed();</span>
+<span class="nc" id="L34">        return feedService.readAllFeed();</span>
     }
 
     @GetMapping(&quot;/feed/{feedId}&quot;)
-    public Optional&lt;ClientFeed&gt; readFeed(@PathVariable(&quot;feedId&quot;) Long feedId){
-//        System.out.println(&quot;feedId = &quot; + feedId);
-
-<span class="fc" id="L42">        return feedService.readFeed(feedId);</span>
+    public ResponseEntity readFeed(@PathVariable(&quot;feedId&quot;) Long feedId) {
+        try {
+<span class="nc" id="L40">            Optional&lt;ClientFeed&gt; feed = feedService.readFeed(feedId);</span>
+<span class="nc" id="L41">            return ResponseEntity.status(HttpStatus.OK).body(feed);</span>
+<span class="nc" id="L42">        } catch (Exception e) {</span>
+<span class="nc" id="L43">            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Exception raised in ClientFeedController/readFeed&quot;);</span>
+        }
     }
 
     @PatchMapping(&quot;/feed/{feedId}&quot;)
-    public void updateFeed(@PathVariable(&quot;feedId&quot;) Long feedId, @Valid @RequestBody FeedRequestDto requestDto) {
+    public ResponseEntity updateFeed(@PathVariable(&quot;feedId&quot;) Long feedId, @Valid @RequestBody FeedRequestDto requestDto) {
         try {
-<span class="fc" id="L48">            feedService.patchFeed(feedId, requestDto);</span>
-<span class="nc" id="L49">        }catch (Exception e){</span>
-<span class="nc" id="L50">            e.printStackTrace();</span>
-<span class="fc" id="L51">        }</span>
-<span class="fc" id="L52">    }</span>
+<span class="nc" id="L50">            feedService.patchFeed(feedId, requestDto);</span>
+<span class="nc" id="L51">        }catch (Exception e){</span>
+<span class="nc" id="L52">            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(&quot;Exception raised in ClientFeedController/updateFeed&quot;);</span>
+<span class="nc" id="L53">        }</span>
+<span class="nc" id="L54">        return ResponseEntity.status(HttpStatus.OK).body(&quot;ok&quot;);</span>
+    }
 
     @DeleteMapping(&quot;/feed/{feedId}&quot;)
     public void deleteFeed (@PathVariable(&quot;feedId&quot;) Long feedId){
-<span class="fc" id="L56">        feedService.deleteFeed(feedId);</span>
-<span class="fc" id="L57">    }</span>
+<span class="nc" id="L59">        feedService.deleteFeed(feedId);</span>
+<span class="nc" id="L60">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

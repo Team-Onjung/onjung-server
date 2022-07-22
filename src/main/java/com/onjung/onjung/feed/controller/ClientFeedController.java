@@ -4,9 +4,6 @@ import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.service.ClientFeedService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +35,6 @@ public class ClientFeedController implements FeedController{
     }
 
     @GetMapping("/feed/{feedId}")
-    @Cacheable(value = "clientFeedCaching", key = "#feedId")
     public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) {
         try {
             Optional<ClientFeed> feed = feedService.readFeed(feedId);
@@ -49,7 +45,6 @@ public class ClientFeedController implements FeedController{
     }
 
     @PatchMapping("/feed/{feedId}")
-    @CachePut(value = "clientFeedCaching", key = "#feedId")
     public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @Valid @RequestBody FeedRequestDto requestDto) {
         try {
             feedService.patchFeed(feedId, requestDto);
@@ -60,7 +55,6 @@ public class ClientFeedController implements FeedController{
     }
 
     @DeleteMapping("/feed/{feedId}")
-    @CacheEvict(value = "clientFeedCaching", key = "#feedId")
     public void deleteFeed (@PathVariable("feedId") Long feedId){
         feedService.deleteFeed(feedId);
     }

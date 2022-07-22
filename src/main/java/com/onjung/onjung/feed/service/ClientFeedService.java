@@ -8,6 +8,12 @@ import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +25,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ClientFeedService implements FeedService{
 
+    private final EhCacheCacheManager cacheManager;
+
     private final ClientFeedRepository clientFeedRepository;
     private final UserRepository userRepository;
 
     @Transactional
+    @CacheEvict(value = "clientFeedCaching", allEntries = true)
     public void createFeed(FeedRequestDto feedRequestDto) throws Exception {
         //임시로 유저 객체 저장, 이후 회원가입한 회원에 한해 저장하는걸로 수정.
         LocalDate birthDate= LocalDate.ofYearDay(2022,1);
@@ -58,11 +67,17 @@ public class ClientFeedService implements FeedService{
         }
     }
 
+    @Transactional(readOnly = true)
+    @Cacheable("clientFeedCaching")
     public List<ClientFeed> readAllFeed(){
         return clientFeedRepository.findAll();
     }
 
-    public Optional<ClientFeed> readFeed(Long feedId){
+
+    @Transactional(readOnly = true)
+    @Cacheable(value = "clientFeedCaching", key = "#feedId")
+    public Optional<ClientFeed> readFeed(Long feedId) throws InterruptedException {
+//        Thread.sleep(3000);
         Optional<ClientFeed> feed=clientFeedRepository.findById(feedId);
         if (feed.isPresent()){
             return feed;
@@ -72,6 +87,7 @@ public class ClientFeedService implements FeedService{
     }
 
     @Transactional
+    @CachePut(value = "clientFeedCaching", key = "#feedId")
     public void patchFeed(Long feedId, FeedRequestDto requestDto){
         final Optional<ClientFeed> clientFeed= clientFeedRepository.findById(feedId);
         try {
@@ -95,6 +111,7 @@ public class ClientFeedService implements FeedService{
         }
     }
 
+    @CacheEvict(value = "clientFeedCaching", allEntries = true)
     public void deleteFeed(Long feedId){
         Optional<ClientFeed> clientFeed=clientFeedRepository.findById(feedId);
         if(clientFeed.isPresent()){
