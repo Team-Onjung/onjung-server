@@ -1,29 +1,34 @@
 package com.onjung.onjung.item.dto;
 
 import com.onjung.onjung.category.domain.Category;
+import com.onjung.onjung.item.domain.Item;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
+import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
+
 @Getter
+@Setter
 public class ItemDto {
 
     @NotBlank
-    String name;
+    private String name;
 
-    int deposit;
+    private int deposit;
 
-    LocalDateTime startDate;
+    private LocalDateTime startDate;
 
-    LocalDateTime endDate;
+    private LocalDateTime endDate;
 
-    LocalDateTime duration;
+    private LocalDateTime duration;
 
-    int rentalFee;
+    private int rentalFee;
 
-    Category category;
+    private Category category;
 
     @Builder
     public ItemDto(
@@ -43,4 +48,5 @@ public class ItemDto {
       this.rentalFee = rentalFee;
       this.category = category;
     }
+
 }
