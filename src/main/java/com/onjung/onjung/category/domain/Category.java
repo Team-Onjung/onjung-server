@@ -2,6 +2,7 @@ package com.onjung.onjung.category.domain;
 
 
 import com.onjung.onjung.item.domain.Item;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,5 +31,12 @@ public class Category {
 
     @OneToMany(mappedBy="category")
     private List<Item> items = new ArrayList<>();
+
+    @Builder
+    public Category(
+            String name
+    ){
+        this.name = name;
+    }
 
 }
