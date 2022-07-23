@@ -22,7 +22,7 @@ public class UserService {
             User user= User.builder()
                     .email(userRequestDto.getEmail())
                     .uuid(userRequestDto.getUuid())
-                    .location_id(userRequestDto.getLocation_id())
+                    .locationId(userRequestDto.getLocation_id())
                     .provider(userRequestDto.getProvider())
                     .profileImg(userRequestDto.getProfileImg())
                     .profileIntro(userRequestDto.getProfileIntro())
@@ -40,7 +40,7 @@ public class UserService {
     }
 
     public void validateDuplicateMember(User user){
-        Optional<User> findMember = userRepository.findByEmail(user.getEmail());
+        Optional<User> findMember = userRepository.findByUsername(user.getUsername());
         if (findMember.isPresent()){
             throw new DuplicatedUserException();
         }

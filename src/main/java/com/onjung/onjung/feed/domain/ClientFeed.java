@@ -1,10 +1,8 @@
 package com.onjung.onjung.feed.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.onjung.onjung.user.domain.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -13,19 +11,22 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
+
 @Entity
 @Getter
 @Setter
 @Table(name = "ClientFeed")
 @DynamicInsert
 @NoArgsConstructor
+@EqualsAndHashCode
 public class ClientFeed implements Feed{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch=FetchType.LAZY, optional=false)
     @JoinColumn(name = "writer_id")
     private User writer;
 
@@ -54,20 +55,23 @@ public class ClientFeed implements Feed{
     //    수령 안됨(가능) / 수령 대기(예약) / 수령 중(배송 중)/ 수령 취소/ 수령 완료
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Status status=Status.STATUS_POSSIBLE;
+    private Status status;
+
+    @PrePersist
+    public void setDefault(){
+        this.status = this.status == null ? Status.STATUS_POSSIBLE : this.status;
+    }
 
     @Builder
     public ClientFeed(
                       User writer,
                       String title,
                       String body,
-                      String itemId,
-                      Status status) {
+                      String itemId) {
         this.writer = writer;
         this.itemId = itemId;
         this.title = title;
         this.body = body;
-        this.status = status;
     }
 
     public void addCnt(){

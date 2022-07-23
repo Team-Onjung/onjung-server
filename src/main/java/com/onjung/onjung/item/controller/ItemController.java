@@ -18,11 +18,9 @@ public class ItemController {
 
     private final ItemService itemService;
 
-    @GetMapping("/get")
+    @GetMapping()
     public List<Item> get(){
         return itemService.findItems();
     }
-
-
 
 }

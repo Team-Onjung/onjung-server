@@ -1,6 +1,5 @@
 package com.onjung.onjung.user.domain;
 
-import com.onjung.onjung.feed.domain.ClientFeed;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -25,8 +23,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "writer")
-    private List<ClientFeed> clientFeeds;
+    //    사용자 닉네임 (UNIQUE)
+    @Column(length = 20, unique = true, nullable = false)
+    private String username;
 
     @Column(length = 20, nullable = false)
     private String email;
@@ -37,7 +36,7 @@ public class User {
 
 //    주소 Table에서 입력한 후 받아오는 값, 이후 수정 필요
     @NotNull
-    private String location_id;
+    private String locationId;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -63,17 +62,13 @@ public class User {
     @Column(length = 30, nullable = false)
     private String phone;
 
-//    휴면 계정 여부(DEFAULT = 0)
-    @Column(name ="is_active", columnDefinition = "boolean default false")
+//    휴면 계정 여부(DEFAULT = 1)
+    @Column(name ="is_active")
     private Boolean isActive;
 
 //    계정 정지 여부 (DEFAULT = 0)
-    @Column(name ="is_blocked", columnDefinition = "boolean default false")
+    @Column(name ="is_blocked")
     private Boolean isBlocked;
-
-//    사용자 닉네임 (UNIQUE)
-    @Column(length = 20, unique = true, nullable = false)
-    private String username;
 
 //    생년월일
     @NotNull
@@ -83,15 +78,22 @@ public class User {
     @Column(length = 20, nullable = false)
     private String university;
 
-//    대학생 인증 여부
-    @Column(name ="is_university", columnDefinition = "boolean default false")
+//    대학생 인증 여부 (DEFAULT = 0)
+    @Column(name ="is_university")
     private Boolean isUniversity;
+
+    @PrePersist
+    public void setDefault(){
+        this.isActive = this.isActive == null ? true : this.isActive;
+        this.isBlocked = this.isBlocked == null ? false : this.isBlocked;
+        this.isUniversity = this.isUniversity == null ? false : this.isUniversity;
+    }
 
     @Builder
     public User(
                 String email,
                 String uuid,
-                String location_id,
+                String locationId,
                 String provider,
                 String profileImg,
                 String profileIntro,
@@ -102,7 +104,7 @@ public class User {
 
         this.email = email;
         this.uuid = uuid;
-        this.location_id = location_id;
+        this.locationId = locationId;
         this.provider = provider;
         this.profileImg = profileImg;
         this.profileIntro = profileIntro;

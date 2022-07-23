@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClientFeed.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">onjung</a> &gt; <a href="index.source.html" class="el_package">com.onjung.onjung.feed.domain</a> &gt; <span class="el_source">ClientFeed.java</span></div><h1>ClientFeed.java</h1><pre class="source lang-java linenums">package com.onjung.onjung.feed.domain;
+
+import com.onjung.onjung.user.domain.User;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+
+
+@Entity
+@Getter
+<span class="nc" id="L16">@Setter</span>
+@Table(name = &quot;ClientFeed&quot;)
+@DynamicInsert
+<span class="fc" id="L19">@NoArgsConstructor</span>
+<span class="nc bnc" id="L20" title="All 72 branches missed.">@EqualsAndHashCode</span>
+public class ClientFeed implements Feed{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<span class="nc" id="L25">    private Long id;</span>
+
+    @ManyToOne(fetch=FetchType.LAZY, optional=false)
+    @JoinColumn(name = &quot;writer_id&quot;)
+<span class="nc" id="L29">    private User writer;</span>
+
+    //이후 아이템 완성시 수정필요
+    @NotNull
+<span class="nc" id="L33">    private String itemId;</span>
+
+    @CreationTimestamp
+    @Column(name = &quot;created_at&quot;)
+<span class="nc" id="L37">    private LocalDateTime createdAt;</span>
+
+    @UpdateTimestamp
+    @Column(name = &quot;updated_at&quot;)
+<span class="nc" id="L41">    private LocalDateTime updatedAt;</span>
+
+    @Column(length = 32, nullable = false)
+<span class="nc" id="L44">    private String title;</span>
+
+    @NotNull
+<span class="nc" id="L47">    private String body;</span>
+
+    //    방문자 수
+    @Column(columnDefinition = &quot;bigint default 0&quot;)
+<span class="nc" id="L51">    private long visitedCnt;</span>
+
+    //    수령 안됨(가능) / 수령 대기(예약) / 수령 중(배송 중)/ 수령 취소/ 수령 완료
+    @NotNull
+    @Enumerated(EnumType.STRING)
+<span class="nc" id="L56">    private Status status;</span>
+
+    @PrePersist
+    public void setDefault(){
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        this.status = this.status == null ? Status.STATUS_POSSIBLE : this.status;</span>
+<span class="nc" id="L61">    }</span>
+
+<span class="nc" id="L63">    @Builder</span>
+    public ClientFeed(
+                      User writer,
+                      String title,
+                      String body,
+<span class="nc" id="L68">                      String itemId) {</span>
+<span class="nc" id="L69">        this.writer = writer;</span>
+<span class="nc" id="L70">        this.itemId = itemId;</span>
+<span class="nc" id="L71">        this.title = title;</span>
+<span class="nc" id="L72">        this.body = body;</span>
+<span class="nc" id="L73">    }</span>
+
+    public void addCnt(){
+<span class="nc" id="L76">        this.visitedCnt+=1;</span>
+<span class="nc" id="L77">    }</span>
+
+    public void changeStatus(Status status){
+<span class="nc" id="L80">        this.status=status;</span>
+<span class="nc" id="L81">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
