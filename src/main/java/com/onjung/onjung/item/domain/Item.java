@@ -1,6 +1,5 @@
 package com.onjung.onjung.item.domain;
 
-import com.onjung.onjung.category.domain.Category;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

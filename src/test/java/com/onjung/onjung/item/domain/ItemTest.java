@@ -1,6 +1,5 @@
 package com.onjung.onjung.item.domain;
 
-import com.onjung.onjung.category.domain.Category;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.transaction.annotation.Transactional;

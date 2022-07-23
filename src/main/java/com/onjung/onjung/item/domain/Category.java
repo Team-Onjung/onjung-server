@@ -1,4 +1,4 @@
-package com.onjung.onjung.category.domain;
+package com.onjung.onjung.item.domain;
 
 
 import com.onjung.onjung.item.domain.Item;
