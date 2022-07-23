@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">onjung</a> &gt; <a href="index.source.html" class="el_package">com.onjung.onjung.user.domain</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package com.onjung.onjung.user.domain;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Entity
+@Getter
+@Table(name = &quot;User&quot;)
+@DynamicInsert
+<span class="fc" id="L19">@NoArgsConstructor</span>
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<span class="nc" id="L24">    private Long id;</span>
+
+    //    사용자 닉네임 (UNIQUE)
+    @Column(length = 20, unique = true, nullable = false)
+<span class="nc" id="L28">    private String username;</span>
+
+    @Column(length = 20, nullable = false)
+<span class="nc" id="L31">    private String email;</span>
+
+//    Social Login 에서 받아오는 문자열값
+    @Column(length = 32, nullable = false)
+<span class="nc" id="L35">    private String uuid;</span>
+
+//    주소 Table에서 입력한 후 받아오는 값, 이후 수정 필요
+    @NotNull
+<span class="nc" id="L39">    private String locationId;</span>
+
+    @CreationTimestamp
+    @Column(name = &quot;created_at&quot;)
+<span class="nc" id="L43">    private LocalDateTime createdAt;</span>
+
+    @UpdateTimestamp
+    @Column(name = &quot;updated_at&quot;)
+<span class="nc" id="L47">    private LocalDateTime updatedAt;</span>
+
+//    소셜로그인 제공사
+    @Column(length = 20, nullable = false)
+<span class="nc" id="L51">    private String provider;</span>
+
+//    프로필 이미지
+    @Column(name =&quot;profile_img&quot;, length = 256)
+<span class="nc" id="L55">    private String profileImg;</span>
+
+//    프로필 소개
+    @Column(name =&quot;profile_intro&quot;, length = 256)
+<span class="nc" id="L59">    private String profileIntro;</span>
+
+//    전화번호
+    @Column(length = 30, nullable = false)
+<span class="nc" id="L63">    private String phone;</span>
+
+//    휴면 계정 여부(DEFAULT = 1)
+    @Column(name =&quot;is_active&quot;)
+<span class="nc" id="L67">    private Boolean isActive;</span>
+
+//    계정 정지 여부 (DEFAULT = 0)
+    @Column(name =&quot;is_blocked&quot;)
+<span class="nc" id="L71">    private Boolean isBlocked;</span>
+
+//    생년월일
+    @NotNull
+<span class="nc" id="L75">    private LocalDate birth;</span>
+
+//    대학교
+    @Column(length = 20, nullable = false)
+<span class="nc" id="L79">    private String university;</span>
+
+//    대학생 인증 여부 (DEFAULT = 0)
+    @Column(name =&quot;is_university&quot;)
+<span class="nc" id="L83">    private Boolean isUniversity;</span>
+
+    @PrePersist
+    public void setDefault(){
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        this.isActive = this.isActive == null ? true : this.isActive;</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        this.isBlocked = this.isBlocked == null ? false : this.isBlocked;</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        this.isUniversity = this.isUniversity == null ? false : this.isUniversity;</span>
+<span class="nc" id="L90">    }</span>
+
+<span class="nc" id="L92">    @Builder</span>
+    public User(
+                String email,
+                String uuid,
+                String locationId,
+                String provider,
+                String profileImg,
+                String profileIntro,
+                String phone,
+                String username,
+                LocalDate birth,
+<span class="nc" id="L103">                String university) {</span>
+
+<span class="nc" id="L105">        this.email = email;</span>
+<span class="nc" id="L106">        this.uuid = uuid;</span>
+<span class="nc" id="L107">        this.locationId = locationId;</span>
+<span class="nc" id="L108">        this.provider = provider;</span>
+<span class="nc" id="L109">        this.profileImg = profileImg;</span>
+<span class="nc" id="L110">        this.profileIntro = profileIntro;</span>
+<span class="nc" id="L111">        this.phone = phone;</span>
+<span class="nc" id="L112">        this.username = username;</span>
+<span class="nc" id="L113">        this.birth = birth;</span>
+<span class="nc" id="L114">        this.university = university;</span>
+<span class="nc" id="L115">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
