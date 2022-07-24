@@ -19,25 +19,18 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
 
-    public void saveItem(ItemDto itemDto){
-        Item item= Item.builder()
-                .name(itemDto.getName())
-                .deposit(itemDto.getDeposit())
-                .startDate(itemDto.getStartDate())
-                .endDate(itemDto.getEndDate())
-                .duration(itemDto.getDuration())
-                .rentalFee(itemDto.getRentalFee())
-                .category(itemDto.getCategory())
-                .build();
-    }
-
     public List<Item> findItems(){
         return itemRepository.findAll();
     }
 
-    public Optional<Item> findOne(String itemName){
-        return itemRepository.findByName(itemName);
+    public List<Item> findItemsByName(String itemName){
+        return itemRepository.findAllByName(itemName);
     }
+
+    public Optional<Item> findOne(Long itemId){
+        return itemRepository.findById(itemId);
+    }
+
 
 
 }

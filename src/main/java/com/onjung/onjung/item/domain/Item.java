@@ -1,9 +1,9 @@
 package com.onjung.onjung.item.domain;
 
-import com.onjung.onjung.category.domain.Category;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @Table(name="item")
 @DynamicInsert
 @NoArgsConstructor
