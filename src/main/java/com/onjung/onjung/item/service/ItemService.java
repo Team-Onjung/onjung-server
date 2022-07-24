@@ -24,7 +24,7 @@ public class ItemService {
     }
 
     public List<Item> findItemsByName(String itemName){
-        return itemRepository.findByName(itemName);
+        return itemRepository.findAllByName(itemName);
     }
 
     public Optional<Item> findOne(Long itemId){
