@@ -28,23 +28,4 @@ public class ItemDto {
 
     private Category category;
 
-    @Builder
-    public ItemDto(
-            String name,
-            int deposit,
-            LocalDateTime startDate,
-            LocalDateTime endDate,
-            LocalDateTime duration,
-            int rentalFee,
-            Category category
-    ){
-      this.name = name;
-      this.deposit = deposit;
-      this.startDate = startDate;
-      this.endDate = endDate;
-      this.duration = duration;
-      this.rentalFee = rentalFee;
-      this.category = category;
-    }
-
 }
