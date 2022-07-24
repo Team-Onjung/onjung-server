@@ -50,6 +50,10 @@ public class ClientFeedService implements FeedService{
         userRepository.save(testUser);
 
         Optional<User> savedUser= userRepository.findByUsername(name);
+//        savedUser.get().changeIsActive();
+//        savedUser.get().setLastLogin();
+//        System.out.println("savedUser.get().getLastLogined() = " + savedUser.get().getIsActive());
+//        System.out.println("savedUser.get().getLastLogined() = " + savedUser.get().getLastLogined());
 
         try {
             ClientFeed feed = ClientFeed.builder()

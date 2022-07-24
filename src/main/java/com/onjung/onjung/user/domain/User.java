@@ -1,5 +1,6 @@
 package com.onjung.onjung.user.domain;
 
+import com.onjung.onjung.feed.domain.Status;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -82,6 +83,11 @@ public class User {
     @Column(name ="is_university")
     private Boolean isUniversity;
 
+//    마지막 로그인 날짜
+    @CreationTimestamp
+    @Column(name = "last_logined")
+    private LocalDateTime lastLogined;
+
     @PrePersist
     public void setDefault(){
         this.isActive = this.isActive == null ? true : this.isActive;
@@ -112,5 +118,14 @@ public class User {
         this.username = username;
         this.birth = birth;
         this.university = university;
+    }
+
+    //lastLogin 업데이트, 이후 로그인 구현시 테스트 필요
+    public void setLastLogin(){
+        this.lastLogined= LocalDateTime.now();
+    }
+
+    public void changeIsActive(){
+        this.isActive= !this.isActive;
     }
 }
