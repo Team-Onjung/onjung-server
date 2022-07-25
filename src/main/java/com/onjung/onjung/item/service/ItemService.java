@@ -3,6 +3,7 @@ package com.onjung.onjung.item.service;
 import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.exception.InvalidParameterException;
 import com.onjung.onjung.feed.domain.ClientFeed;
+import com.onjung.onjung.item.domain.Category;
 import com.onjung.onjung.item.domain.Item;
 import com.onjung.onjung.item.dto.ItemDto;
 import com.onjung.onjung.item.repository.ItemRepository;
@@ -13,6 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +35,7 @@ public class ItemService {
     @Transactional
     @CacheEvict(value="itemCaching", allEntries = true)
     public void createItem(ItemDto itemDto) throws Exception {
+
         try{
             Item item = Item.builder()
                     .name(itemDto.getName())
@@ -44,13 +47,14 @@ public class ItemService {
                     .rentalFee(itemDto.getRentalFee())
                     .build();
             itemRepository.save(item);
+
         }catch (IllegalArgumentException e){
             throw new InvalidParameterException();
         }
     }
 
     @Transactional(readOnly = true)
-    @CacheEvict(value = "itemCaching", key = "#itemId")
+    @Cacheable(value = "itemCaching", key = "#itemId")
     public Optional<Item> readItem(Long itemId) throws InterruptedException {
         Optional<Item> item = itemRepository.findById(itemId);
         if (item.isPresent()){
