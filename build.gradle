@@ -75,6 +75,8 @@ dependencies {
 	implementation group: 'net.sf.ehcache', name: 'ehcache', version: '2.10.9.2'
 
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
+	testImplementation 'org.springframework.batch:spring-batch-test'
+	implementation 'org.springframework.boot:spring-boot-starter-quartz'
 
     compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

@@ -29,40 +29,40 @@ public class JobConfig {
     @Autowired public EntityManagerFactory entityManagerFactory;
 
     @Bean
-    public Job ExampleJob() throws Exception {
+    public Job deactivateUserJob() throws Exception {
 
-        Job exampleJob = jobBuilderFactory.get("exampleJob")
-                .start(Step())
+        Job deactivateUserJob = jobBuilderFactory.get("deactivateUserJob")
+                .start(deactivateUserStep())
                 .build();
 
-        return exampleJob;
+        return deactivateUserJob;
     }
 
     @Bean
     @JobScope
-    public Step Step() throws Exception {
-        return stepBuilderFactory.get("Step")
+    public Step deactivateUserStep() throws Exception {
+        return stepBuilderFactory.get("deactivateUserStep")
                 .<User,User>chunk(10)
-                .reader(reader())
-                .processor(processor())
-                .writer(writer())
+                .reader(deactivateUserReader())
+                .processor(deactivateUserProcessor())
+                .writer(deactivateUserWriter())
                 .build();
     }
 
     @Bean
     @StepScope
-    public JpaPagingItemReader<User> reader() throws Exception {
+    public JpaPagingItemReader<User> deactivateUserReader() throws Exception {
 
         Map<String,Object> parameterValues = new HashMap<>();
 
-        LocalDateTime oneYearAgo = LocalDateTime.now().minusYears(1L);
+        LocalDateTime oneYearAgo = LocalDateTime.now();
 
         parameterValues.put("date", oneYearAgo);
 
         return new JpaPagingItemReaderBuilder<User>()
                 .pageSize(10)
                 .parameterValues(parameterValues)
-                .queryString("SELECT p FROM User as p WHERE DATEDIFF(p.lastLogined,date) >= 0")
+                .queryString("SELECT u FROM User as u WHERE u.isActive=true and DATEDIFF(dd,u.lastLogined, date) <= 365")
                 .entityManagerFactory(entityManagerFactory)
                 .name("JpaPagingItemReader")
                 .build();
@@ -70,7 +70,7 @@ public class JobConfig {
 
     @Bean
     @StepScope
-    public ItemProcessor<User, User> processor(){
+    public ItemProcessor<User, User> deactivateUserProcessor(){
 
         return new ItemProcessor<User, User>() {
 
@@ -85,7 +85,7 @@ public class JobConfig {
 
     @Bean
     @StepScope
-    public JpaItemWriter<User> writer(){
+    public JpaItemWriter<User> deactivateUserWriter(){
         return new JpaItemWriterBuilder<User>()
                 .entityManagerFactory(entityManagerFactory)
                 .build();
