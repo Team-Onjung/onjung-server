@@ -83,6 +83,10 @@ public class User {
     @Column(name ="is_university")
     private Boolean isUniversity;
 
+//    누적 경고수, 10회 이상일시 block
+    @Column(name = "report_cnt", columnDefinition = "bigint default 0")
+    private long reportCnt;
+
 //    마지막 로그인 날짜
     @CreationTimestamp
     @Column(name = "last_logined")
@@ -127,5 +131,9 @@ public class User {
 
     public void changeIsActive(){
         this.isActive= !this.isActive;
+    }
+
+    public void changeIsBlocked(){
+        this.isBlocked= !this.isBlocked;
     }
 }
