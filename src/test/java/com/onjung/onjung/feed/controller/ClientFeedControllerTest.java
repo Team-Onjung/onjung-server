@@ -1,7 +1,7 @@
 package com.onjung.onjung.feed.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.onjung.onjung.feed.repository.ClientFeedRepository;
+import com.onjung.onjung.feed.repository.jpa.ClientFeedRepository;
 import com.onjung.onjung.user.domain.User;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,7 @@
 package com.onjung.onjung.feed.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.onjung.onjung.feed.repository.ClientFeedRepository;
-import com.onjung.onjung.feed.repository.ServerFeedRepository;
-import com.onjung.onjung.user.domain.User;
+import com.onjung.onjung.feed.repository.jpa.ServerFeedRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,7 +14,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

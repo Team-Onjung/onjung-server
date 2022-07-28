@@ -21,7 +21,8 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 public class ClientFeed implements Feed{
 
-    @Id
+    @javax.persistence.Id
+    @org.springframework.data.annotation.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
