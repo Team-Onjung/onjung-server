@@ -1,18 +1,17 @@
 package com.onjung.onjung.feed.service;
 
+import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
-import org.springframework.http.ResponseEntity;
-
-import java.util.List;
-import java.util.Optional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface FeedService {
 
     void createFeed(FeedRequestDto feedRequestDto) throws Exception;
 
-    List readAllFeed();
+    Flux readAllFeed();
 
-    Optional readFeed(Long feedId) throws InterruptedException;
+    Mono readFeed(Long feedId) throws InterruptedException;
 
     void patchFeed(Long feedId, FeedRequestDto requestDto);
 

@@ -5,18 +5,21 @@ import com.onjung.onjung.exception.InvalidParameterException;
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.repository.jpa.ClientFeedRepository;
+import com.onjung.onjung.feed.repository.r2dbc.ClientFeedReactiveRepository;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,13 +31,15 @@ public class ClientFeedService implements FeedService{
     private final ClientFeedRepository clientFeedRepository;
     private final UserRepository userRepository;
 
-    @Transactional
+    @Autowired
+    ClientFeedReactiveRepository clientFeedReactiveRepository;
+
+    @Transactional(value = "transactionManager")
     @CacheEvict(value = "clientFeedCaching", allEntries = true)
     public void createFeed(FeedRequestDto feedRequestDto) throws Exception {
         //임시로 유저 객체 저장, 이후 회원가입한 회원에 한해 저장하는걸로 수정.
         LocalDate birthDate= LocalDate.ofYearDay(2022,1);
         String name=Double.toString(Math.random());
-
         User testUser=User.builder()
                 .email("email")
                 .birth(birthDate)
@@ -48,13 +53,8 @@ public class ClientFeedService implements FeedService{
                 .uuid("uuid")
                 .build();
         userRepository.save(testUser);
-
         Optional<User> savedUser= userRepository.findByUsername(name);
-//        savedUser.get().changeIsActive();
-//        savedUser.get().setLastLogin();
-//        System.out.println("savedUser.get().getLastLogined() = " + savedUser.get().getIsActive());
-//        System.out.println("savedUser.get().getLastLogined() = " + savedUser.get().getLastLogined());
-
+        //여기까지 이후 변경 필요.
         try {
             ClientFeed feed = ClientFeed.builder()
                     .writer(savedUser.get())
@@ -69,19 +69,18 @@ public class ClientFeedService implements FeedService{
         }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, value = "connectionFactoryTransactionManager")
     @Cacheable("clientFeedCaching")
-    public List<ClientFeed> readAllFeed(){
-        return clientFeedRepository.findAll();
+    public Flux<ClientFeed> readAllFeed(){
+        return clientFeedReactiveRepository.findAll();
     }
 
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, value = "connectionFactoryTransactionManager")
     @Cacheable(value = "clientFeedCaching", key = "#feedId")
-    public Optional<ClientFeed> readFeed(Long feedId) throws InterruptedException {
-//        Thread.sleep(3000);
-        Optional<ClientFeed> feed=clientFeedRepository.findById(feedId);
-        if (feed.isPresent()){
+    public Mono<ClientFeed> readFeed(Long feedId) throws InterruptedException {
+        Mono<ClientFeed> feed=clientFeedReactiveRepository.findById(feedId);
+        if (feed!=null){
             return feed;
         }else {
             throw new DataNotFoundException();
@@ -113,6 +112,7 @@ public class ClientFeedService implements FeedService{
         }
     }
 
+    @Transactional
     @CacheEvict(value = "clientFeedCaching", allEntries = true)
     public void deleteFeed(Long feedId){
         Optional<ClientFeed> clientFeed=clientFeedRepository.findById(feedId);

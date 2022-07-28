@@ -1,16 +1,17 @@
 package com.onjung.onjung.feed.controller;
 
 import com.onjung.onjung.feed.domain.ClientFeed;
+import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.service.ClientFeedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,21 +25,22 @@ public class ClientFeedController implements FeedController{
         try {
             feedService.createFeed(requestDto);
         }catch (Exception e){
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exception raised in ClientFeedController/createFeed");
         }
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
     @GetMapping("/feed")
-    public List<ClientFeed> readAllFeed(){
+    public Flux<ClientFeed> readAllFeed(){
         return feedService.readAllFeed();
     }
 
     @GetMapping("/feed/{feedId}")
     public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) {
         try {
-            Optional<ClientFeed> feed = feedService.readFeed(feedId);
-            return ResponseEntity.status(HttpStatus.OK).body(feed);
+            Mono<ClientFeed> feed = feedService.readFeed(feedId);
+            return ResponseEntity.status(HttpStatus.OK).body(feed.block());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exception raised in ClientFeedController/readFeed");
         }
