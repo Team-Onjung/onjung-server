@@ -1,5 +1,6 @@
 package com.onjung.onjung.user.domain;
 
+import com.onjung.onjung.feed.domain.Status;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,7 @@ public class User {
     private Long id;
 
     //    사용자 닉네임 (UNIQUE)
-    @Column(length = 20, unique = true, nullable = false)
+    @Column(length = 100, unique = true, nullable = false)
     private String username;
 
     @Column(length = 20, nullable = false)
@@ -82,6 +83,15 @@ public class User {
     @Column(name ="is_university")
     private Boolean isUniversity;
 
+//    누적 경고수, 10회 이상일시 block
+    @Column(name = "report_cnt", columnDefinition = "bigint default 0")
+    private long reportCnt;
+
+//    마지막 로그인 날짜
+    @CreationTimestamp
+    @Column(name = "last_logined")
+    private LocalDateTime lastLogined;
+
     @PrePersist
     public void setDefault(){
         this.isActive = this.isActive == null ? true : this.isActive;
@@ -112,5 +122,18 @@ public class User {
         this.username = username;
         this.birth = birth;
         this.university = university;
+    }
+
+    //lastLogin 업데이트, 이후 로그인 구현시 테스트 필요
+    public void setLastLogin(){
+        this.lastLogined= LocalDateTime.now();
+    }
+
+    public void changeIsActive(){
+        this.isActive= !this.isActive;
+    }
+
+    public void changeIsBlocked(){
+        this.isBlocked= !this.isBlocked;
     }
 }

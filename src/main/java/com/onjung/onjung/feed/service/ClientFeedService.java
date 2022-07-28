@@ -8,8 +8,6 @@ import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -52,6 +50,10 @@ public class ClientFeedService implements FeedService{
         userRepository.save(testUser);
 
         Optional<User> savedUser= userRepository.findByUsername(name);
+//        savedUser.get().changeIsActive();
+//        savedUser.get().setLastLogin();
+//        System.out.println("savedUser.get().getLastLogined() = " + savedUser.get().getIsActive());
+//        System.out.println("savedUser.get().getLastLogined() = " + savedUser.get().getLastLogined());
 
         try {
             ClientFeed feed = ClientFeed.builder()

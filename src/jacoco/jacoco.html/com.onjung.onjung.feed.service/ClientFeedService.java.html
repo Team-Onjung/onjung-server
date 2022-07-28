@@ -8,11 +8,10 @@ import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import net.sf.ehcache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +20,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-<span class="fc" id="L24">@RequiredArgsConstructor</span>
+<span class="nc" id="L23">@RequiredArgsConstructor</span>
 public class ClientFeedService implements FeedService{
 
-    private final CacheManager cacheManager;
+    private final EhCacheCacheManager cacheManager;
 
     private final ClientFeedRepository clientFeedRepository;
     private final UserRepository userRepository;
@@ -33,97 +32,89 @@ public class ClientFeedService implements FeedService{
     @CacheEvict(value = &quot;clientFeedCaching&quot;, allEntries = true)
     public void createFeed(FeedRequestDto feedRequestDto) throws Exception {
         //임시로 유저 객체 저장, 이후 회원가입한 회원에 한해 저장하는걸로 수정.
-<span class="nc" id="L36">        LocalDate birthDate= LocalDate.ofYearDay(2022,1);</span>
-<span class="nc" id="L37">        String name=Double.toString(Math.random());</span>
+<span class="nc" id="L35">        LocalDate birthDate= LocalDate.ofYearDay(2022,1);</span>
+<span class="nc" id="L36">        String name=Double.toString(Math.random());</span>
 
-<span class="nc" id="L39">        User testUser=User.builder()</span>
-<span class="nc" id="L40">                .email(&quot;email&quot;)</span>
-<span class="nc" id="L41">                .birth(birthDate)</span>
-<span class="nc" id="L42">                .locationId(&quot;locationId&quot;)</span>
-<span class="nc" id="L43">                .phone(&quot;phone&quot;)</span>
-<span class="nc" id="L44">                .profileImg(&quot;profileImg&quot;)</span>
-<span class="nc" id="L45">                .profileIntro(&quot;profileIntro&quot;)</span>
-<span class="nc" id="L46">                .provider(&quot;provider&quot;)</span>
-<span class="nc" id="L47">                .university(&quot;university&quot;)</span>
-<span class="nc" id="L48">                .username(name)</span>
-<span class="nc" id="L49">                .uuid(&quot;uuid&quot;)</span>
-<span class="nc" id="L50">                .build();</span>
-<span class="nc" id="L51">        userRepository.save(testUser);</span>
+<span class="nc" id="L38">        User testUser=User.builder()</span>
+<span class="nc" id="L39">                .email(&quot;email&quot;)</span>
+<span class="nc" id="L40">                .birth(birthDate)</span>
+<span class="nc" id="L41">                .locationId(&quot;locationId&quot;)</span>
+<span class="nc" id="L42">                .phone(&quot;phone&quot;)</span>
+<span class="nc" id="L43">                .profileImg(&quot;profileImg&quot;)</span>
+<span class="nc" id="L44">                .profileIntro(&quot;profileIntro&quot;)</span>
+<span class="nc" id="L45">                .provider(&quot;provider&quot;)</span>
+<span class="nc" id="L46">                .university(&quot;university&quot;)</span>
+<span class="nc" id="L47">                .username(name)</span>
+<span class="nc" id="L48">                .uuid(&quot;uuid&quot;)</span>
+<span class="nc" id="L49">                .build();</span>
+<span class="nc" id="L50">        userRepository.save(testUser);</span>
 
-<span class="nc" id="L53">        Optional&lt;User&gt; savedUser= userRepository.findByUsername(name);</span>
+<span class="nc" id="L52">        Optional&lt;User&gt; savedUser= userRepository.findByUsername(name);</span>
 
         try {
-<span class="nc" id="L56">            ClientFeed feed = ClientFeed.builder()</span>
-<span class="nc" id="L57">                    .writer(savedUser.get())</span>
-<span class="nc" id="L58">                    .title(feedRequestDto.getTitle())</span>
-<span class="nc" id="L59">                    .body(feedRequestDto.getBody())</span>
-<span class="nc" id="L60">                    .itemId(feedRequestDto.getItemId())</span>
-<span class="nc" id="L61">                    .build();</span>
+<span class="nc" id="L55">            ClientFeed feed = ClientFeed.builder()</span>
+<span class="nc" id="L56">                    .writer(savedUser.get())</span>
+<span class="nc" id="L57">                    .title(feedRequestDto.getTitle())</span>
+<span class="nc" id="L58">                    .body(feedRequestDto.getBody())</span>
+<span class="nc" id="L59">                    .itemId(feedRequestDto.getItemId())</span>
+<span class="nc" id="L60">                    .build();</span>
 
-<span class="nc" id="L63">            clientFeedRepository.save(feed);</span>
-<span class="nc" id="L64">        }catch (IllegalArgumentException e){</span>
-<span class="nc" id="L65">            throw new InvalidParameterException();</span>
-<span class="nc" id="L66">        }</span>
-<span class="nc" id="L67">    }</span>
+<span class="nc" id="L62">            clientFeedRepository.save(feed);</span>
+<span class="nc" id="L63">        }catch (IllegalArgumentException e){</span>
+<span class="nc" id="L64">            throw new InvalidParameterException();</span>
+<span class="nc" id="L65">        }</span>
+<span class="nc" id="L66">    }</span>
 
     @Transactional(readOnly = true)
     @Cacheable(&quot;clientFeedCaching&quot;)
     public List&lt;ClientFeed&gt; readAllFeed(){
-        //캐시확인을 위한 코드 이후 삭제 필요
-<span class="nc" id="L73">        Cache cache = (Cache) cacheManager.getCache(&quot;clientFeedCaching&quot;);</span>
-
-<span class="nc" id="L75">        List keys = cache.getKeys();</span>
-
-<span class="nc bnc" id="L77" title="All 2 branches missed.">        for(Object key: keys) {</span>
-<span class="nc" id="L78">            System.out.println(&quot;==&gt; ehcache key: &quot; + key + &quot;\n&quot;);</span>
-<span class="nc" id="L79">        }</span>
-
-<span class="nc" id="L81">        return clientFeedRepository.findAll();</span>
+<span class="nc" id="L71">        return clientFeedRepository.findAll();</span>
     }
 
 
     @Transactional(readOnly = true)
     @Cacheable(value = &quot;clientFeedCaching&quot;, key = &quot;#feedId&quot;)
-    public Optional&lt;ClientFeed&gt; readFeed(Long feedId){
-<span class="nc" id="L88">        Optional&lt;ClientFeed&gt; feed=clientFeedRepository.findById(feedId);</span>
-<span class="nc bnc" id="L89" title="All 2 branches missed.">        if (feed.isPresent()){</span>
-<span class="nc" id="L90">            return feed;</span>
+    public Optional&lt;ClientFeed&gt; readFeed(Long feedId) throws InterruptedException {
+//        Thread.sleep(3000);
+<span class="nc" id="L79">        Optional&lt;ClientFeed&gt; feed=clientFeedRepository.findById(feedId);</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        if (feed.isPresent()){</span>
+<span class="nc" id="L81">            return feed;</span>
         }else {
-<span class="nc" id="L92">            throw new DataNotFoundException();</span>
+<span class="nc" id="L83">            throw new DataNotFoundException();</span>
         }
     }
 
     @Transactional
     @CachePut(value = &quot;clientFeedCaching&quot;, key = &quot;#feedId&quot;)
     public void patchFeed(Long feedId, FeedRequestDto requestDto){
-<span class="nc" id="L99">        final Optional&lt;ClientFeed&gt; clientFeed= clientFeedRepository.findById(feedId);</span>
+<span class="nc" id="L90">        final Optional&lt;ClientFeed&gt; clientFeed= clientFeedRepository.findById(feedId);</span>
         try {
-<span class="nc bnc" id="L101" title="All 2 branches missed.">            if(clientFeed.isPresent()){</span>
-<span class="nc bnc" id="L102" title="All 2 branches missed.">                if(requestDto.getTitle()!=null){</span>
-<span class="nc" id="L103">                    clientFeed.get().setTitle(requestDto.getTitle());</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            if(clientFeed.isPresent()){</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">                if(requestDto.getTitle()!=null){</span>
+<span class="nc" id="L94">                    clientFeed.get().setTitle(requestDto.getTitle());</span>
                 }
-<span class="nc bnc" id="L105" title="All 2 branches missed.">                if(requestDto.getBody()!=null){</span>
-<span class="nc" id="L106">                    clientFeed.get().setBody(requestDto.getBody());</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">                if(requestDto.getBody()!=null){</span>
+<span class="nc" id="L97">                    clientFeed.get().setBody(requestDto.getBody());</span>
                 }
-<span class="nc bnc" id="L108" title="All 2 branches missed.">                if(requestDto.getItemId()!=null){</span>
-<span class="nc" id="L109">                    clientFeed.get().setItemId(requestDto.getItemId());</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">                if(requestDto.getItemId()!=null){</span>
+<span class="nc" id="L100">                    clientFeed.get().setItemId(requestDto.getItemId());</span>
                 }
-<span class="nc" id="L111">                clientFeedRepository.save(clientFeed.get());</span>
+<span class="nc" id="L102">                clientFeedRepository.save(clientFeed.get());</span>
             }else {
-<span class="nc" id="L113">                throw new DataNotFoundException();</span>
+<span class="nc" id="L104">                throw new DataNotFoundException();</span>
             }
 
-<span class="nc" id="L116">        }catch (IllegalArgumentException e){</span>
-<span class="nc" id="L117">            throw new InvalidParameterException();</span>
-<span class="nc" id="L118">        }</span>
-<span class="nc" id="L119">    }</span>
+<span class="nc" id="L107">        }catch (IllegalArgumentException e){</span>
+<span class="nc" id="L108">            throw new InvalidParameterException();</span>
+<span class="nc" id="L109">        }</span>
+<span class="nc" id="L110">    }</span>
 
     @CacheEvict(value = &quot;clientFeedCaching&quot;, allEntries = true)
     public void deleteFeed(Long feedId){
-<span class="nc" id="L123">        Optional&lt;ClientFeed&gt; clientFeed=clientFeedRepository.findById(feedId);</span>
-<span class="nc bnc" id="L124" title="All 2 branches missed.">        if(clientFeed.isPresent()){</span>
-<span class="nc" id="L125">            clientFeedRepository.delete(clientFeed.get());</span>
+<span class="nc" id="L114">        Optional&lt;ClientFeed&gt; clientFeed=clientFeedRepository.findById(feedId);</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        if(clientFeed.isPresent()){</span>
+<span class="nc" id="L116">            clientFeedRepository.delete(clientFeed.get());</span>
         }
-<span class="nc" id="L127">    }</span>
+<span class="nc" id="L118">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">onjung</a> &gt; <a href="index.source.html" class="el_package">com.onjung.onjung.user.domain</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package com.onjung.onjung.user.domain;
 
+import com.onjung.onjung.feed.domain.Status;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,80 +17,85 @@ import java.time.LocalDateTime;
 @Getter
 @Table(name = &quot;User&quot;)
 @DynamicInsert
-<span class="fc" id="L19">@NoArgsConstructor</span>
+<span class="fc" id="L20">@NoArgsConstructor</span>
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-<span class="nc" id="L24">    private Long id;</span>
+<span class="fc" id="L25">    private Long id;</span>
 
     //    사용자 닉네임 (UNIQUE)
     @Column(length = 20, unique = true, nullable = false)
-<span class="nc" id="L28">    private String username;</span>
+<span class="fc" id="L29">    private String username;</span>
 
     @Column(length = 20, nullable = false)
-<span class="nc" id="L31">    private String email;</span>
+<span class="fc" id="L32">    private String email;</span>
 
 //    Social Login 에서 받아오는 문자열값
     @Column(length = 32, nullable = false)
-<span class="nc" id="L35">    private String uuid;</span>
+<span class="fc" id="L36">    private String uuid;</span>
 
 //    주소 Table에서 입력한 후 받아오는 값, 이후 수정 필요
     @NotNull
-<span class="nc" id="L39">    private String locationId;</span>
+<span class="fc" id="L40">    private String locationId;</span>
 
     @CreationTimestamp
     @Column(name = &quot;created_at&quot;)
-<span class="nc" id="L43">    private LocalDateTime createdAt;</span>
+<span class="nc" id="L44">    private LocalDateTime createdAt;</span>
 
     @UpdateTimestamp
     @Column(name = &quot;updated_at&quot;)
-<span class="nc" id="L47">    private LocalDateTime updatedAt;</span>
+<span class="nc" id="L48">    private LocalDateTime updatedAt;</span>
 
 //    소셜로그인 제공사
     @Column(length = 20, nullable = false)
-<span class="nc" id="L51">    private String provider;</span>
+<span class="fc" id="L52">    private String provider;</span>
 
 //    프로필 이미지
     @Column(name =&quot;profile_img&quot;, length = 256)
-<span class="nc" id="L55">    private String profileImg;</span>
+<span class="fc" id="L56">    private String profileImg;</span>
 
 //    프로필 소개
     @Column(name =&quot;profile_intro&quot;, length = 256)
-<span class="nc" id="L59">    private String profileIntro;</span>
+<span class="fc" id="L60">    private String profileIntro;</span>
 
 //    전화번호
     @Column(length = 30, nullable = false)
-<span class="nc" id="L63">    private String phone;</span>
+<span class="fc" id="L64">    private String phone;</span>
 
 //    휴면 계정 여부(DEFAULT = 1)
     @Column(name =&quot;is_active&quot;)
-<span class="nc" id="L67">    private Boolean isActive;</span>
+<span class="nc" id="L68">    private Boolean isActive;</span>
 
 //    계정 정지 여부 (DEFAULT = 0)
     @Column(name =&quot;is_blocked&quot;)
-<span class="nc" id="L71">    private Boolean isBlocked;</span>
+<span class="nc" id="L72">    private Boolean isBlocked;</span>
 
 //    생년월일
     @NotNull
-<span class="nc" id="L75">    private LocalDate birth;</span>
+<span class="fc" id="L76">    private LocalDate birth;</span>
 
 //    대학교
     @Column(length = 20, nullable = false)
-<span class="nc" id="L79">    private String university;</span>
+<span class="fc" id="L80">    private String university;</span>
 
 //    대학생 인증 여부 (DEFAULT = 0)
     @Column(name =&quot;is_university&quot;)
-<span class="nc" id="L83">    private Boolean isUniversity;</span>
+<span class="nc" id="L84">    private Boolean isUniversity;</span>
+
+//    마지막 로그인 날짜
+    @CreationTimestamp
+    @Column(name = &quot;last_logined&quot;)
+<span class="nc" id="L89">    private LocalDateTime lastLogined;</span>
 
     @PrePersist
     public void setDefault(){
-<span class="nc bnc" id="L87" title="All 2 branches missed.">        this.isActive = this.isActive == null ? true : this.isActive;</span>
-<span class="nc bnc" id="L88" title="All 2 branches missed.">        this.isBlocked = this.isBlocked == null ? false : this.isBlocked;</span>
-<span class="nc bnc" id="L89" title="All 2 branches missed.">        this.isUniversity = this.isUniversity == null ? false : this.isUniversity;</span>
-<span class="nc" id="L90">    }</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        this.isActive = this.isActive == null ? true : this.isActive;</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        this.isBlocked = this.isBlocked == null ? false : this.isBlocked;</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        this.isUniversity = this.isUniversity == null ? false : this.isUniversity;</span>
+<span class="fc" id="L96">    }</span>
 
-<span class="nc" id="L92">    @Builder</span>
+<span class="pc" id="L98">    @Builder</span>
     public User(
                 String email,
                 String uuid,
@@ -100,18 +106,27 @@ public class User {
                 String phone,
                 String username,
                 LocalDate birth,
-<span class="nc" id="L103">                String university) {</span>
+<span class="fc" id="L109">                String university) {</span>
 
-<span class="nc" id="L105">        this.email = email;</span>
-<span class="nc" id="L106">        this.uuid = uuid;</span>
-<span class="nc" id="L107">        this.locationId = locationId;</span>
-<span class="nc" id="L108">        this.provider = provider;</span>
-<span class="nc" id="L109">        this.profileImg = profileImg;</span>
-<span class="nc" id="L110">        this.profileIntro = profileIntro;</span>
-<span class="nc" id="L111">        this.phone = phone;</span>
-<span class="nc" id="L112">        this.username = username;</span>
-<span class="nc" id="L113">        this.birth = birth;</span>
-<span class="nc" id="L114">        this.university = university;</span>
-<span class="nc" id="L115">    }</span>
+<span class="fc" id="L111">        this.email = email;</span>
+<span class="fc" id="L112">        this.uuid = uuid;</span>
+<span class="fc" id="L113">        this.locationId = locationId;</span>
+<span class="fc" id="L114">        this.provider = provider;</span>
+<span class="fc" id="L115">        this.profileImg = profileImg;</span>
+<span class="fc" id="L116">        this.profileIntro = profileIntro;</span>
+<span class="fc" id="L117">        this.phone = phone;</span>
+<span class="fc" id="L118">        this.username = username;</span>
+<span class="fc" id="L119">        this.birth = birth;</span>
+<span class="fc" id="L120">        this.university = university;</span>
+<span class="fc" id="L121">    }</span>
+
+    //lastLogin 업데이트, 이후 로그인 구현시 테스트 필요
+    public void setLastLogin(){
+<span class="nc" id="L125">        this.lastLogined= LocalDateTime.now();</span>
+<span class="nc" id="L126">    }</span>
+
+    public void changeIsActive(){
+<span class="nc bnc" id="L129" title="All 2 branches missed.">        this.isActive= !this.isActive;</span>
+<span class="nc" id="L130">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

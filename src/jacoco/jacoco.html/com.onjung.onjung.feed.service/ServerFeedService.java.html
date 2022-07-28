@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-<span class="fc" id="L19">@RequiredArgsConstructor</span>
+<span class="nc" id="L19">@RequiredArgsConstructor</span>
 public class ServerFeedService implements FeedService{
 
     private final ServerFeedRepository serverFeedRepository;
@@ -58,7 +58,7 @@ public class ServerFeedService implements FeedService{
 <span class="nc" id="L58">    }</span>
 
     public List&lt;ServerFeed&gt; readAllFeed(){
-<span class="fc" id="L61">        return serverFeedRepository.findAll();</span>
+<span class="nc" id="L61">        return serverFeedRepository.findAll();</span>
     }
 
     public Optional&lt;ServerFeed&gt; readFeed(Long feedId){
