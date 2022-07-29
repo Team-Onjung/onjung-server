@@ -7,7 +7,9 @@ import com.onjung.onjung.feed.service.ClientFeedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -19,6 +21,8 @@ import javax.validation.Valid;
 public class ClientFeedController implements FeedController{
 
     private final ClientFeedService feedService;
+
+    WebClient client=WebClient.create();
 
     @PostMapping("/feed")
     public ResponseEntity createFeed(@Valid @RequestBody FeedRequestDto requestDto) {
@@ -32,18 +36,16 @@ public class ClientFeedController implements FeedController{
     }
 
     @GetMapping("/feed")
+    @Async
     public Flux<ClientFeed> readAllFeed(){
         return feedService.readAllFeed();
     }
 
     @GetMapping("/feed/{feedId}")
-    public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) {
-        try {
+    @Async
+    public Mono<ClientFeed> readFeed(@PathVariable("feedId") Long feedId) throws InterruptedException {
             Mono<ClientFeed> feed = feedService.readFeed(feedId);
-            return ResponseEntity.status(HttpStatus.OK).body(feed.block());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exception raised in ClientFeedController/readFeed");
-        }
+            return feed;
     }
 
     @PatchMapping("/feed/{feedId}")

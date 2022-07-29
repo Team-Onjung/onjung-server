@@ -1,5 +1,6 @@
 package com.onjung.onjung.feed.controller;
 
+import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.service.ServerFeedService;
@@ -36,13 +37,9 @@ public class SeverFeedController implements FeedController{
     }
 
     @GetMapping("/feed/{feedId}")
-    public ResponseEntity readFeed(@PathVariable("feedId") Long feedId){
-        try {
+    public Mono<ServerFeed> readFeed(@PathVariable("feedId") Long feedId){
             Mono<ServerFeed> feed = feedService.readFeed(feedId);
-            return ResponseEntity.status(HttpStatus.OK).body(feed);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exception raised in ClientFeedController/readFeed");
-        }
+            return feed;
     }
 
     @PatchMapping("/feed/{feedId}")
