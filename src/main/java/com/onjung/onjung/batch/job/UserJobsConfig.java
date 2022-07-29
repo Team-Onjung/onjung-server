@@ -15,8 +15,10 @@ import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 
 import javax.persistence.EntityManagerFactory;
@@ -26,6 +28,7 @@ import java.util.Map;
 
 @Slf4j
 @Configuration
+@Import(DataSourceAutoConfiguration.class)
 @RequiredArgsConstructor
 public class UserJobsConfig {
     @Autowired public JobBuilderFactory jobBuilderFactory;

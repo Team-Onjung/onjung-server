@@ -1,4 +1,4 @@
-package com.onjung.onjung.feed.repository;
+package com.onjung.onjung.feed.repository.jpa;
 
 import com.onjung.onjung.feed.domain.ClientFeed;
 import org.springframework.data.jpa.repository.JpaRepository;

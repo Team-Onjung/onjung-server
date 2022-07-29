@@ -1,6 +1,5 @@
 package com.onjung.onjung.feed.domain;
 
-import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.user.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

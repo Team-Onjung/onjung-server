@@ -1,10 +1,8 @@
 package com.onjung.onjung.feed.service;
 
-import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.domain.Status;
-import com.onjung.onjung.feed.repository.ClientFeedRepository;
-import com.onjung.onjung.feed.repository.ServerFeedRepository;
+import com.onjung.onjung.feed.repository.jpa.ServerFeedRepository;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)

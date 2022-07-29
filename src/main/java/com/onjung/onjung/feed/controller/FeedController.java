@@ -2,17 +2,16 @@ package com.onjung.onjung.feed.controller;
 
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
-import java.util.Optional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface FeedController {
 
     ResponseEntity createFeed(FeedRequestDto requestDto);
 
-    List readAllFeed();
+    Flux readAllFeed();
 
-    ResponseEntity readFeed(Long feedId);
+    Mono readFeed(Long feedId) throws InterruptedException;
 
     ResponseEntity updateFeed(Long feedId, FeedRequestDto requestDto);
 

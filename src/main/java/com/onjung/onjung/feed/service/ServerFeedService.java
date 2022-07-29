@@ -2,27 +2,42 @@ package com.onjung.onjung.feed.service;
 
 import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.exception.InvalidParameterException;
+import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
-import com.onjung.onjung.feed.repository.ServerFeedRepository;
+import com.onjung.onjung.feed.repository.jpa.ServerFeedRepository;
+import com.onjung.onjung.feed.repository.r2dbc.ClientFeedReactiveRepository;
+import com.onjung.onjung.feed.repository.r2dbc.ServerFeedReactiveRepository;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ServerFeedService implements FeedService{
 
+    private final EhCacheCacheManager cacheManager;
+
     private final ServerFeedRepository serverFeedRepository;
     private final UserRepository userRepository;
 
-    @Transactional
+    @Autowired
+    ServerFeedReactiveRepository serverFeedReactiveRepository;
+
+    @Transactional(value = "transactionManager")
+    @CacheEvict(value = "serverFeedCaching", allEntries = true)
     public void createFeed(FeedRequestDto feedRequestDto) throws Exception {
         //임시로 유저 객체 저장, 이후 회원가입한 회원에 한해 저장하는걸로 수정.
         LocalDate birthDate= LocalDate.ofYearDay(2022,1);
@@ -43,7 +58,7 @@ public class ServerFeedService implements FeedService{
         userRepository.save(testUser);
 
         Optional<User> savedUser= userRepository.findByUsername(name);
-
+        //여기까지 이후 변경 필요.
         try {
             ServerFeed feed = ServerFeed.builder()
                     .writer(savedUser.get())
@@ -57,19 +72,25 @@ public class ServerFeedService implements FeedService{
         }
     }
 
-    public List<ServerFeed> readAllFeed(){
-        return serverFeedRepository.findAll();
+    @Transactional(readOnly = true, value = "connectionFactoryTransactionManager")
+    @Cacheable("serverFeedCaching")
+    public Flux<ServerFeed> readAllFeed(){
+        return serverFeedReactiveRepository.findAll();
     }
 
-    public Optional<ServerFeed> readFeed(Long feedId){
-        Optional<ServerFeed> feed=serverFeedRepository.findById(feedId);
-        if (feed.isPresent()){
+    @Transactional(readOnly = true, value = "connectionFactoryTransactionManager")
+    @Cacheable(value = "serverFeedCaching", key = "#feedId")
+    public Mono<ServerFeed> readFeed(Long feedId){
+        Mono<ServerFeed> feed=serverFeedReactiveRepository.findById(feedId);
+        if (feed!=null){
             return feed;
         }else {
             throw new DataNotFoundException();
         }
     }
 
+    @Transactional
+    @CachePut(value = "serverFeedCaching", key = "#feedId")
     public void patchFeed(Long feedId, FeedRequestDto requestDto){
         final Optional<ServerFeed> serverFeed= serverFeedRepository.findById(feedId);
         try {
@@ -93,6 +114,8 @@ public class ServerFeedService implements FeedService{
         }
     }
 
+    @Transactional
+    @CacheEvict(value = "serverFeedCaching", allEntries = true)
     public void deleteFeed(Long feedId){
         Optional<ServerFeed> serverFeed=serverFeedRepository.findById(feedId);
         if(serverFeed.isPresent()){
