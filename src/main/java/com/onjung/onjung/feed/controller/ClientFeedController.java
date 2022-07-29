@@ -22,8 +22,6 @@ public class ClientFeedController implements FeedController{
 
     private final ClientFeedService feedService;
 
-    WebClient client=WebClient.create();
-
     @PostMapping("/feed")
     public ResponseEntity createFeed(@Valid @RequestBody FeedRequestDto requestDto) {
         try {
@@ -36,13 +34,13 @@ public class ClientFeedController implements FeedController{
     }
 
     @GetMapping("/feed")
-    @Async
+//    @Async
     public Flux<ClientFeed> readAllFeed(){
         return feedService.readAllFeed();
     }
 
     @GetMapping("/feed/{feedId}")
-    @Async
+//    @Async
     public Mono<ClientFeed> readFeed(@PathVariable("feedId") Long feedId) throws InterruptedException {
             Mono<ClientFeed> feed = feedService.readFeed(feedId);
             return feed;
