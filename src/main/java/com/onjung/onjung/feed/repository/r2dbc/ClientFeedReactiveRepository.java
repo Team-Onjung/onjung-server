@@ -6,6 +6,5 @@ import reactor.core.publisher.Mono;
 
 public interface ClientFeedReactiveRepository extends R2dbcRepository<ClientFeed,Long> {
 
-//    @Query("select * from client_feed")
     Mono<ClientFeed> findById(Long id);
 }

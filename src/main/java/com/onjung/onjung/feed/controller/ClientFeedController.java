@@ -1,7 +1,6 @@
 package com.onjung.onjung.feed.controller;
 
 import com.onjung.onjung.feed.domain.ClientFeed;
-import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.service.ClientFeedService;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -34,13 +32,13 @@ public class ClientFeedController implements FeedController{
     }
 
     @GetMapping("/feed")
-//    @Async
+    @Async
     public Flux<ClientFeed> readAllFeed(){
         return feedService.readAllFeed();
     }
 
     @GetMapping("/feed/{feedId}")
-//    @Async
+    @Async
     public Mono<ClientFeed> readFeed(@PathVariable("feedId") Long feedId) throws InterruptedException {
             Mono<ClientFeed> feed = feedService.readFeed(feedId);
             return feed;
