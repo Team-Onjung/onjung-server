@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.WebAsyncTask;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -31,9 +32,9 @@ public class SeverFeedController implements FeedController{
     }
 
     @GetMapping("/feed")
-    public List<ServerFeed> readAllFeed(){
+    public WebAsyncTask<List<ServerFeed>> readAllFeed(){
 
-        return feedService.readAllFeed();
+        return new WebAsyncTask<List<ServerFeed>>(feedService::readAllFeed);
     }
 
     @GetMapping("/feed/{feedId}")

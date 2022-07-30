@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.WebAsyncTask;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -29,9 +30,12 @@ public class ClientFeedController implements FeedController{
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
+//    WebAsyncTask: Callable에 비해, timeout과 thread를 지정하기가 비교적 간편하다.
+//                  Callable을 돌려줄 때와 사용법 및 내부 동작은 동일.
+//                  Callable을 WebAsyncTask로 한번 더 감싸주기만 하면 됨.
     @GetMapping("/feed")
-    public List<ClientFeed> readAllFeed(){
-        return feedService.readAllFeed();
+    public WebAsyncTask<List<ClientFeed>> readAllFeed(){
+        return new WebAsyncTask<List<ClientFeed>>(feedService::readAllFeed);
     }
 
     @GetMapping("/feed/{feedId}")
