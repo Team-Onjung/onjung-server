@@ -2,7 +2,7 @@ package com.onjung.onjung.feed.service;
 
 import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.domain.Status;
-import com.onjung.onjung.feed.repository.jpa.ServerFeedRepository;
+import com.onjung.onjung.feed.repository.ServerFeedRepository;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;

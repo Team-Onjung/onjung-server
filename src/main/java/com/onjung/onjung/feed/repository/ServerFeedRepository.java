@@ -1,4 +1,4 @@
-package com.onjung.onjung.feed.repository.jpa;
+package com.onjung.onjung.feed.repository;
 
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
