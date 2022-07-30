@@ -2,7 +2,7 @@ package com.onjung.onjung.feed.service;
 
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.Status;
-import com.onjung.onjung.feed.repository.jpa.ClientFeedRepository;
+import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.user.domain.User;
 
 import com.onjung.onjung.user.repository.UserRepository;

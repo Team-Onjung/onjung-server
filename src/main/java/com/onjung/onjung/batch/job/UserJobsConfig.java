@@ -28,7 +28,6 @@ import java.util.Map;
 
 @Slf4j
 @Configuration
-@Import(DataSourceAutoConfiguration.class)
 @RequiredArgsConstructor
 public class UserJobsConfig {
     @Autowired public JobBuilderFactory jobBuilderFactory;

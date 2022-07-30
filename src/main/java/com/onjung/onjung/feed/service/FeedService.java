@@ -1,17 +1,17 @@
 package com.onjung.onjung.feed.service;
 
-import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface FeedService {
 
     void createFeed(FeedRequestDto feedRequestDto) throws Exception;
 
-    Flux readAllFeed();
+    List readAllFeed();
 
-    Mono readFeed(Long feedId) throws InterruptedException;
+    Optional readFeed(Long feedId) throws InterruptedException;
 
     void patchFeed(Long feedId, FeedRequestDto requestDto);
 
