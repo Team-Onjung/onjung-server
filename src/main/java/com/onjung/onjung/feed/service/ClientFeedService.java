@@ -12,6 +12,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,6 +68,7 @@ public class ClientFeedService implements FeedService{
 
     @Transactional(readOnly = true)
     @Cacheable("clientFeedCaching")
+    @Async
     public List<ClientFeed> readAllFeed(){
         return clientFeedRepository.findAll();
     }
@@ -74,6 +76,7 @@ public class ClientFeedService implements FeedService{
 
     @Transactional(readOnly = true)
     @Cacheable(value = "clientFeedCaching", key = "#feedId")
+    @Async
     public Optional<ClientFeed> readFeed(Long feedId) throws InterruptedException {
 //        Thread.sleep(3000);
         Optional<ClientFeed> feed=clientFeedRepository.findById(feedId);
