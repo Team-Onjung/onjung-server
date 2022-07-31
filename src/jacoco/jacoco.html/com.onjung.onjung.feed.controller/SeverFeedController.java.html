@@ -8,13 +8,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.WebAsyncTask;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-<span class="nc" id="L17">@RequiredArgsConstructor</span>
+@RequiredArgsConstructor
 @RequestMapping(&quot;/server&quot;)
 public class SeverFeedController implements FeedController{
 
@@ -23,42 +24,42 @@ public class SeverFeedController implements FeedController{
     @PostMapping(&quot;/feed&quot;)
     public ResponseEntity createFeed(@Valid @RequestBody FeedRequestDto requestDto) {
         try {
-<span class="nc" id="L26">            feedService.createFeed(requestDto);</span>
-<span class="nc" id="L27">        }catch (Exception e){</span>
-<span class="nc" id="L28">            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(&quot;Exception raised in SeverFeedController/createFeed&quot;);</span>
-<span class="nc" id="L29">        }</span>
-<span class="nc" id="L30">        return ResponseEntity.status(HttpStatus.OK).body(&quot;ok&quot;);</span>
+<span class="nc" id="L27">            feedService.createFeed(requestDto);</span>
+<span class="nc" id="L28">        }catch (Exception e){</span>
+<span class="nc" id="L29">            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(&quot;Exception raised in SeverFeedController/createFeed&quot;);</span>
+<span class="nc" id="L30">        }</span>
+<span class="nc" id="L31">        return ResponseEntity.status(HttpStatus.OK).body(&quot;ok&quot;);</span>
     }
 
     @GetMapping(&quot;/feed&quot;)
-    public List&lt;ServerFeed&gt; readAllFeed(){
+    public WebAsyncTask&lt;List&lt;ServerFeed&gt;&gt; readAllFeed(){
 
-<span class="nc" id="L36">        return feedService.readAllFeed();</span>
+<span class="nc" id="L37">        return new WebAsyncTask&lt;List&lt;ServerFeed&gt;&gt;(feedService::readAllFeed);</span>
     }
 
     @GetMapping(&quot;/feed/{feedId}&quot;)
     public ResponseEntity readFeed(@PathVariable(&quot;feedId&quot;) Long feedId){
         try {
-<span class="nc" id="L42">            Optional&lt;ServerFeed&gt; feed = feedService.readFeed(feedId);</span>
-<span class="nc" id="L43">            return ResponseEntity.status(HttpStatus.OK).body(feed);</span>
-<span class="nc" id="L44">        } catch (Exception e) {</span>
-<span class="nc" id="L45">            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Exception raised in ClientFeedController/readFeed&quot;);</span>
+<span class="nc" id="L43">            Optional&lt;ServerFeed&gt; feed = feedService.readFeed(feedId);</span>
+<span class="nc" id="L44">            return ResponseEntity.status(HttpStatus.OK).body(feed);</span>
+<span class="nc" id="L45">        } catch (Exception e) {</span>
+<span class="nc" id="L46">            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Exception raised in ClientFeedController/readFeed&quot;);</span>
         }
     }
 
     @PatchMapping(&quot;/feed/{feedId}&quot;)
     public ResponseEntity updateFeed(@PathVariable(&quot;feedId&quot;) Long feedId, @Valid @RequestBody FeedRequestDto requestDto) {
         try {
-<span class="nc" id="L52">            feedService.patchFeed(feedId, requestDto);</span>
-<span class="nc" id="L53">        }catch (Exception e){</span>
-<span class="nc" id="L54">            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(&quot;Exception raised in SeverFeedController/updateFeed&quot;);</span>
-<span class="nc" id="L55">        }</span>
-<span class="nc" id="L56">        return ResponseEntity.status(HttpStatus.OK).body(&quot;ok&quot;);</span>
+<span class="nc" id="L53">            feedService.patchFeed(feedId, requestDto);</span>
+<span class="nc" id="L54">        }catch (Exception e){</span>
+<span class="nc" id="L55">            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(&quot;Exception raised in SeverFeedController/updateFeed&quot;);</span>
+<span class="nc" id="L56">        }</span>
+<span class="nc" id="L57">        return ResponseEntity.status(HttpStatus.OK).body(&quot;ok&quot;);</span>
     }
 
     @DeleteMapping(&quot;/feed/{feedId}&quot;)
     public void deleteFeed (@PathVariable(&quot;feedId&quot;) Long feedId){
-<span class="nc" id="L61">        feedService.deleteFeed(feedId);</span>
-<span class="nc" id="L62">    }</span>
+<span class="nc" id="L62">        feedService.deleteFeed(feedId);</span>
+<span class="nc" id="L63">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

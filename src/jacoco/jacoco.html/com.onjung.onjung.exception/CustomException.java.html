@@ -7,9 +7,9 @@ public class CustomException extends RuntimeException{
     private ErrorCode errorCode;
 
     public CustomException(ErrorCode errorCode) {
-<span class="nc" id="L10">        super(errorCode.getMessage());</span>
-<span class="nc" id="L11">        this.errorCode = errorCode;</span>
-<span class="nc" id="L12">    }</span>
+<span class="fc" id="L10">        super(errorCode.getMessage());</span>
+<span class="fc" id="L11">        this.errorCode = errorCode;</span>
+<span class="fc" id="L12">    }</span>
 
     public ErrorCode getErrorCode() {
 <span class="nc" id="L15">        return errorCode;</span>

@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.1'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+
 	id 'jacoco'
 }
 
@@ -22,7 +23,6 @@ jacocoTestReport {
 		csv.enabled false
 
 		html.destination file("src/jacoco/jacoco.html")
-		xml.destination file("src/jacoco/jacoco.xml")
 	}
 	finalizedBy 'jacocoTestCoverageVerification'
 }
@@ -36,13 +36,13 @@ jacocoTestCoverageVerification {
 			limit {
 				counter = 'LINE'
 				value = 'COVEREDRATIO'
-				minimum = 0.60
+				minimum = 0.00
 			}
 
 			limit {
 				counter = 'METHOD'
 				value = 'COVEREDRATIO'
-				minimum = 0.60
+				minimum = 0.00
 			}
 		}
 	}

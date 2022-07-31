@@ -12,90 +12,95 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
 @Table(name = &quot;User&quot;)
 @DynamicInsert
-<span class="fc" id="L20">@NoArgsConstructor</span>
+@NoArgsConstructor
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-<span class="fc" id="L25">    private Long id;</span>
+    private Long id;
 
     //    사용자 닉네임 (UNIQUE)
-    @Column(length = 20, unique = true, nullable = false)
-<span class="fc" id="L29">    private String username;</span>
+    @Column(length = 100, unique = true, nullable = false)
+    private String username;
 
     @Column(length = 20, nullable = false)
-<span class="fc" id="L32">    private String email;</span>
+    private String email;
 
 //    Social Login 에서 받아오는 문자열값
     @Column(length = 32, nullable = false)
-<span class="fc" id="L36">    private String uuid;</span>
+    private String uuid;
 
 //    주소 Table에서 입력한 후 받아오는 값, 이후 수정 필요
     @NotNull
-<span class="fc" id="L40">    private String locationId;</span>
+    private String locationId;
 
     @CreationTimestamp
     @Column(name = &quot;created_at&quot;)
-<span class="nc" id="L44">    private LocalDateTime createdAt;</span>
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = &quot;updated_at&quot;)
-<span class="nc" id="L48">    private LocalDateTime updatedAt;</span>
+    private LocalDateTime updatedAt;
 
 //    소셜로그인 제공사
     @Column(length = 20, nullable = false)
-<span class="fc" id="L52">    private String provider;</span>
+    private String provider;
 
 //    프로필 이미지
     @Column(name =&quot;profile_img&quot;, length = 256)
-<span class="fc" id="L56">    private String profileImg;</span>
+    private String profileImg;
 
 //    프로필 소개
     @Column(name =&quot;profile_intro&quot;, length = 256)
-<span class="fc" id="L60">    private String profileIntro;</span>
+    private String profileIntro;
 
 //    전화번호
     @Column(length = 30, nullable = false)
-<span class="fc" id="L64">    private String phone;</span>
+    private String phone;
 
 //    휴면 계정 여부(DEFAULT = 1)
     @Column(name =&quot;is_active&quot;)
-<span class="nc" id="L68">    private Boolean isActive;</span>
+    private Boolean isActive;
 
 //    계정 정지 여부 (DEFAULT = 0)
     @Column(name =&quot;is_blocked&quot;)
-<span class="nc" id="L72">    private Boolean isBlocked;</span>
+    private Boolean isBlocked;
 
 //    생년월일
     @NotNull
-<span class="fc" id="L76">    private LocalDate birth;</span>
+    private LocalDate birth;
 
 //    대학교
     @Column(length = 20, nullable = false)
-<span class="fc" id="L80">    private String university;</span>
+    private String university;
 
 //    대학생 인증 여부 (DEFAULT = 0)
     @Column(name =&quot;is_university&quot;)
-<span class="nc" id="L84">    private Boolean isUniversity;</span>
+    private Boolean isUniversity;
+
+//    누적 경고수, 10회 이상일시 block
+    @Column(name = &quot;report_cnt&quot;, columnDefinition = &quot;bigint default 0&quot;)
+    private long reportCnt;
 
 //    마지막 로그인 날짜
     @CreationTimestamp
     @Column(name = &quot;last_logined&quot;)
-<span class="nc" id="L89">    private LocalDateTime lastLogined;</span>
+    private LocalDateTime lastLogined;
 
     @PrePersist
     public void setDefault(){
-<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        this.isActive = this.isActive == null ? true : this.isActive;</span>
-<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        this.isBlocked = this.isBlocked == null ? false : this.isBlocked;</span>
-<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        this.isUniversity = this.isUniversity == null ? false : this.isUniversity;</span>
-<span class="fc" id="L96">    }</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">        this.isActive = this.isActive == null ? true : this.isActive;</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        this.isBlocked = this.isBlocked == null ? false : this.isBlocked;</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        this.isUniversity = this.isUniversity == null ? false : this.isUniversity;</span>
+<span class="fc" id="L101">    }</span>
 
-<span class="pc" id="L98">    @Builder</span>
+    @Builder
     public User(
                 String email,
                 String uuid,
@@ -106,27 +111,31 @@ public class User {
                 String phone,
                 String username,
                 LocalDate birth,
-<span class="fc" id="L109">                String university) {</span>
+<span class="fc" id="L114">                String university) {</span>
 
-<span class="fc" id="L111">        this.email = email;</span>
-<span class="fc" id="L112">        this.uuid = uuid;</span>
-<span class="fc" id="L113">        this.locationId = locationId;</span>
-<span class="fc" id="L114">        this.provider = provider;</span>
-<span class="fc" id="L115">        this.profileImg = profileImg;</span>
-<span class="fc" id="L116">        this.profileIntro = profileIntro;</span>
-<span class="fc" id="L117">        this.phone = phone;</span>
-<span class="fc" id="L118">        this.username = username;</span>
-<span class="fc" id="L119">        this.birth = birth;</span>
-<span class="fc" id="L120">        this.university = university;</span>
-<span class="fc" id="L121">    }</span>
+<span class="fc" id="L116">        this.email = email;</span>
+<span class="fc" id="L117">        this.uuid = uuid;</span>
+<span class="fc" id="L118">        this.locationId = locationId;</span>
+<span class="fc" id="L119">        this.provider = provider;</span>
+<span class="fc" id="L120">        this.profileImg = profileImg;</span>
+<span class="fc" id="L121">        this.profileIntro = profileIntro;</span>
+<span class="fc" id="L122">        this.phone = phone;</span>
+<span class="fc" id="L123">        this.username = username;</span>
+<span class="fc" id="L124">        this.birth = birth;</span>
+<span class="fc" id="L125">        this.university = university;</span>
+<span class="fc" id="L126">    }</span>
 
     //lastLogin 업데이트, 이후 로그인 구현시 테스트 필요
     public void setLastLogin(){
-<span class="nc" id="L125">        this.lastLogined= LocalDateTime.now();</span>
-<span class="nc" id="L126">    }</span>
+<span class="nc" id="L130">        this.lastLogined= LocalDateTime.now();</span>
+<span class="nc" id="L131">    }</span>
 
     public void changeIsActive(){
-<span class="nc bnc" id="L129" title="All 2 branches missed.">        this.isActive= !this.isActive;</span>
-<span class="nc" id="L130">    }</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        this.isActive= !this.isActive;</span>
+<span class="nc" id="L135">    }</span>
+
+    public void changeIsBlocked(){
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">        this.isBlocked= !this.isBlocked;</span>
+<span class="fc" id="L139">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

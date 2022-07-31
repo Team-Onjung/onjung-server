@@ -24,8 +24,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ClientFeedService implements FeedService{
 
-    private final EhCacheCacheManager cacheManager;
-
     private final ClientFeedRepository clientFeedRepository;
     private final UserRepository userRepository;
 
