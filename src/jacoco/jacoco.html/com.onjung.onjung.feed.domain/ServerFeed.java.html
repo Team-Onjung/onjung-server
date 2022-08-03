@@ -12,71 +12,70 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-<span class="nc" id="L15">@Setter</span>
+@Setter
 @Table(name = &quot;ServerFeed&quot;)
 @DynamicInsert
-<span class="fc" id="L18">@NoArgsConstructor</span>
-<span class="nc bnc" id="L19" title="All 72 branches missed.">@EqualsAndHashCode</span>
+@NoArgsConstructor
 public class ServerFeed implements Feed{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-<span class="nc" id="L24">    private Long id;</span>
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = &quot;writer_id&quot;)
-<span class="nc" id="L28">    private User writer;</span>
+    private User writer;
 
     //이후 아이템 완성시 수정필요
     @NotNull
-<span class="nc" id="L32">    private String itemId;</span>
+    private String itemId;
 
     @CreationTimestamp
     @Column(name = &quot;created_at&quot;)
-<span class="nc" id="L36">    private LocalDateTime createdAt;</span>
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = &quot;updated_at&quot;)
-<span class="nc" id="L40">    private LocalDateTime updatedAt;</span>
+    private LocalDateTime updatedAt;
 
     @Column(length = 32, nullable = false)
-<span class="nc" id="L43">    private String title;</span>
+    private String title;
 
     @NotNull
-<span class="nc" id="L46">    private String body;</span>
+    private String body;
 
     //    방문자 수
     @Column(columnDefinition = &quot;bigint default 0&quot;)
-<span class="nc" id="L50">    private long visitedCnt;</span>
+    private long visitedCnt;
 
     //    수령 안됨(가능) / 수령 대기(예약) / 수령 중(배송 중)/ 수령 취소/ 수령 완료
     @NotNull
     @Enumerated(EnumType.STRING)
-<span class="nc" id="L55">    private Status status;</span>
+    private Status status;
 
     @PrePersist
     public void setDefault(){
-<span class="nc bnc" id="L59" title="All 2 branches missed.">        this.status = this.status == null ? Status.STATUS_POSSIBLE : this.status;</span>
-<span class="nc" id="L60">    }</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        this.status = this.status == null ? Status.STATUS_POSSIBLE : this.status;</span>
+<span class="nc" id="L59">    }</span>
 
-<span class="nc" id="L62">    @Builder</span>
+    @Builder
     public ServerFeed(
             User writer,
             String title,
             String body,
-<span class="nc" id="L67">            String itemId) {</span>
-<span class="nc" id="L68">        this.writer = writer;</span>
-<span class="nc" id="L69">        this.itemId = itemId;</span>
-<span class="nc" id="L70">        this.title = title;</span>
-<span class="nc" id="L71">        this.body = body;</span>
-<span class="nc" id="L72">    }</span>
+<span class="nc" id="L66">            String itemId) {</span>
+<span class="nc" id="L67">        this.writer = writer;</span>
+<span class="nc" id="L68">        this.itemId = itemId;</span>
+<span class="nc" id="L69">        this.title = title;</span>
+<span class="nc" id="L70">        this.body = body;</span>
+<span class="nc" id="L71">    }</span>
 
     public void addCnt(){
-<span class="nc" id="L75">        this.visitedCnt+=1;</span>
-<span class="nc" id="L76">    }</span>
+<span class="nc" id="L74">        this.visitedCnt+=1;</span>
+<span class="nc" id="L75">    }</span>
 
     public void changeStatus(Status status){
-<span class="nc" id="L79">        this.status=status;</span>
-<span class="nc" id="L80">    }</span>
+<span class="nc" id="L78">        this.status=status;</span>
+<span class="nc" id="L79">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

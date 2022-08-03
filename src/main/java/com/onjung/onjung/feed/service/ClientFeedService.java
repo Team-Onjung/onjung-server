@@ -3,6 +3,7 @@
 import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.exception.InvalidParameterException;
 import com.onjung.onjung.feed.domain.ClientFeed;
+import com.onjung.onjung.feed.domain.Status;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.user.domain.User;
@@ -24,10 +25,27 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ClientFeedService implements FeedService{
 
-    private final EhCacheCacheManager cacheManager;
-
     private final ClientFeedRepository clientFeedRepository;
     private final UserRepository userRepository;
+
+    @Transactional
+    @CachePut(value = "clientFeedCaching", key = "#feedId")
+    public void lendFeed(Long feedId) throws Exception {
+        Optional<ClientFeed> clientFeed=clientFeedRepository.findById(feedId);
+        try {
+            if(clientFeed.isPresent()){
+                User LentUser=clientFeed.get().getWriter();
+                LentUser.earnPoints();
+
+                clientFeed.get().changeStatus(Status.STATUS_RESERVED);
+                clientFeedRepository.save(clientFeed.get());
+            }else {
+                throw new DataNotFoundException();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     @Transactional
     @CacheEvict(value = "clientFeedCaching", allEntries = true)
@@ -51,6 +69,7 @@ public class ClientFeedService implements FeedService{
         userRepository.save(testUser);
 
         Optional<User> savedUser= userRepository.findByUsername(name);
+        //
 
         try {
             ClientFeed feed = ClientFeed.builder()

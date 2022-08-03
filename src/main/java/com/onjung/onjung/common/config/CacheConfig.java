@@ -2,26 +2,36 @@ package com.onjung.onjung.common.config;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.config.CacheConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Scope;
 
 import java.util.Objects;
 
 @EnableCaching
 @Configuration
-public class CacheConfig {
+public class CacheConfig extends CachingConfigurerSupport {
 
     //CacacheManager의 적절한 관리 및 인스턴스를 제공하는데 필요하며 EhCache 설정 리소스를 구성한다.
     @Bean
     public EhCacheManagerFactoryBean cacheManagerFactoryBean(){
-        return new EhCacheManagerFactoryBean();
+        EhCacheManagerFactoryBean factoryBean = new EhCacheManagerFactoryBean();
+        //테스트를 위해 추가
+        factoryBean.setShared(true);
+        return factoryBean;
     }
 
     //  EhcacheManager 등록
     @Bean
+    @Scope
     public EhCacheCacheManager ehCacheCacheManager(){
 
         // 클라이언트 피드 캐시 설정

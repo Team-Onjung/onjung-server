@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.WebAsyncTask;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -31,9 +32,19 @@ public class SeverFeedController implements FeedController{
     }
 
     @GetMapping("/feed")
-    public List<ServerFeed> readAllFeed(){
+    public WebAsyncTask<List<ServerFeed>> readAllFeed(){
 
-        return feedService.readAllFeed();
+        return new WebAsyncTask<List<ServerFeed>>(feedService::readAllFeed);
+    }
+
+    @PostMapping("/feed/{feedId}")
+    public ResponseEntity borrowFeed(@PathVariable("feedId") Long feedId) {
+        try {
+            feedService.borrowFeed(feedId);
+            return ResponseEntity.status(HttpStatus.OK).body("borrowing is succeed");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception raised in ClientFeedController/borrowFeed");
+        }
     }
 
     @GetMapping("/feed/{feedId}")

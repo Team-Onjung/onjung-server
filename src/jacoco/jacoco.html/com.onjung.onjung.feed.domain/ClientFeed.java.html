@@ -14,72 +14,71 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-<span class="nc" id="L17">@Setter</span>
+@Setter
 @Table(name = &quot;ClientFeed&quot;)
 @DynamicInsert
-<span class="fc" id="L20">@NoArgsConstructor</span>
-<span class="nc bnc" id="L21" title="All 72 branches missed.">@EqualsAndHashCode</span>
+@NoArgsConstructor
 public class ClientFeed implements Feed{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-<span class="nc" id="L26">    private Long id;</span>
+    private Long id;
 
     @JsonIgnore
     @ManyToOne(fetch=FetchType.LAZY, optional=false)
     @JoinColumn(name = &quot;writer_id&quot;)
-<span class="nc" id="L31">    private User writer;</span>
+    private User writer;
 
     //이후 아이템 완성시 수정필요
     @NotNull
-<span class="nc" id="L35">    private String itemId;</span>
+    private String itemId;
 
     @CreationTimestamp
     @Column(name = &quot;created_at&quot;)
-<span class="nc" id="L39">    private LocalDateTime createdAt;</span>
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = &quot;updated_at&quot;)
-<span class="nc" id="L43">    private LocalDateTime updatedAt;</span>
+    private LocalDateTime updatedAt;
 
     @Column(length = 32, nullable = false)
-<span class="nc" id="L46">    private String title;</span>
+    private String title;
 
     @NotNull
-<span class="nc" id="L49">    private String body;</span>
+    private String body;
 
     //    방문자 수
     @Column(columnDefinition = &quot;bigint default 0&quot;)
-<span class="nc" id="L53">    private long visitedCnt;</span>
+    private long visitedCnt;
 
     //    수령 안됨(가능) / 수령 대기(예약) / 수령 중(배송 중)/ 수령 취소/ 수령 완료
     @NotNull
     @Enumerated(EnumType.STRING)
-<span class="nc" id="L58">    private Status status;</span>
+    private Status status;
 
     @PrePersist
     public void setDefault(){
-<span class="nc bnc" id="L62" title="All 2 branches missed.">        this.status = this.status == null ? Status.STATUS_POSSIBLE : this.status;</span>
-<span class="nc" id="L63">    }</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        this.status = this.status == null ? Status.STATUS_POSSIBLE : this.status;</span>
+<span class="fc" id="L62">    }</span>
 
-<span class="nc" id="L65">    @Builder</span>
+    @Builder
     public ClientFeed(
                       User writer,
                       String title,
                       String body,
-<span class="nc" id="L70">                      String itemId) {</span>
-<span class="nc" id="L71">        this.writer = writer;</span>
-<span class="nc" id="L72">        this.itemId = itemId;</span>
-<span class="nc" id="L73">        this.title = title;</span>
-<span class="nc" id="L74">        this.body = body;</span>
-<span class="nc" id="L75">    }</span>
+<span class="fc" id="L69">                      String itemId) {</span>
+<span class="fc" id="L70">        this.writer = writer;</span>
+<span class="fc" id="L71">        this.itemId = itemId;</span>
+<span class="fc" id="L72">        this.title = title;</span>
+<span class="fc" id="L73">        this.body = body;</span>
+<span class="fc" id="L74">    }</span>
 
     public void addCnt(){
-<span class="nc" id="L78">        this.visitedCnt+=1;</span>
-<span class="nc" id="L79">    }</span>
+<span class="nc" id="L77">        this.visitedCnt+=1;</span>
+<span class="nc" id="L78">    }</span>
 
     public void changeStatus(Status status){
-<span class="nc" id="L82">        this.status=status;</span>
-<span class="nc" id="L83">    }</span>
+<span class="nc" id="L81">        this.status=status;</span>
+<span class="nc" id="L82">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

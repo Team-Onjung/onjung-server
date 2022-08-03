@@ -16,11 +16,9 @@ import java.time.LocalDateTime;
 @Table(name = "ServerFeed")
 @DynamicInsert
 @NoArgsConstructor
-@EqualsAndHashCode
 public class ServerFeed implements Feed{
 
-    @javax.persistence.Id
-    @org.springframework.data.annotation.Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

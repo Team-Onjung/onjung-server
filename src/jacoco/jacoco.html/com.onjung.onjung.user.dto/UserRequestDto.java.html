@@ -4,31 +4,32 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 public class UserRequestDto {
 
-<span class="nc" id="L11">    String email;</span>
+    String email;
 
-<span class="nc" id="L13">    String uuid;</span>
+    String uuid;
 
-<span class="nc" id="L15">    String location_id;</span>
+    String location_id;
 
-<span class="nc" id="L17">    String provider;</span>
+    String provider;
 
-<span class="nc" id="L19">    String profileImg;</span>
+    String profileImg;
 
-<span class="nc" id="L21">    String profileIntro;</span>
+    String profileIntro;
 
-<span class="nc" id="L23">    String phone;</span>
+    String phone;
 
-<span class="nc" id="L25">    String username;</span>
+    String username;
 
-<span class="nc" id="L27">    LocalDate birth;</span>
+    LocalDate birth;
 
-<span class="nc" id="L29">    String university;</span>
+    String university;
 
-<span class="nc" id="L31">    @Builder</span>
+    @Builder
     public UserRequestDto(String email,
                           String uuid,
                           String location_id,
@@ -38,17 +39,17 @@ public class UserRequestDto {
                           String phone,
                           String username,
                           LocalDate birth,
-<span class="nc" id="L41">                          String university) {</span>
-<span class="nc" id="L42">        this.email = email;</span>
-<span class="nc" id="L43">        this.uuid = uuid;</span>
-<span class="nc" id="L44">        this.location_id = location_id;</span>
-<span class="nc" id="L45">        this.provider = provider;</span>
-<span class="nc" id="L46">        this.profileImg = profileImg;</span>
-<span class="nc" id="L47">        this.profileIntro = profileIntro;</span>
-<span class="nc" id="L48">        this.phone = phone;</span>
-<span class="nc" id="L49">        this.username = username;</span>
-<span class="nc" id="L50">        this.birth = birth;</span>
-<span class="nc" id="L51">        this.university = university;</span>
-<span class="nc" id="L52">    }</span>
+<span class="nc" id="L42">                          String university) {</span>
+<span class="nc" id="L43">        this.email = email;</span>
+<span class="nc" id="L44">        this.uuid = uuid;</span>
+<span class="nc" id="L45">        this.location_id = location_id;</span>
+<span class="nc" id="L46">        this.provider = provider;</span>
+<span class="nc" id="L47">        this.profileImg = profileImg;</span>
+<span class="nc" id="L48">        this.profileIntro = profileIntro;</span>
+<span class="nc" id="L49">        this.phone = phone;</span>
+<span class="nc" id="L50">        this.username = username;</span>
+<span class="nc" id="L51">        this.birth = birth;</span>
+<span class="nc" id="L52">        this.university = university;</span>
+<span class="nc" id="L53">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
