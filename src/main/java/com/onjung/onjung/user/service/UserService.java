@@ -1,11 +1,12 @@
 package com.onjung.onjung.user.service;
 
+import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.exception.DuplicatedUserException;
+import com.onjung.onjung.user.domain.Role;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.dto.UserRequestDto;
 import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +40,7 @@ public class UserService {
 
             validateDuplicateMember(user);
             userRepository.save(user);
+            System.out.println("user = " + userRepository.findByUsername("username").get().getUsername());
         }catch (Exception e){
             e.printStackTrace();
         }
