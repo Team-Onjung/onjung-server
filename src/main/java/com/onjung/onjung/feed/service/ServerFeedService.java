@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -45,30 +46,11 @@ public class ServerFeedService implements FeedService{
     }
 
     @Transactional
-    public void createFeed(FeedRequestDto feedRequestDto) throws Exception {
-        //임시로 유저 객체 저장, 이후 회원가입한 회원에 한해 저장하는걸로 수정.
-        LocalDate birthDate= LocalDate.ofYearDay(2022,1);
-        String name=Double.toString(Math.random());
-
-        User testUser=User.builder()
-                .email("email")
-                .birth(birthDate)
-                .locationId("locationId")
-                .phone("phone")
-                .profileImg("profileImg")
-                .profileIntro("profileIntro")
-                .provider("provider")
-                .university("university")
-                .username(name)
-                .uuid("uuid")
-                .build();
-        userRepository.save(testUser);
-
-        Optional<User> savedUser= userRepository.findByUsername(name);
+    public void createFeed(FeedRequestDto feedRequestDto, User feedUser) throws Exception {
 
         try {
             ServerFeed feed = ServerFeed.builder()
-                    .writer(savedUser.get())
+                    .writer(feedUser)
                     .title(feedRequestDto.getTitle())
                     .body(feedRequestDto.getBody())
                     .itemId(feedRequestDto.getItemId())
