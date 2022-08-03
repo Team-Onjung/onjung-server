@@ -38,6 +38,16 @@ public class ClientFeedController implements FeedController{
         return new WebAsyncTask<List<ClientFeed>>(feedService::readAllFeed);
     }
 
+    @PostMapping("/feed/{feedId}")
+    public ResponseEntity lendFeed(@PathVariable("feedId") Long feedId) {
+        try {
+            feedService.lendFeed(feedId);
+            return ResponseEntity.status(HttpStatus.OK).body("lending is succeed");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception raised in ClientFeedController/lendFeed");
+        }
+    }
+
     @GetMapping("/feed/{feedId}")
     public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) {
         try {

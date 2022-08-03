@@ -2,12 +2,15 @@ package com.onjung.onjung.feed.service;
 
 import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.exception.InvalidParameterException;
+import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
+import com.onjung.onjung.feed.domain.Status;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.repository.ServerFeedRepository;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +24,25 @@ public class ServerFeedService implements FeedService{
 
     private final ServerFeedRepository serverFeedRepository;
     private final UserRepository userRepository;
+
+    @Transactional
+    @CachePut(value = "clientFeedCaching", key = "#feedId")
+    public void borrowFeed(Long feedId) throws Exception {
+        Optional<ServerFeed> serverFeed=serverFeedRepository.findById(feedId);
+        try {
+            if(serverFeed.isPresent()){
+                User borrowedUser=serverFeed.get().getWriter();
+                borrowedUser.discountPoints();
+
+                serverFeed.get().changeStatus(Status.STATUS_RESERVED);
+                serverFeedRepository.save(serverFeed.get());
+            }else {
+                throw new DataNotFoundException();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     @Transactional
     public void createFeed(FeedRequestDto feedRequestDto) throws Exception {

@@ -37,6 +37,16 @@ public class SeverFeedController implements FeedController{
         return new WebAsyncTask<List<ServerFeed>>(feedService::readAllFeed);
     }
 
+    @PostMapping("/feed/{feedId}")
+    public ResponseEntity borrowFeed(@PathVariable("feedId") Long feedId) {
+        try {
+            feedService.borrowFeed(feedId);
+            return ResponseEntity.status(HttpStatus.OK).body("borrowing is succeed");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception raised in ClientFeedController/borrowFeed");
+        }
+    }
+
     @GetMapping("/feed/{feedId}")
     public ResponseEntity readFeed(@PathVariable("feedId") Long feedId){
         try {

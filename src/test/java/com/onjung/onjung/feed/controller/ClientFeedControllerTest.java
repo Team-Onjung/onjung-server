@@ -1,5 +1,6 @@
 package com.onjung.onjung.feed.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.repository.ClientFeedRepository;
@@ -193,6 +194,25 @@ public class ClientFeedControllerTest {
 
         ResultActions SuccessedResultActions=mockMvc.perform(delete("/client/feed/1")
                         .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void lendFeed() throws Exception {
+        Map<String, Object> data = new HashMap<>();
+
+        User testUser=new User();
+
+        data.put("title","title");
+        data.put("body", "body");
+        data.put("itemId","itemId");
+
+        ObjectMapper objectMapper=new ObjectMapper();
+
+        //성공 로직
+        ResultActions SuccessedResultActions=mockMvc.perform(post("/client/feed/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(data)))
                 .andExpect(status().isOk());
     }
 }

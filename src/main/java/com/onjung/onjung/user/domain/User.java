@@ -88,6 +88,10 @@ public class User {
     @Column(name = "report_cnt", columnDefinition = "bigint default 0")
     private long reportCnt;
 
+//    나눔 수 (포인트)
+    @Column(columnDefinition = "bigint default 0")
+    private long point;
+
 //    마지막 로그인 날짜
     @CreationTimestamp
     @Column(name = "last_logined")
@@ -136,5 +140,13 @@ public class User {
 
     public void changeIsBlocked(){
         this.isBlocked= !this.isBlocked;
+    }
+
+    public void earnPoints(){
+        this.point+=1;
+    }
+
+    public void discountPoints(){
+        this.point-=1;
     }
 }
