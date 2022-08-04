@@ -3,6 +3,7 @@ package com.onjung.onjung.user.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.persistence.Column;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -10,6 +11,9 @@ import java.util.UUID;
 public class UserRequestDto {
 
     String email;
+
+    //비밀번호, OAUTH 구현이후 삭제할지는 고민 필요
+    String password;
 
     String uuid;
 
@@ -31,6 +35,7 @@ public class UserRequestDto {
 
     @Builder
     public UserRequestDto(String email,
+                          String password,
                           String uuid,
                           String location_id,
                           String provider,
@@ -41,6 +46,7 @@ public class UserRequestDto {
                           LocalDate birth,
                           String university) {
         this.email = email;
+        this.password=password;
         this.uuid = uuid;
         this.location_id = location_id;
         this.provider = provider;

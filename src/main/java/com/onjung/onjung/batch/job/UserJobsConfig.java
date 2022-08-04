@@ -42,11 +42,15 @@ public class UserJobsConfig {
     public Job parallelUserJobs() throws Exception {
 
         Flow deactivateUser=new FlowBuilder<Flow>("deactivateUser")
-                .start(deactivateUserStep())
+                .from(deactivateUserStep())
+                .on(STEP_NAME1)
+                .end()
                 .build();
 
         Flow blockUserUser=new FlowBuilder<Flow>("blockUser")
-                .start(blockUserStep())
+                .from(blockUserStep())
+                .on(STEP_NAME2)
+                .end()
                 .build();
 
         Flow parallelUserSteps=new FlowBuilder<Flow>("parallelUserSteps")

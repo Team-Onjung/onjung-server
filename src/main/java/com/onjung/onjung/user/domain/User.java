@@ -29,6 +29,10 @@ public class User {
     @Column(length = 100, unique = true, nullable = false)
     private String username;
 
+    //비밀번호, OAUTH 구현이후 삭제할지는 고민 필요
+    @Column(length = 100, nullable = false)
+    private String password;
+
     @Column(length = 20, nullable = false)
     private String email;
 
@@ -107,6 +111,7 @@ public class User {
     @Builder
     public User(
                 String email,
+                String password,
                 String uuid,
                 String locationId,
                 String provider,
@@ -118,6 +123,7 @@ public class User {
                 String university) {
 
         this.email = email;
+        this.password=password;
         this.uuid = uuid;
         this.locationId = locationId;
         this.provider = provider;
@@ -148,5 +154,13 @@ public class User {
 
     public void discountPoints(){
         this.point-=1;
+    }
+
+    public String getUsername(){
+        return this.username;
+    }
+
+    public String getPassword(){
+        return this.password;
     }
 }
