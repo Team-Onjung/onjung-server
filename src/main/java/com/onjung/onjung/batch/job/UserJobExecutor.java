@@ -9,7 +9,7 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-public class BatchScheduledJob extends QuartzJobBean {
+public class UserJobExecutor extends QuartzJobBean {
 
     @Autowired
     private Job job;

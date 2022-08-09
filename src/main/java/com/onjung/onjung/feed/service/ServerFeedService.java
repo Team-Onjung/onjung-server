@@ -31,7 +31,7 @@ public class ServerFeedService implements FeedService{
     public void borrowFeed(Long feedId) throws Exception {
         Optional<ServerFeed> serverFeed=serverFeedRepository.findById(feedId);
         try {
-            if(serverFeed.isPresent()){
+            if(serverFeed.isPresent() && serverFeed.get().getStatus()==Status.STATUS_POSSIBLE){
                 User borrowedUser=serverFeed.get().getWriter();
                 borrowedUser.discountPoints();
 
