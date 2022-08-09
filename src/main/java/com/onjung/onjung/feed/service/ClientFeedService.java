@@ -33,7 +33,7 @@ public class ClientFeedService implements FeedService{
     public void lendFeed(Long feedId) throws Exception {
         Optional<ClientFeed> clientFeed=clientFeedRepository.findById(feedId);
         try {
-            if(clientFeed.isPresent()){
+            if(clientFeed.isPresent() && clientFeed.get().getStatus()==Status.STATUS_POSSIBLE){
                 User LentUser=clientFeed.get().getWriter();
                 LentUser.earnPoints();
 
