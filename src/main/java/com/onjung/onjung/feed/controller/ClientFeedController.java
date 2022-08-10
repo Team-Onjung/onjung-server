@@ -72,9 +72,11 @@ public class ClientFeedController implements FeedController{
         try {
             Optional<ClientFeed> feed = feedService.readFeed(feedId);
             return ResponseEntity.status(HttpStatus.OK).body(feed);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exception raised in ClientFeedController/readFeed");
         }
+        catch (InterruptedException e) {
+            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(e.getMessage());
+        }
+
     }
 
     @PatchMapping("/feed/{feedId}")

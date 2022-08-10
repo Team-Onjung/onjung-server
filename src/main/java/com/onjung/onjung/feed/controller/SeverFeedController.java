@@ -69,12 +69,9 @@ public class SeverFeedController implements FeedController{
 
     @GetMapping("/feed/{feedId}")
     public ResponseEntity readFeed(@PathVariable("feedId") Long feedId){
-        try {
             Optional<ServerFeed> feed = feedService.readFeed(feedId);
             return ResponseEntity.status(HttpStatus.OK).body(feed);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exception raised in ClientFeedController/readFeed");
-        }
+
     }
 
     @PatchMapping("/feed/{feedId}")

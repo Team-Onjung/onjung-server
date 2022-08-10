@@ -5,8 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import javax.xml.crypto.Data;
+import java.util.NoSuchElementException;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -26,6 +30,35 @@ public class ControllerExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
+    @ExceptionHandler(DataNotFoundException.class)
+    protected ResponseEntity<ErrorResponse> handleDataNotFoundException(DataNotFoundException e) {
+        logger.error("handleDataNotFoundException", e);
+
+        final ErrorResponse response
+                = ErrorResponse
+                .create()
+                .status(HttpStatus.NOT_FOUND.value())
+                .message(e.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    // 파라미터 유효성 검사 통과 못한 경우 처리하기
+    @ExceptionHandler({InvalidParameterException.class, MethodArgumentNotValidException.class})
+    protected ResponseEntity<ErrorResponse> handleInvalidParameterException(InvalidParameterException e) {
+        logger.error("handleInvalidParameterException", e);
+
+        ErrorCode errorCode = e.getErrorCode();
+
+        ErrorResponse response
+                = ErrorResponse
+                .create()
+                .status(errorCode.getStatus())
+                .message(e.toString())
+                .errors(e.getErrors());
+
+        return new ResponseEntity<>(response, HttpStatus.resolve(errorCode.getStatus()));
+    }
 
 
     // 나머지 오류 전부
@@ -38,7 +71,6 @@ public class ControllerExceptionHandler {
                 .create()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message(e.toString());
-
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

@@ -52,7 +52,6 @@ public class ClientFeedService implements FeedService{
     public void createFeed(FeedRequestDto feedRequestDto, User feedUser) throws Exception {
 
 
-        try {
             ClientFeed feed = ClientFeed.builder()
                     .writer(feedUser)
                     .title(feedRequestDto.getTitle())
@@ -61,10 +60,7 @@ public class ClientFeedService implements FeedService{
                     .build();
 
             clientFeedRepository.save(feed);
-        }catch (IllegalArgumentException e){
-            e.printStackTrace();
-            throw new InvalidParameterException();
-        }
+
     }
 
     @Transactional(readOnly = true)
@@ -92,7 +88,6 @@ public class ClientFeedService implements FeedService{
     @CachePut(value = "clientFeedCaching", key = "#feedId")
     public void patchFeed(Long feedId, FeedRequestDto requestDto){
         final Optional<ClientFeed> clientFeed= clientFeedRepository.findById(feedId);
-        try {
             if(clientFeed.isPresent()){
                 if(requestDto.getTitle()!=null){
                     clientFeed.get().setTitle(requestDto.getTitle());
@@ -108,9 +103,7 @@ public class ClientFeedService implements FeedService{
                 throw new DataNotFoundException();
             }
 
-        }catch (IllegalArgumentException e){
-            throw new InvalidParameterException();
-        }
+
     }
 
     @Transactional

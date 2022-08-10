@@ -36,7 +36,6 @@ public class ItemService {
     @CacheEvict(value="itemCaching", allEntries = true)
     public void createItem(ItemDto itemDto) throws Exception {
 
-        try{
             Item item = Item.builder()
                     .name(itemDto.getName())
                     .deposit(itemDto.getRentalFee())
@@ -48,9 +47,7 @@ public class ItemService {
                     .build();
             itemRepository.save(item);
 
-        }catch (IllegalArgumentException e){
-            throw new InvalidParameterException();
-        }
+
     }
 
     @Transactional(readOnly = true)

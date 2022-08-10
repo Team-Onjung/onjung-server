@@ -29,15 +29,15 @@ public class ItemController {
     }
 
     @GetMapping("{itemId}")
-    public ResponseEntity readItem(@PathVariable("itemId") Long itemId){
-        try{
+    public ResponseEntity readItem(@PathVariable("itemId") Long itemId) {
+        try {
             Optional<Item> item = itemService.readItem(itemId);
             return ResponseEntity.status(HttpStatus.OK).body(item);
-        }catch (Exception e)
-        {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exception raised in ItemController/readItem");
+        } catch (InterruptedException e) {
+            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(e.getMessage());
         }
     }
+
 
     @PostMapping()
     public ResponseEntity createItem(@Valid @RequestBody ItemDto itemDto){
