@@ -17,6 +17,9 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,9 +55,8 @@ public class SeverFeedController implements FeedController{
     }
 
     @GetMapping("/feed")
-    public WebAsyncTask<List<ServerFeed>> readAllFeed(){
-
-        return new WebAsyncTask<List<ServerFeed>>(feedService::readAllFeed);
+    public List<ServerFeed> readAllFeed() throws ExecutionException, InterruptedException, TimeoutException {
+        return feedService.readAllFeed().get(200L, TimeUnit.MILLISECONDS);
     }
 
     @PostMapping("/feed/{feedId}")
@@ -68,10 +70,14 @@ public class SeverFeedController implements FeedController{
     }
 
     @GetMapping("/feed/{feedId}")
-    public ResponseEntity readFeed(@PathVariable("feedId") Long feedId){
-            Optional<ServerFeed> feed = feedService.readFeed(feedId);
+    public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) throws ExecutionException, TimeoutException {
+        try {
+            ServerFeed feed = feedService.readFeed(feedId).get(200L, TimeUnit.MILLISECONDS);
             return ResponseEntity.status(HttpStatus.OK).body(feed);
-
+        }
+        catch (InterruptedException e) {
+            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(e.getMessage());
+        }
     }
 
     @PatchMapping("/feed/{feedId}")

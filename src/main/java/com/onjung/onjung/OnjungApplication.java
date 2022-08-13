@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableCaching
 @EnableBatchProcessing
 @EnableScheduling
-//@EnableAsync
+@EnableAsync
 @EnableAutoConfiguration
 @SpringBootApplication
 public class OnjungApplication {

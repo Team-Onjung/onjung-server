@@ -7,23 +7,21 @@ import com.onjung.onjung.feed.domain.Status;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.user.domain.User;
-import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import net.sf.ehcache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Future;
 
-@Service
+ @Service
 @RequiredArgsConstructor
 public class ClientFeedService implements FeedService{
 
@@ -63,19 +61,19 @@ public class ClientFeedService implements FeedService{
     @Transactional(readOnly = true)
     @Cacheable("clientFeedCaching")
     @Async
-    public List<ClientFeed> readAllFeed(){
-        return clientFeedRepository.findAll();
+    public Future<List<ClientFeed>> readAllFeed(){
+        return new AsyncResult<List<ClientFeed>>(clientFeedRepository.findAll());
     }
 
 
     @Transactional(readOnly = true)
     @Cacheable(value = "clientFeedCaching", key = "#feedId")
     @Async
-    public Optional<ClientFeed> readFeed(Long feedId) throws InterruptedException {
+    public Future<ClientFeed> readFeed(Long feedId) throws InterruptedException {
 //        Thread.sleep(3000);
         Optional<ClientFeed> feed=clientFeedRepository.findById(feedId);
         if (feed.isPresent()){
-            return feed;
+            return new AsyncResult<ClientFeed>(feed.get());
         }else {
             throw new DataNotFoundException();
         }
