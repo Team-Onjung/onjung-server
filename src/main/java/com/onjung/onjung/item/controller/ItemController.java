@@ -1,5 +1,6 @@
 package com.onjung.onjung.item.controller;
 
+import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.item.domain.Item;
 import com.onjung.onjung.item.dto.ItemDto;
 import com.onjung.onjung.item.service.ItemService;
@@ -29,34 +30,24 @@ public class ItemController {
     }
 
     @GetMapping("{itemId}")
-    public ResponseEntity readItem(@PathVariable("itemId") Long itemId){
-        try{
+    public ResponseEntity readItem(@PathVariable("itemId") Long itemId) {
             Optional<Item> item = itemService.readItem(itemId);
             return ResponseEntity.status(HttpStatus.OK).body(item);
-        }catch (Exception e)
-        {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exception raised in ItemController/readItem");
-        }
     }
 
+
     @PostMapping()
-    public ResponseEntity createItem(@Valid @RequestBody ItemDto itemDto){
-        try{
+    public ResponseEntity createItem(@Valid @RequestBody ItemDto itemDto) throws Exception {
             itemService.createItem(itemDto);
-        }catch(Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exception raised in ItemController/createItem");
-        }
+
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
 
     @PutMapping("{itemId}")
-    public ResponseEntity updateItem(@PathVariable("itemId") Long itemId, @Valid @RequestBody ItemDto itemDto){
-        try{
+    public ResponseEntity updateItem(@PathVariable("itemId") Long itemId, @Valid @RequestBody ItemDto itemDto) throws DataNotFoundException {
             itemService.putItem(itemId, itemDto);
-        }catch(Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exception raised in ClientFeedController/updateFeed");
-        }
+
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 

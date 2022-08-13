@@ -31,19 +31,15 @@ public class ClientFeedService implements FeedService{
     @Transactional
     @CachePut(value = "clientFeedCaching", key = "#feedId")
     public void lendFeed(Long feedId) throws Exception {
-        Optional<ClientFeed> clientFeed=clientFeedRepository.findById(feedId);
-        try {
-            if(clientFeed.isPresent() && clientFeed.get().getStatus()==Status.STATUS_POSSIBLE){
-                User LentUser=clientFeed.get().getWriter();
-                LentUser.earnPoints();
+        Optional<ClientFeed> clientFeed = clientFeedRepository.findById(feedId);
+        if (clientFeed.isPresent() && clientFeed.get().getStatus() == Status.STATUS_POSSIBLE) {
+            User LentUser = clientFeed.get().getWriter();
+            LentUser.earnPoints();
 
-                clientFeed.get().changeStatus(Status.STATUS_RESERVED);
-                clientFeedRepository.save(clientFeed.get());
-            }else {
-                throw new DataNotFoundException();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
+            clientFeed.get().changeStatus(Status.STATUS_RESERVED);
+            clientFeedRepository.save(clientFeed.get());
+        } else {
+            throw new DataNotFoundException();
         }
     }
 
@@ -52,7 +48,6 @@ public class ClientFeedService implements FeedService{
     public void createFeed(FeedRequestDto feedRequestDto, User feedUser) throws Exception {
 
 
-        try {
             ClientFeed feed = ClientFeed.builder()
                     .writer(feedUser)
                     .title(feedRequestDto.getTitle())
@@ -61,10 +56,7 @@ public class ClientFeedService implements FeedService{
                     .build();
 
             clientFeedRepository.save(feed);
-        }catch (IllegalArgumentException e){
-            e.printStackTrace();
-            throw new InvalidParameterException();
-        }
+
     }
 
     @Transactional(readOnly = true)
@@ -78,8 +70,7 @@ public class ClientFeedService implements FeedService{
     @Transactional(readOnly = true)
     @Cacheable(value = "clientFeedCaching", key = "#feedId")
     @Async
-    public Optional<ClientFeed> readFeed(Long feedId) throws InterruptedException {
-//        Thread.sleep(3000);
+    public Optional<ClientFeed> readFeed(Long feedId) {
         Optional<ClientFeed> feed=clientFeedRepository.findById(feedId);
         if (feed.isPresent()){
             return feed;
@@ -92,7 +83,6 @@ public class ClientFeedService implements FeedService{
     @CachePut(value = "clientFeedCaching", key = "#feedId")
     public void patchFeed(Long feedId, FeedRequestDto requestDto){
         final Optional<ClientFeed> clientFeed= clientFeedRepository.findById(feedId);
-        try {
             if(clientFeed.isPresent()){
                 if(requestDto.getTitle()!=null){
                     clientFeed.get().setTitle(requestDto.getTitle());
@@ -108,9 +98,7 @@ public class ClientFeedService implements FeedService{
                 throw new DataNotFoundException();
             }
 
-        }catch (IllegalArgumentException e){
-            throw new InvalidParameterException();
-        }
+
     }
 
     @Transactional
@@ -119,6 +107,8 @@ public class ClientFeedService implements FeedService{
         Optional<ClientFeed> clientFeed=clientFeedRepository.findById(feedId);
         if(clientFeed.isPresent()){
             clientFeedRepository.delete(clientFeed.get());
+        }else{
+            throw new DataNotFoundException();
         }
     }
 }

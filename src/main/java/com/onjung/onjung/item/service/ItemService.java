@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -36,7 +37,6 @@ public class ItemService {
     @CacheEvict(value="itemCaching", allEntries = true)
     public void createItem(ItemDto itemDto) throws Exception {
 
-        try{
             Item item = Item.builder()
                     .name(itemDto.getName())
                     .deposit(itemDto.getRentalFee())
@@ -48,14 +48,12 @@ public class ItemService {
                     .build();
             itemRepository.save(item);
 
-        }catch (IllegalArgumentException e){
-            throw new InvalidParameterException();
-        }
+
     }
 
     @Transactional(readOnly = true)
     @Cacheable(value = "itemCaching", key = "#itemId")
-    public Optional<Item> readItem(Long itemId) throws InterruptedException {
+    public Optional<Item> readItem(Long itemId) {
         Optional<Item> item = itemRepository.findById(itemId);
         if (item.isPresent()){
             return item;
@@ -66,18 +64,24 @@ public class ItemService {
 
     @Transactional
     @CachePut(value = "itemCaching", key = "#itemId")
-    public void putItem(Long itemId, ItemDto itemDto){
-        Item item = itemRepository.findById(itemId).get();
+    public void putItem(Long itemId, ItemDto itemDto) {
+        try{
+            Item item = itemRepository.findById(itemId).get();
+            item.setCategory(itemDto.getCategory());
+            item.setDeposit(itemDto.getDeposit());
+            item.setDuration(itemDto.getDuration());
+            item.setStartDate(item.getStartDate());
+            item.setEndDate(itemDto.getEndDate());
+            item.setName(itemDto.getName());
+            item.setRentalFee(itemDto.getRentalFee());
 
-        item.setCategory(itemDto.getCategory());
-        item.setDeposit(itemDto.getDeposit());
-        item.setDuration(itemDto.getDuration());
-        item.setStartDate(item.getStartDate());
-        item.setEndDate(itemDto.getEndDate());
-        item.setName(itemDto.getName());
-        item.setRentalFee(itemDto.getRentalFee());
+            itemRepository.save(item);
 
-        itemRepository.save(item);
+        }catch(NoSuchElementException e){
+            throw new DataNotFoundException();
+        }
+
+
 
     }
 
@@ -86,6 +90,8 @@ public class ItemService {
         Optional<Item> item = itemRepository.findById(itemId);
         if(item.isPresent()){
             itemRepository.delete(item.get());
+        }else{
+            throw new DataNotFoundException();
         }
     }
 
