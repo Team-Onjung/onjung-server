@@ -10,10 +10,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 @EnableCaching
-//@EnableBatchProcessing
-//@EnableScheduling
+@EnableBatchProcessing
+@EnableScheduling
 //@EnableAsync
-//@EnableAutoConfiguration
+@EnableAutoConfiguration
 @SpringBootApplication
 public class OnjungApplication {
 

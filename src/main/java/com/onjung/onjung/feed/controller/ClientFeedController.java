@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.WebAsyncTask;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 

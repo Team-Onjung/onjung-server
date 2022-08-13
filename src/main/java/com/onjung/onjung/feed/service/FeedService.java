@@ -1,5 +1,6 @@
 package com.onjung.onjung.feed.service;
 
+import com.onjung.onjung.feed.domain.Feed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.user.domain.User;
 
@@ -15,7 +16,7 @@ public interface FeedService {
 
     Optional readFeed(Long feedId) throws InterruptedException;
 
-    void patchFeed(Long feedId, FeedRequestDto requestDto);
+    Feed patchFeed(Long feedId, FeedRequestDto requestDto);
 
     void deleteFeed(Long feedId);
 }

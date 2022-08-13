@@ -3,6 +3,7 @@ package com.onjung.onjung.feed.service;
 import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.exception.InvalidParameterException;
 import com.onjung.onjung.feed.domain.ClientFeed;
+import com.onjung.onjung.feed.domain.Feed;
 import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.domain.Status;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
@@ -71,7 +72,7 @@ public class ServerFeedService implements FeedService{
         }
     }
 
-    public void patchFeed(Long feedId, FeedRequestDto requestDto){
+    public Feed patchFeed(Long feedId, FeedRequestDto requestDto){
         final Optional<ServerFeed> serverFeed= serverFeedRepository.findById(feedId);
         if(serverFeed.isPresent()){
             if(requestDto.getTitle()!=null){
@@ -84,11 +85,10 @@ public class ServerFeedService implements FeedService{
                 serverFeed.get().setItemId(requestDto.getItemId());
             }
             serverFeedRepository.save(serverFeed.get());
+            return serverFeed.get();
         }else {
             throw new DataNotFoundException();
         }
-
-
     }
 
     public void deleteFeed(Long feedId){

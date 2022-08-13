@@ -9,6 +9,7 @@ import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import net.sf.ehcache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -50,17 +51,13 @@ public class ClientFeedService implements FeedService{
     @Transactional
     @CacheEvict(value = "clientFeedCaching", allEntries = true)
     public void createFeed(FeedRequestDto feedRequestDto, User feedUser) throws Exception {
-
-
             ClientFeed feed = ClientFeed.builder()
                     .writer(feedUser)
                     .title(feedRequestDto.getTitle())
                     .body(feedRequestDto.getBody())
                     .itemId(feedRequestDto.getItemId())
                     .build();
-
             clientFeedRepository.save(feed);
-
     }
 
     @Transactional(readOnly = true)
@@ -86,7 +83,7 @@ public class ClientFeedService implements FeedService{
 
     @Transactional
     @CachePut(value = "clientFeedCaching", key = "#feedId")
-    public void patchFeed(Long feedId, FeedRequestDto requestDto){
+    public ClientFeed patchFeed(Long feedId, FeedRequestDto requestDto){
         final Optional<ClientFeed> clientFeed= clientFeedRepository.findById(feedId);
             if(clientFeed.isPresent()){
                 if(requestDto.getTitle()!=null){
@@ -99,11 +96,10 @@ public class ClientFeedService implements FeedService{
                     clientFeed.get().setItemId(requestDto.getItemId());
                 }
                 clientFeedRepository.save(clientFeed.get());
+                return clientFeed.get();
             }else {
                 throw new DataNotFoundException();
             }
-
-
     }
 
     @Transactional
