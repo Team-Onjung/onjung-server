@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface FeedController {
 
-    ResponseEntity createFeed(FeedRequestDto requestDto);
+    ResponseEntity createFeed(FeedRequestDto requestDto) throws Exception;
 
     WebAsyncTask readAllFeed();
 

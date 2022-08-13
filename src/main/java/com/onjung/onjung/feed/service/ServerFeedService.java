@@ -30,7 +30,6 @@ public class ServerFeedService implements FeedService{
     @CachePut(value = "clientFeedCaching", key = "#feedId")
     public void borrowFeed(Long feedId) throws Exception {
         Optional<ServerFeed> serverFeed=serverFeedRepository.findById(feedId);
-        try {
             if(serverFeed.isPresent() && serverFeed.get().getStatus()==Status.STATUS_POSSIBLE){
                 User borrowedUser=serverFeed.get().getWriter();
                 borrowedUser.discountPoints();
@@ -40,9 +39,7 @@ public class ServerFeedService implements FeedService{
             }else {
                 throw new DataNotFoundException();
             }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+
     }
 
     @Transactional
@@ -95,6 +92,8 @@ public class ServerFeedService implements FeedService{
         Optional<ServerFeed> serverFeed=serverFeedRepository.findById(feedId);
         if(serverFeed.isPresent()){
             serverFeedRepository.delete(serverFeed.get());
+        }else{
+            throw new DataNotFoundException();
         }
     }
 }

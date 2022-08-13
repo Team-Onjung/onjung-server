@@ -1,5 +1,6 @@
 package com.onjung.onjung.feed.controller;
 
+import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
@@ -27,7 +28,7 @@ public class SeverFeedController implements FeedController{
     private final UserRepository userRepository;
 
     @PostMapping("/feed")
-    public ResponseEntity createFeed(@Valid @RequestBody FeedRequestDto requestDto) {
+    public ResponseEntity createFeed(@Valid @RequestBody FeedRequestDto requestDto) throws Exception{
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 
@@ -37,12 +38,7 @@ public class SeverFeedController implements FeedController{
             if (_user.isPresent()) {
                 User user = _user.get();
                 System.out.println("user = " + user);
-                try {
-                    feedService.createFeed(requestDto, user);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exception raised in SeverFeedController/createFeed");
-                }
+                feedService.createFeed(requestDto, user);
                 return ResponseEntity.status(HttpStatus.OK).body("ok");
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("user not found");
@@ -58,13 +54,9 @@ public class SeverFeedController implements FeedController{
     }
 
     @PostMapping("/feed/{feedId}")
-    public ResponseEntity borrowFeed(@PathVariable("feedId") Long feedId) {
-        try {
-            feedService.borrowFeed(feedId);
-            return ResponseEntity.status(HttpStatus.OK).body("borrowing is succeed");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception raised in ClientFeedController/borrowFeed");
-        }
+    public ResponseEntity borrowFeed(@PathVariable("feedId") Long feedId) throws DataNotFoundException, Exception {
+        feedService.borrowFeed(feedId);
+        return ResponseEntity.status(HttpStatus.OK).body("borrowing is succeed");
     }
 
     @GetMapping("/feed/{feedId}")
@@ -75,12 +67,8 @@ public class SeverFeedController implements FeedController{
     }
 
     @PatchMapping("/feed/{feedId}")
-    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @Valid @RequestBody FeedRequestDto requestDto) {
-        try {
+    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @Valid @RequestBody FeedRequestDto requestDto) throws DataNotFoundException {
             feedService.patchFeed(feedId, requestDto);
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exception raised in SeverFeedController/updateFeed");
-        }
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 

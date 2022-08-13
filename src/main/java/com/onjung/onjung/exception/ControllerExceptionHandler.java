@@ -54,8 +54,8 @@ public class ControllerExceptionHandler {
                 = ErrorResponse
                 .create()
                 .status(errorCode.getStatus())
-                .message(e.toString())
-                .errors(e.getErrors());
+                .message(e.toString());
+//                .errors(e.getErrors());
 
         return new ResponseEntity<>(response, HttpStatus.resolve(errorCode.getStatus()));
     }

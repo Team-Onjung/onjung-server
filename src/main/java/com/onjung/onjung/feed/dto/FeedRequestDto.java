@@ -2,9 +2,10 @@ package com.onjung.onjung.feed.dto;
 
 import com.onjung.onjung.user.domain.User;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 public class FeedRequestDto {
 
     String title;

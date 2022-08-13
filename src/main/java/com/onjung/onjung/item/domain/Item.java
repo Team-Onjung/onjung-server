@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 @Table(name="item")
 @DynamicInsert
 @NoArgsConstructor
-public class Item {
+public class Item implements Serializable {
 
     @Id
     @GeneratedValue
