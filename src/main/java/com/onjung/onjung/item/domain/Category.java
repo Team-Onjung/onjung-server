@@ -10,6 +10,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import java.util.List;
 @Table(name="Category")
 @DynamicInsert
 @NoArgsConstructor
-public class Category {
+public class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

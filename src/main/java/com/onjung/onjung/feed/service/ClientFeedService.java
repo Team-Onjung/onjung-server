@@ -30,19 +30,15 @@ public class ClientFeedService implements FeedService{
     @Transactional
     @CachePut(value = "clientFeedCaching", key = "#feedId")
     public void lendFeed(Long feedId) throws Exception {
-        Optional<ClientFeed> clientFeed=clientFeedRepository.findById(feedId);
-        try {
-            if(clientFeed.isPresent() && clientFeed.get().getStatus()==Status.STATUS_POSSIBLE){
-                User LentUser=clientFeed.get().getWriter();
-                LentUser.earnPoints();
+        Optional<ClientFeed> clientFeed = clientFeedRepository.findById(feedId);
+        if (clientFeed.isPresent() && clientFeed.get().getStatus() == Status.STATUS_POSSIBLE) {
+            User LentUser = clientFeed.get().getWriter();
+            LentUser.earnPoints();
 
-                clientFeed.get().changeStatus(Status.STATUS_RESERVED);
-                clientFeedRepository.save(clientFeed.get());
-            }else {
-                throw new DataNotFoundException();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
+            clientFeed.get().changeStatus(Status.STATUS_RESERVED);
+            clientFeedRepository.save(clientFeed.get());
+        } else {
+            throw new DataNotFoundException();
         }
     }
 
@@ -70,7 +66,6 @@ public class ClientFeedService implements FeedService{
     @Cacheable(value = "clientFeedCaching", key = "#feedId")
     @Async
     public Future<ClientFeed> readFeed(Long feedId) throws InterruptedException {
-//        Thread.sleep(3000);
         Optional<ClientFeed> feed=clientFeedRepository.findById(feedId);
         if (feed.isPresent()){
             return new AsyncResult<ClientFeed>(feed.get());
@@ -106,6 +101,8 @@ public class ClientFeedService implements FeedService{
         Optional<ClientFeed> clientFeed=clientFeedRepository.findById(feedId);
         if(clientFeed.isPresent()){
             clientFeedRepository.delete(clientFeed.get());
+        }else{
+            throw new DataNotFoundException();
         }
     }
 }

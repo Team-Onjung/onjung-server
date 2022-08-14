@@ -1,5 +1,6 @@
 package com.onjung.onjung.feed.controller;
 
+import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.service.ClientFeedService;
@@ -30,7 +31,7 @@ public class ClientFeedController implements FeedController{
     private final UserRepository userRepository;
 
     @PostMapping("/feed")
-    public ResponseEntity createFeed(@Valid @RequestBody FeedRequestDto requestDto) {
+    public ResponseEntity createFeed(@Valid @RequestBody FeedRequestDto requestDto) throws Exception{
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if ((String)principal!= "anonymousUser") {
@@ -39,16 +40,12 @@ public class ClientFeedController implements FeedController{
             if (_user.isPresent()) {
                 User user = _user.get();
                 System.out.println("user = " + user);
-                try {
-                    feedService.createFeed(requestDto, user);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exception raised in ClientFeedService");
-                }
+                feedService.createFeed(requestDto, user);
                 return ResponseEntity.status(HttpStatus.OK).body("ok");
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("user not found");
         }else {
+            System.out.println("##########");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you need to login");
         }
     }
@@ -59,39 +56,25 @@ public class ClientFeedController implements FeedController{
     }
 
     @PostMapping("/feed/{feedId}")
-    public ResponseEntity lendFeed(@PathVariable("feedId") Long feedId) {
-        try {
+    public ResponseEntity lendFeed(@PathVariable("feedId") Long feedId) throws DataNotFoundException, Exception{
             feedService.lendFeed(feedId);
             return ResponseEntity.status(HttpStatus.OK).body("lending is succeed");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception raised in ClientFeedController/lendFeed");
-        }
     }
 
     @GetMapping("/feed/{feedId}")
     public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) throws ExecutionException, TimeoutException {
-        try {
             ClientFeed feed = feedService.readFeed(feedId).get(200L, TimeUnit.MILLISECONDS);
             return ResponseEntity.status(HttpStatus.OK).body(feed);
-        }
-        catch (InterruptedException e) {
-            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(e.getMessage());
-        }
-
     }
 
     @PatchMapping("/feed/{feedId}")
-    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @Valid @RequestBody FeedRequestDto requestDto) {
-        try {
-            feedService.patchFeed(feedId, requestDto);
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exception raised in ClientFeedController/updateFeed");
-        }
+    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @Valid @RequestBody FeedRequestDto requestDto) throws DataNotFoundException {
+        feedService.patchFeed(feedId, requestDto);
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
     @DeleteMapping("/feed/{feedId}")
-    public void deleteFeed (@PathVariable("feedId") Long feedId){
+    public void deleteFeed (@PathVariable("feedId") Long feedId) throws DataNotFoundException {
         feedService.deleteFeed(feedId);
     }
 }
