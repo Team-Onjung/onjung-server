@@ -9,14 +9,18 @@ import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.WebAsyncTask;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,12 +50,9 @@ public class ClientFeedController implements FeedController{
         }
     }
 
-//    WebAsyncTask: Callable에 비해, timeout과 thread를 지정하기가 비교적 간편하다.
-//                  Callable을 돌려줄 때와 사용법 및 내부 동작은 동일.
-//                  Callable을 WebAsyncTask로 한번 더 감싸주기만 하면 됨.
     @GetMapping("/feed")
-    public WebAsyncTask<List<ClientFeed>> readAllFeed(){
-        return new WebAsyncTask<List<ClientFeed>>(feedService::readAllFeed);
+    public List<ClientFeed> readAllFeed() throws ExecutionException, InterruptedException, TimeoutException {
+        return feedService.readAllFeed().get(200L, TimeUnit.MILLISECONDS);
     }
 
     @PostMapping("/feed/{feedId}")
@@ -61,8 +62,8 @@ public class ClientFeedController implements FeedController{
     }
 
     @GetMapping("/feed/{feedId}")
-    public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) throws DataNotFoundException{
-            Optional<ClientFeed> feed = feedService.readFeed(feedId);
+    public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) throws ExecutionException, TimeoutException {
+            ClientFeed feed = feedService.readFeed(feedId).get(200L, TimeUnit.MILLISECONDS);
             return ResponseEntity.status(HttpStatus.OK).body(feed);
     }
 
