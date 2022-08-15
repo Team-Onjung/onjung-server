@@ -11,7 +11,6 @@ public class QuartzConfig {
     @Bean
     public JobDetail quartzJobDetail() {
         return JobBuilder.newJob(UserJobExecutor.class)
-                .storeDurably()
                 .build();
     }
 
