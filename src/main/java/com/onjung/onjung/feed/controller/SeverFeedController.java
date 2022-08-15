@@ -79,7 +79,8 @@ public class SeverFeedController implements FeedController{
     }
 
     @DeleteMapping("/feed/{feedId}")
-    public void deleteFeed (@PathVariable("feedId") Long feedId){
+    public ResponseEntity deleteFeed (@PathVariable("feedId") Long feedId){
         feedService.deleteFeed(feedId);
+        return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 }
