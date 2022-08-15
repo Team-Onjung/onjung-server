@@ -3,6 +3,7 @@ package com.onjung.onjung.feed.controller;
 import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
+import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.feed.service.ClientFeedService;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
@@ -28,6 +29,7 @@ import java.util.concurrent.TimeoutException;
 public class ClientFeedController implements FeedController{
 
     private final ClientFeedService feedService;
+    private final ClientFeedRepository feedRepository;
     private final UserRepository userRepository;
 
     @PostMapping("/feed")
@@ -39,13 +41,12 @@ public class ClientFeedController implements FeedController{
 
             if (_user.isPresent()) {
                 User user = _user.get();
-                System.out.println("user = " + user);
+//                System.out.println("user = " + user);
                 feedService.createFeed(requestDto, user);
                 return ResponseEntity.status(HttpStatus.OK).body("ok");
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("user not found");
         }else {
-            System.out.println("##########");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you need to login");
         }
     }
@@ -62,19 +63,44 @@ public class ClientFeedController implements FeedController{
     }
 
     @GetMapping("/feed/{feedId}")
-    public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) throws ExecutionException, TimeoutException {
+    public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) throws ExecutionException, TimeoutException, InterruptedException {
             ClientFeed feed = feedService.readFeed(feedId).get(200L, TimeUnit.MILLISECONDS);
             return ResponseEntity.status(HttpStatus.OK).body(feed);
     }
 
     @PatchMapping("/feed/{feedId}")
     public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @Valid @RequestBody FeedRequestDto requestDto) throws DataNotFoundException {
-        feedService.patchFeed(feedId, requestDto);
-        return ResponseEntity.status(HttpStatus.OK).body("ok");
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if ((String)principal!= "anonymousUser") {
+            Optional<User> _user = userRepository.findByUsername((String) principal);
+            Optional<ClientFeed> _feed = feedRepository.findById(feedId);
+
+            if (_user.isPresent() && _user.get().equals(_feed.get().getWriter())) {
+                feedService.patchFeed(feedId, requestDto);
+                return ResponseEntity.status(HttpStatus.OK).body("ok");
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you can not patch feed that you did not write");
+        }else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you need to login");
+        }
     }
 
     @DeleteMapping("/feed/{feedId}")
-    public void deleteFeed (@PathVariable("feedId") Long feedId) throws DataNotFoundException {
-        feedService.deleteFeed(feedId);
+    public ResponseEntity deleteFeed (@PathVariable("feedId") Long feedId) throws DataNotFoundException {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if ((String)principal!= "anonymousUser") {
+            Optional<User> _user = userRepository.findByUsername((String) principal);
+            Optional<ClientFeed> _feed = feedRepository.findById(feedId);
+
+            if (_user.isPresent() && _user.get().equals(_feed.get().getWriter())) {
+                feedService.deleteFeed(feedId);
+                return ResponseEntity.status(HttpStatus.OK).body("ok");
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you can not delete feed that you did not write");
+        }else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you need to login");
+        }
     }
 }

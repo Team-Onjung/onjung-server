@@ -17,9 +17,9 @@ public interface FeedController {
 
     List readAllFeed() throws ExecutionException, InterruptedException, TimeoutException;
 
-    ResponseEntity readFeed(Long feedId) throws ExecutionException, TimeoutException;
+    ResponseEntity readFeed(Long feedId) throws ExecutionException, TimeoutException, InterruptedException;
 
     ResponseEntity updateFeed(Long feedId, FeedRequestDto requestDto);
 
-    void deleteFeed (Long feedId);
+    ResponseEntity deleteFeed (Long feedId);
 }
