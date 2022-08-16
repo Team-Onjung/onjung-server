@@ -40,7 +40,7 @@ public class UserService {
 
             validateDuplicateMember(user);
             userRepository.save(user);
-            System.out.println("user = " + userRepository.findByUsername("username").get().getUsername());
+//            System.out.println("user = " + userRepository.findByUsername("username").get().getUsername());
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -1,5 +1,7 @@
 package com.onjung.onjung.user.domain;
 
+import com.onjung.onjung.feed.domain.ClientFeed;
+import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.domain.Status;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +14,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -32,6 +36,14 @@ public class User {
     //비밀번호, OAUTH 구현이후 삭제할지는 고민 필요
     @Column(length = 100, nullable = false)
     private String password;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="clientFeeds_id")
+    private List<ClientFeed> clientFeedList = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="serverFeeds_id")
+    private List<ServerFeed> serverFeedList = new ArrayList<>();
 
     @Column(length = 20, nullable = false)
     private String email;
