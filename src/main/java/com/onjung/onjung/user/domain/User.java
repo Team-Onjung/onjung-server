@@ -6,6 +6,7 @@ import com.onjung.onjung.feed.domain.Status;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -41,6 +42,7 @@ public class User {
     @JoinColumn(name="clientFeeds_id")
     private List<ClientFeed> clientFeedList = new ArrayList<>();
 
+    @BatchSize(size = 100)
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="serverFeeds_id")
     private List<ServerFeed> serverFeedList = new ArrayList<>();
