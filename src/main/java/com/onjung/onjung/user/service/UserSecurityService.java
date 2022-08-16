@@ -26,12 +26,12 @@ public class UserSecurityService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("username = " + username);
+//        System.out.println("username = " + username);
         Optional<User> _loginUser = userRepository.findByUsername(username);
         if (_loginUser.isEmpty()) {
             throw new DataNotFoundException();
         }
-        System.out.println("_loginUser = " + _loginUser.get());
+//        System.out.println("_loginUser = " + _loginUser.get());
 
         User loginUser = _loginUser.get();
         List<GrantedAuthority> authorities = new ArrayList<>();
