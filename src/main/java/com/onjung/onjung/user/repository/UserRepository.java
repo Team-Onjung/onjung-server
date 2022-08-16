@@ -15,8 +15,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findByUsername(String username);
 
     @Query("select a from User a join fetch a.clientFeedList")
-    List<ClientFeed> findAllClientFeed();
+    List<User> findAllClientFeed();
 
     @Query("select a from User a join fetch a.serverFeedList")
-    List<ServerFeed> findAllServerFeed();
+    List<User> findAllServerFeed();
 }
