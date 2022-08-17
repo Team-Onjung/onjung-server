@@ -13,10 +13,10 @@ public class FeedRequestDto {
     String body;
 
 //    이후에 변경필요
-    String itemId;
+    Long itemId;
 
     @Builder
-    public FeedRequestDto(String title, String body, String itemId) {
+    public FeedRequestDto(String title, String body, Long itemId) {
         this.title = title;
         this.body = body;
         this.itemId = itemId;
