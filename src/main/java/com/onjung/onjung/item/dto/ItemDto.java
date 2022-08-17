@@ -26,6 +26,25 @@ public class ItemDto {
 
     private int rentalFee;
 
-    private Category category;
+    private Long categoryId;
+
+    @Builder
+    public ItemDto(String name,
+                   int deposit,
+                   LocalDateTime startDate,
+                   LocalDateTime endDate,
+                   LocalDateTime duration,
+                   int rentalFee,
+                   Long categoryId
+                   ) {
+        this.name = name;
+        this.deposit = deposit;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.duration = duration;
+        this.rentalFee = rentalFee;
+        this.categoryId = categoryId;
+
+    }
 
 }
