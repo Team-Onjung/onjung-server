@@ -38,9 +38,11 @@ public class ItemService {
 
     @Transactional
     @CacheEvict(value="itemCaching", allEntries = true)
-    public void createItem(ItemDto itemDto) throws Exception {
-        
+    public void createItem(ItemDto itemDto) {
+
+        try{
             Category requestCategory = categoryRepository.findById(itemDto.getCategoryId()).get();
+
 
             Item item = Item.builder()
                     .name(itemDto.getName())
@@ -51,7 +53,16 @@ public class ItemService {
                     .endDate(itemDto.getEndDate())
                     .rentalFee(itemDto.getRentalFee())
                     .build();
+
             itemRepository.save(item);
+        }
+
+        catch(NoSuchElementException e){
+            throw new DataNotFoundException();
+        }
+
+
+
 
 
     }
@@ -69,11 +80,15 @@ public class ItemService {
 
     @Transactional
     @CachePut(value = "itemCaching", key = "#itemId")
-    public void putItem(Long itemId, ItemDto itemDto) {
+    public Item putItem(Long itemId, ItemDto itemDto) {
         try{
             Item item = itemRepository.findById(itemId).get();
 
             Category requestCategory = categoryRepository.findById(itemDto.getCategoryId()).get();
+            System.out.println("requestCategory = " + requestCategory);
+            if (requestCategory == null){
+                throw new DataNotFoundException();
+            }
 
             item.setCategory(requestCategory);
             item.setDeposit(itemDto.getDeposit());
@@ -85,12 +100,11 @@ public class ItemService {
 
             itemRepository.save(item);
 
+            return item;
+
         }catch(NoSuchElementException e){
             throw new DataNotFoundException();
         }
-
-
-
     }
 
     @CacheEvict(value = "itemCaching", allEntries = true)
