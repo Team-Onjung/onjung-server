@@ -85,10 +85,6 @@ public class ItemService {
             Item item = itemRepository.findById(itemId).get();
 
             Category requestCategory = categoryRepository.findById(itemDto.getCategoryId()).get();
-            System.out.println("requestCategory = " + requestCategory);
-            if (requestCategory == null){
-                throw new DataNotFoundException();
-            }
 
             item.setCategory(requestCategory);
             item.setDeposit(itemDto.getDeposit());

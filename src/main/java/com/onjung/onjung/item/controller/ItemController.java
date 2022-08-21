@@ -42,14 +42,6 @@ public class ItemController {
 
     @PostMapping()
     public ResponseEntity createItem(@Valid ItemDto itemDto, BindingResult result)  {
-        System.out.println("#############");
-        System.out.println(result);
-        System.out.println("#############");
-//            try{
-//                itemService.createItem(itemDto);
-//            }catch(ConstraintViolationException e){
-//                throw new InvalidParameterException(result);
-//            }
 
         if (result.hasErrors()) {
             throw new InvalidParameterException(result);
