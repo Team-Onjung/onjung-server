@@ -1,6 +1,7 @@
 package com.onjung.onjung.item.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.onjung.onjung.item.domain.Item;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class Category implements Serializable {
     @NotNull
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy="category")
     private List<Item> items = new ArrayList<>();
 

@@ -6,6 +6,8 @@ import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.Status;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.repository.ClientFeedRepository;
+import com.onjung.onjung.item.domain.Item;
+import com.onjung.onjung.item.repository.ItemRepository;
 import com.onjung.onjung.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -27,6 +29,8 @@ public class ClientFeedService implements FeedService{
 
     private final ClientFeedRepository clientFeedRepository;
 
+    private final ItemRepository itemRepository;
+
     @Transactional
     @CachePut(value = "clientFeedCaching", key = "#feedId")
     public void lendFeed(Long feedId) throws Exception {
@@ -45,11 +49,14 @@ public class ClientFeedService implements FeedService{
     @Transactional
     @CacheEvict(value = "clientFeedCaching", allEntries = true)
     public void createFeed(FeedRequestDto feedRequestDto, User feedUser) throws Exception {
+
+            Item requestItem = itemRepository.findById(feedRequestDto.getItemId()).get();
+
             ClientFeed feed = ClientFeed.builder()
                     .writer(feedUser)
                     .title(feedRequestDto.getTitle())
                     .body(feedRequestDto.getBody())
-                    .itemId(feedRequestDto.getItemId())
+                    .item(requestItem)
                     .build();
             clientFeedRepository.save(feed);
     }
@@ -86,7 +93,8 @@ public class ClientFeedService implements FeedService{
                     clientFeed.get().setBody(requestDto.getBody());
                 }
                 if(requestDto.getItemId()!=null){
-                    clientFeed.get().setItemId(requestDto.getItemId());
+                    Item requestItem = itemRepository.findById(requestDto.getItemId()).get();
+                    clientFeed.get().setItem(requestItem);
                 }
                 clientFeedRepository.save(clientFeed.get());
                 return clientFeed.get();

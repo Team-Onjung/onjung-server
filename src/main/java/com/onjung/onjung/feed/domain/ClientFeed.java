@@ -1,6 +1,7 @@
 package com.onjung.onjung.feed.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.onjung.onjung.item.domain.Item;
 import com.onjung.onjung.user.domain.User;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -29,9 +30,9 @@ public class ClientFeed implements Feed{
     @JoinColumn(name = "writer_id")
     private User writer;
 
-    //이후 아이템 완성시 수정필요
-    @NotNull
-    private String itemId;
+    @OneToOne
+    @JoinColumn(name = "ITEM_ID")
+    private Item item;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -66,9 +67,9 @@ public class ClientFeed implements Feed{
                       User writer,
                       String title,
                       String body,
-                      String itemId) {
+                      Item item) {
         this.writer = writer;
-        this.itemId = itemId;
+        this.item = item;
         this.title = title;
         this.body = body;
     }
