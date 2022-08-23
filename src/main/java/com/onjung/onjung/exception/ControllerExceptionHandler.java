@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.xml.crypto.Data;
-import java.util.NoSuchElementException;
+
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -43,8 +43,11 @@ public class ControllerExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+
+
     // 파라미터 유효성 검사 통과 못한 경우 처리하기
-    @ExceptionHandler({InvalidParameterException.class, MethodArgumentNotValidException.class})
+
+    @ExceptionHandler(InvalidParameterException.class)
     protected ResponseEntity<ErrorResponse> handleInvalidParameterException(InvalidParameterException e) {
         logger.error("handleInvalidParameterException", e);
 
@@ -54,8 +57,8 @@ public class ControllerExceptionHandler {
                 = ErrorResponse
                 .create()
                 .status(errorCode.getStatus())
-                .message(e.toString());
-//                .errors(e.getErrors());
+                .message(e.toString())
+                .errors(e.getErrors());
 
         return new ResponseEntity<>(response, HttpStatus.resolve(errorCode.getStatus()));
     }

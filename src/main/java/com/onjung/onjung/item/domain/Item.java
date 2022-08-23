@@ -22,28 +22,32 @@ import java.time.LocalDateTime;
 public class Item implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="ITEM_ID")
     private Long id;
 
+    @NotNull
     @Column(length=30, nullable = false)
     private String name;
 
     @NotNull
     private int deposit;
 
+    @NotNull
     @Column(name="start_date", nullable = false)
     private LocalDateTime startDate;
 
+    @NotNull
     @Column(name="end_date", nullable = false)
     private LocalDateTime endDate;
 
     @NotNull
     private LocalDateTime duration;
 
+    @NotNull
     @Column(name="rental_fee", nullable = false)
     private int rentalFee;
-
+    
     @ManyToOne
     @JoinColumn(name="CATEGORY_ID")
     private Category category;
