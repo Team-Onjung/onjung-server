@@ -38,6 +38,8 @@ subprojects {
 		implementation 'com.h2database:h2'
 		implementation 'mysql:mysql-connector-java'
 
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+
 		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 		implementation 'org.springframework.boot:spring-boot-starter-validation'
 
@@ -76,7 +78,6 @@ project(':onjung-api') {
 
 	dependencies {
 		implementation project(':onjung-core') // 컴파일 시 onjung-core project 로딩
-		implementation 'org.springframework.boot:spring-boot-starter-web'
 		implementation 'org.springframework.boot:spring-boot-starter-security'
 		testImplementation 'org.springframework.security:spring-security-test'
 	}
