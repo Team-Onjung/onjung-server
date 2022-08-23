@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,9 @@ public class ItemController {
 
 
     @PostMapping()
-    public ResponseEntity createItem(@Valid ItemDto itemDto, BindingResult result)  {
+    public ResponseEntity createItem(@RequestBody @Valid ItemDto itemDto, BindingResult result)  {
+
+        itemService.createItem(itemDto);
 
         if (result.hasErrors()) {
             throw new InvalidParameterException(result);
@@ -51,9 +54,12 @@ public class ItemController {
 
 
     @PutMapping("{itemId}")
-    public ResponseEntity updateItem(@PathVariable("itemId") Long itemId, @Valid @RequestBody ItemDto itemDto) throws DataNotFoundException {
+    public ResponseEntity updateItem(@PathVariable("itemId") Long itemId,@RequestBody @Valid ItemDto itemDto, BindingResult result) throws DataNotFoundException {
             itemService.putItem(itemId, itemDto);
 
+        if (result.hasErrors()) {
+            throw new InvalidParameterException(result);
+        }
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 

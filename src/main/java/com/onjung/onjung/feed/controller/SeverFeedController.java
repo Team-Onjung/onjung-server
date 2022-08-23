@@ -1,6 +1,7 @@
 package com.onjung.onjung.feed.controller;
 
 import com.onjung.onjung.exception.DataNotFoundException;
+import com.onjung.onjung.exception.InvalidParameterException;
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.WebAsyncTask;
 
@@ -31,7 +33,7 @@ public class SeverFeedController implements FeedController{
     private final UserRepository userRepository;
 
     @PostMapping("/feed")
-    public ResponseEntity createFeed(@Valid @RequestBody FeedRequestDto requestDto) throws Exception{
+    public ResponseEntity createFeed(@RequestBody @Valid FeedRequestDto requestDto, BindingResult result) throws Exception{
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 
@@ -42,7 +44,12 @@ public class SeverFeedController implements FeedController{
                 User user = _user.get();
                 System.out.println("user = " + user);
                 feedService.createFeed(requestDto, user);
-                return ResponseEntity.status(HttpStatus.OK).body("ok");
+
+                if (result.hasErrors()) {
+                    throw new InvalidParameterException(result);
+                }
+                return ResponseEntity.status(HttpStatus.OK).body("OK");
+
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("user not found");
         }else {
@@ -73,8 +80,13 @@ public class SeverFeedController implements FeedController{
     }
 
     @PatchMapping("/feed/{feedId}")
-    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @Valid @RequestBody FeedRequestDto requestDto) throws DataNotFoundException {
+    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @RequestBody @Valid FeedRequestDto requestDto, BindingResult result) throws DataNotFoundException {
             feedService.patchFeed(feedId, requestDto);
+
+        if (result.hasErrors()) {
+            throw new InvalidParameterException(result);
+        }
+
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
