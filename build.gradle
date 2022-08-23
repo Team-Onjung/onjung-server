@@ -1,94 +1,96 @@
-plugins {
-	id 'org.springframework.boot' version '2.7.1'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
-
-	id 'jacoco'
-}
-
-jacoco {
-	toolVersion = '0.8.7'
-}
-
-test {
-	useJUnitPlatform()
-	finalizedBy jacocoTestReport
-}
-
-jacocoTestReport {
-	dependsOn test
-	reports {
-		html.enabled true
-		xml.enabled false
-		csv.enabled false
-
-		html.destination file("src/jacoco/jacoco.html")
+buildscript {
+	ext {
+		springBootVersion = '2.7.1'
 	}
-	finalizedBy 'jacocoTestCoverageVerification'
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+		classpath "io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE"
+	}
 }
 
-jacocoTestCoverageVerification {
-	violationRules {
-		rule {
-			element = 'CLASS'
-			enabled = true
+// 하위 모든 프로젝트 공통 세팅
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'idea'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
 
-			limit {
-				counter = 'LINE'
-				value = 'COVEREDRATIO'
-				minimum = 0.00
-			}
+	group = 'com.onjung'
+	version = '0.0.1-SNAPSHOT'
 
-			limit {
-				counter = 'METHOD'
-				value = 'COVEREDRATIO'
-				minimum = 0.00
-			}
+	sourceCompatibility = '11'
+
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
 		}
 	}
-}
 
-group = 'com.onjung'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+	repositories {
+		mavenCentral()
+	}
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
+	// 하위 모듈에서 공통으로 사용하는 세팅 추가
+	dependencies {
+		implementation 'com.h2database:h2'
+		implementation 'mysql:mysql-connector-java'
+
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+
+		implementation 'org.springframework.boot:spring-boot-starter-cache'
+		implementation group: 'net.sf.ehcache', name: 'ehcache', version: '2.10.9.2'
+
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
+
+		developmentOnly 'org.springframework.boot:spring-boot-devtools'
+		implementation 'org.slf4j:slf4j-api:1.7.31'
+
+		implementation 'junit:junit:4.13.1'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	}
+
+	test {
+		useJUnitPlatform()
 	}
 }
 
-repositories {
-	mavenCentral()
+project(':onjung-core') {
+	// 공통 코드
+
+	bootJar { enabled = false } // core 은 bootJar 로 패키징 할 필요 없음
+	jar { enabled = true }
+
+	dependencies {
+	}
 }
 
-dependencies {
-	implementation 'com.h2database:h2'
-	implementation 'mysql:mysql-connector-java'
+project(':onjung-api') {
+	bootJar { enabled = true }
+	jar { enabled = false }
 
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-
-	implementation 'org.springframework.boot:spring-boot-starter-cache'
-	implementation group: 'net.sf.ehcache', name: 'ehcache', version: '2.10.9.2'
-
-	implementation 'org.springframework.boot:spring-boot-starter-batch'
-	testImplementation 'org.springframework.batch:spring-batch-test'
-	implementation 'org.springframework.boot:spring-boot-starter-quartz'
-
-    compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	implementation 'org.slf4j:slf4j-api:1.7.31'
-
-	implementation 'junit:junit:4.13.1'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
+	dependencies {
+		implementation project(':onjung-core') // 컴파일 시 onjung-core project 로딩
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter-security'
+		testImplementation 'org.springframework.security:spring-security-test'
+	}
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+project(':onjung-batch') {
+	bootJar { enabled = true }
+	jar { enabled = false }
+
+	dependencies {
+		implementation project(':onjung-core') // 컴파일 시 onjung-core project 로딩
+
+		implementation 'org.springframework.boot:spring-boot-starter-batch'
+		testImplementation 'org.springframework.batch:spring-batch-test'
+		implementation 'org.springframework.boot:spring-boot-starter-quartz'
+	}
 }
