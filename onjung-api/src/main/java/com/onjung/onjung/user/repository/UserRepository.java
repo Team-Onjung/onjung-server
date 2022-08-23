@@ -14,6 +14,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findByUsername(String username);
 
-//    @Query("select a from User a join fetch a.clientFeedList")
-//    List<User> findAllUsers();
+    @Query("select a from User a join fetch a.clientFeedList")
+    List<User> findAllUsers();
 }

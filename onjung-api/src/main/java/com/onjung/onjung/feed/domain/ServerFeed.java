@@ -1,5 +1,6 @@
 package com.onjung.onjung.feed.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.onjung.onjung.item.domain.Item;
 import com.onjung.onjung.user.domain.User;
 import lombok.*;
@@ -23,10 +24,12 @@ public class ServerFeed implements Feed{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "writer_id")
     private User writer;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "ITEM_ID")
     private Item item;

@@ -38,14 +38,14 @@ public class User {
     @Column(length = 100, nullable = false)
     private String password;
 
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name="clientFeeds_id")
-//    private List<ClientFeed> clientFeedList = new ArrayList<>();
-//
-//    @BatchSize(size = 100)
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name="serverFeeds_id")
-//    private List<ServerFeed> serverFeedList = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="writer_id")
+    private List<ClientFeed> clientFeedList = new ArrayList<>();
+
+    @BatchSize(size = 100)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="writer_id")
+    private List<ServerFeed> serverFeedList = new ArrayList<>();
 
     @Column(length = 20, nullable = false)
     private String email;

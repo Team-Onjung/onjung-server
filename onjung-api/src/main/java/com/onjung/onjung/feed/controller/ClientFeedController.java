@@ -53,7 +53,7 @@ public class ClientFeedController implements FeedController{
 
     @GetMapping("/feed")
     public List<ClientFeed> readAllFeed() throws ExecutionException, InterruptedException, TimeoutException {
-        return feedService.readAllFeed().get(200L, TimeUnit.MILLISECONDS);
+        return feedService.readAllFeed().get(1000L, TimeUnit.MILLISECONDS);
     }
 
     @PostMapping("/feed/{feedId}")
@@ -64,7 +64,7 @@ public class ClientFeedController implements FeedController{
 
     @GetMapping("/feed/{feedId}")
     public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) throws ExecutionException, TimeoutException, InterruptedException {
-            ClientFeed feed = feedService.readFeed(feedId).get(200L, TimeUnit.MILLISECONDS);
+            ClientFeed feed = feedService.readFeed(feedId).get(1000L, TimeUnit.MILLISECONDS);
             return ResponseEntity.status(HttpStatus.OK).body(feed);
     }
 

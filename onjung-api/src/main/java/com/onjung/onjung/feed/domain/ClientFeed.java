@@ -31,6 +31,7 @@ public class ClientFeed implements Feed{
     private User writer;
 
     @OneToOne
+    @JsonIgnore
     @JoinColumn(name = "ITEM_ID")
     private Item item;
 
