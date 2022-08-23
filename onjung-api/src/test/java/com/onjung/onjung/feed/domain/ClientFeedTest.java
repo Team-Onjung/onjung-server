@@ -14,13 +14,11 @@ public class ClientFeedTest {
                 .title("테스트 코드입니다.")
                 .body("테스트 코드입니다.")
                 .writer(testUser)
-                .itemId("테스트 코드입니다.")
                 .build();
 
         Assertions.assertEquals(clientFeed.getTitle(),"테스트 코드입니다.");
         Assertions.assertEquals(clientFeed.getBody(),"테스트 코드입니다.");
         Assertions.assertEquals(clientFeed.getWriter(),testUser);
-        Assertions.assertEquals(clientFeed.getItemId(),"테스트 코드입니다.");
     }
 
     @Test
