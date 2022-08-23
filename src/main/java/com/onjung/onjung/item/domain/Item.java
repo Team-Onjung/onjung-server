@@ -1,5 +1,7 @@
 package com.onjung.onjung.item.domain;
 
+import com.onjung.onjung.feed.domain.ClientFeed;
+import com.onjung.onjung.feed.domain.ServerFeed;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,6 +51,12 @@ public class Item implements Serializable {
     @ManyToOne
     @JoinColumn(name="CATEGORY_ID")
     private Category category;
+
+    @OneToOne(mappedBy = "item")
+    private ClientFeed clientFeed;
+
+    @OneToOne(mappedBy = "item")
+    private ServerFeed serverFeed;
 
     @Builder
     public Item(

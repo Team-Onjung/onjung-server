@@ -8,6 +8,8 @@ import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.domain.Status;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.repository.ServerFeedRepository;
+import com.onjung.onjung.item.domain.Item;
+import com.onjung.onjung.item.repository.ItemRepository;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class ServerFeedService implements FeedService{
 
     private final ServerFeedRepository serverFeedRepository;
     private final UserRepository userRepository;
+    private final ItemRepository itemRepository;
 
     @Transactional
     @CachePut(value = "clientFeedCaching", key = "#feedId")
@@ -49,11 +52,13 @@ public class ServerFeedService implements FeedService{
     @Transactional
     public void createFeed(FeedRequestDto feedRequestDto, User feedUser) throws Exception {
 
+            Item requestItem = itemRepository.findById(feedRequestDto.getItemId()).get();
+
             ServerFeed feed = ServerFeed.builder()
                     .writer(feedUser)
                     .title(feedRequestDto.getTitle())
                     .body(feedRequestDto.getBody())
-                    .itemId(feedRequestDto.getItemId())
+                    .item(requestItem)
                     .build();
             serverFeedRepository.save(feed);
 
@@ -84,7 +89,8 @@ public class ServerFeedService implements FeedService{
                 serverFeed.get().setBody(requestDto.getBody());
             }
             if(requestDto.getItemId()!=null){
-                serverFeed.get().setItemId(requestDto.getItemId());
+                Item requestItem = itemRepository.findById(requestDto.getItemId()).get();
+                serverFeed.get().setItem(requestItem);
             }
             serverFeedRepository.save(serverFeed.get());
             return serverFeed.get();
