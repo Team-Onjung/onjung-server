@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .headers()
                 .addHeaderWriter(new XFrameOptionsHeaderWriter(
                         XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
-                .and()
+                .and()ㅁ
                     .logout()
                     .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                     .logoutSuccessUrl("/client/feed")
