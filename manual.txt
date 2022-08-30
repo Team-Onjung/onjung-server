@@ -1,0 +1,27 @@
+모두에게 공유되어야 하는 사항들은 여기에 정리해주세요.
+(오류나 세팅 관련해서 신경써야 하는 사항 등)
+
+"""
+배치 실행시, org.springframework.dao.DuplicateKeyException 발생하면 워크벤치 열어 데이터를 확인해주세요.
+
+아래의 명령어를 실행해 키 값이 중복된 데이터가 있는지 확인하실 수 있습니다.(콘솔에 찍힌 Job_key값이 중복되는지 확인)
+SELECT * FROM onjung.BATCH_JOB_INSTANCE;
+
+만약 중복된 키 값이 있다면 데이터의 삭제를 위해 아래의 명령어를 입력해주세요.
+use onjung;
+set sql_safe_updates=0;
+
+delete from BATCH_JOB_EXECUTION_CONTEXT;
+delete from BATCH_JOB_EXECUTION_PARAMS;
+delete from BATCH_JOB_EXECUTION_SEQ;
+delete from BATCH_JOB_SEQ;
+delete from BATCH_STEP_EXECUTION_CONTEXT;
+delete from BATCH_STEP_EXECUTION_SEQ;
+delete from BATCH_STEP_EXECUTION;
+delete from BATCH_JOB_EXECUTION;
+delete from BATCH_JOB_INSTANCE;
+
+INSERT INTO BATCH_STEP_EXECUTION_SEQ values(0, '0');
+INSERT INTO BATCH_JOB_EXECUTION_SEQ values(0, '0');
+INSERT INTO BATCH_JOB_SEQ values(0, '0');
+"""
