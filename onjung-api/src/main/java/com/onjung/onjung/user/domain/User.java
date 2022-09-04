@@ -45,15 +45,15 @@ public class User {
     @JoinColumn(name="writer_id")
     private List<ServerFeed> serverFeedList = new ArrayList<>();
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 20, nullable = true)
     private String email;
 
 //    Social Login 에서 받아오는 문자열값
-    @Column(length = 32, nullable = false)
+    @Column(length = 32)
     private String uuid;
 
 //    주소 Table에서 입력한 후 받아오는 값, 이후 수정 필요
-    @NotNull
+//    @NotNull
     private String locationId;
 
     @CreationTimestamp
@@ -66,6 +66,7 @@ public class User {
 
 //    소셜로그인 제공사
     @Column(length = 20, nullable = false)
+    @Enumerated(EnumType.STRING)
     private String provider;
 
 //    프로필 이미지
@@ -77,7 +78,7 @@ public class User {
     private String profileIntro;
 
 //    전화번호
-    @Column(length = 30, nullable = false)
+//    @Column(length = 30, nullable = false)
     private String phone;
 
 //    휴면 계정 여부(DEFAULT = 1)
@@ -89,11 +90,11 @@ public class User {
     private Boolean isBlocked;
 
 //    생년월일
-    @NotNull
+//    @NotNull
     private LocalDate birth;
 
 //    대학교
-    @Column(length = 20, nullable = false)
+//    @Column(length = 20, nullable = false)
     private String university;
 
 //    대학생 인증 여부 (DEFAULT = 0)

@@ -3,9 +3,7 @@ package com.onjung.onjung.user.dto;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.persistence.Column;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Getter
 public class UserRequestDto {
