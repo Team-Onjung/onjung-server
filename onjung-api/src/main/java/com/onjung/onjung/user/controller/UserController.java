@@ -1,6 +1,7 @@
 package com.onjung.onjung.user.controller;
 
 import com.onjung.onjung.user.domain.User;
+import com.onjung.onjung.user.dto.LoginVo;
 import com.onjung.onjung.user.dto.UserRequestDto;
 import com.onjung.onjung.user.service.UserSecurityService;
 import com.onjung.onjung.user.service.UserService;
@@ -40,12 +41,12 @@ public class UserController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody UserRequestDto requestDto) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody LoginVo request) throws Exception {
 
         final UserDetails userDetails = userSecurityService
-                .loadUserByUsername(requestDto.getUsername());
+                .loadUserByUsername(request.getUsername());
 
-        authenticate(requestDto.getUsername(), requestDto.getPassword());
+        authenticate(request.getUsername(), request.getPassword());
 
         return ResponseEntity.status(HttpStatus.OK).body(userDetails);
     }

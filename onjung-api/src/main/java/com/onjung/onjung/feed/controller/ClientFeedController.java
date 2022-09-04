@@ -35,13 +35,11 @@ public class ClientFeedController implements FeedController{
     public ResponseEntity createFeed(@RequestBody @Valid  FeedRequestDto requestDto, BindingResult result) throws Exception{
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if ((String)principal!= "anonymousUser") {
-            Optional<User> _user = userRepository.findByUsername((String) principal);
+        if (!"anonymousUser".equals((String)principal)) {
+            Optional<User> user = userRepository.findByUsername((String) principal);
 
-            if (_user.isPresent()) {
-                User user = _user.get();
-//                System.out.println("user = " + user);
-                feedService.createFeed(requestDto, user);
+            if (user.isPresent()) {
+                feedService.createFeed(requestDto, user.get());
 
                 if (result.hasErrors()) {
                     throw new InvalidParameterException(result);
@@ -76,15 +74,17 @@ public class ClientFeedController implements FeedController{
     public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @RequestBody @Valid FeedRequestDto requestDto, BindingResult result) throws DataNotFoundException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if ((String)principal!= "anonymousUser") {
-            Optional<User> _user = userRepository.findByUsername((String) principal);
-            Optional<ClientFeed> _feed = feedRepository.findById(feedId);
+        if (!"anonymousUser".equals((String)principal)) {
+            Optional<User> user = userRepository.findByUsername((String) principal);
+            Optional<ClientFeed> feed = feedRepository.findById(feedId);
 
-            if (_user.isPresent() && _user.get().equals(_feed.get().getWriter())) {
-                feedService.patchFeed(feedId, requestDto);
+            if (user.isPresent() && feed.isPresent()) {
+                if (user.get().equals(feed.get().getWriter())) {
+                    feedService.patchFeed(feedId, requestDto);
 
-                if (result.hasErrors()) {
-                    throw new InvalidParameterException(result);
+                    if (result.hasErrors()) {
+                        throw new InvalidParameterException(result);
+                    }
                 }
                 return ResponseEntity.status(HttpStatus.OK).body("ok");
 
@@ -97,19 +97,27 @@ public class ClientFeedController implements FeedController{
 
     @DeleteMapping("/feed/{feedId}")
     public ResponseEntity deleteFeed (@PathVariable("feedId") Long feedId) throws DataNotFoundException {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if ((String)principal!= "anonymousUser") {
-            Optional<User> _user = userRepository.findByUsername((String) principal);
-            Optional<ClientFeed> _feed = feedRepository.findById(feedId);
+        if (!"anonymousUser".equals(principal)) {
+            Optional<User> user = userRepository.findByUsername(principal);
+            Optional<ClientFeed> feed = feedRepository.findById(feedId);
 
-            if (_user.isPresent() && _user.get().equals(_feed.get().getWriter())) {
-                feedService.deleteFeed(feedId);
-                return ResponseEntity.status(HttpStatus.OK).body("ok");
+            if (user.isPresent() && feed.isPresent()) {
+                if (user.get().equals(feed.get().getWriter())) {
+                    feedService.deleteFeed(feedId);
+                    return ResponseEntity.status(HttpStatus.OK).body("ok");
+                }
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you can not delete feed that you did not write");
         }else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you need to login");
         }
+    }
+
+    @GetMapping("/feed/search/{query}")
+    public ResponseEntity searchFeed (@PathVariable("query") String query) {
+        List<ClientFeed> feeds = feedService.searchFeed(query);
+        return ResponseEntity.status(HttpStatus.OK).body(feeds);
     }
 }
