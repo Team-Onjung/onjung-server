@@ -95,7 +95,3 @@ project(':onjung-batch') {
 		implementation 'org.springframework.boot:spring-boot-starter-quartz'
 	}
 }
-
-jar {
-	enabled = false
-}
