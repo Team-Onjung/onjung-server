@@ -95,3 +95,7 @@ project(':onjung-batch') {
 		implementation 'org.springframework.boot:spring-boot-starter-quartz'
 	}
 }
+
+bootJar {
+	destinationDirectory = file("./onjung-api/build/libs/onjung-api-0.0.1-SNAPSHOT.jar")
+}
