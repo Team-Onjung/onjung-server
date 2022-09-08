@@ -3,7 +3,7 @@ package com.onjung.onjung.feed.controller;
 import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.exception.InvalidParameterException;
 import com.onjung.onjung.feed.domain.ServerFeed;
-import com.onjung.onjung.feed.dto.FeedRequestDto;
+import com.onjung.onjung.feed.dto.ServerFeedRequestDto;
 import com.onjung.onjung.feed.service.ServerFeedService;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
@@ -24,15 +24,14 @@ import java.util.concurrent.TimeoutException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/server")
-public class SeverFeedController implements FeedController{
+public class SeverFeedController {
 
     private final ServerFeedService feedService;
     private final UserRepository userRepository;
 
     @PostMapping("/feed")
-    public ResponseEntity createFeed(@RequestBody @Valid FeedRequestDto requestDto, BindingResult result) throws Exception{
+    public ResponseEntity createFeed(@RequestBody @Valid ServerFeedRequestDto requestDto, BindingResult result) throws Exception{
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
 
         if ((String)principal!= "anonymousUser") {
             Optional<User> _user = userRepository.findByUsername((String) principal);
@@ -77,8 +76,8 @@ public class SeverFeedController implements FeedController{
     }
 
     @PatchMapping("/feed/{feedId}")
-    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @RequestBody @Valid FeedRequestDto requestDto, BindingResult result) throws DataNotFoundException {
-            feedService.patchFeed(feedId, requestDto);
+    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @RequestBody @Valid ServerFeedRequestDto requestDto, BindingResult result) throws DataNotFoundException {
+            feedService.putFeed(feedId, requestDto);
 
         if (result.hasErrors()) {
             throw new InvalidParameterException(result);
