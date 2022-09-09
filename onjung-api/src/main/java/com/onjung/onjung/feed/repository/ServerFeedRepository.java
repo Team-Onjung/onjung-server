@@ -15,5 +15,5 @@ public interface ServerFeedRepository extends JpaRepository<ServerFeed,Long>{
 
     Optional<ServerFeed> findByTitle(String title);
 
-    List<ClientFeed> findByTitleContains(String title);
+    List<ClientFeed> findAllByTitleContains(String title);
 }
