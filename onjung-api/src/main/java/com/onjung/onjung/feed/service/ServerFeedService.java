@@ -1,6 +1,7 @@
 package com.onjung.onjung.feed.service;
 
 import com.onjung.onjung.exception.DataNotFoundException;
+import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.Feed;
 import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.domain.Status;
@@ -102,5 +103,10 @@ public class ServerFeedService implements FeedService{
         }else{
             throw new DataNotFoundException();
         }
+    }
+
+    @Transactional
+    public List<ClientFeed> searchFeed(String query) {
+        return serverFeedRepository.findAllByTitleContains(query);
     }
 }

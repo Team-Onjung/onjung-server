@@ -2,6 +2,7 @@ package com.onjung.onjung.feed.controller;
 
 import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.exception.InvalidParameterException;
+import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.service.ServerFeedService;
@@ -91,5 +92,11 @@ public class SeverFeedController implements FeedController{
     public ResponseEntity deleteFeed (@PathVariable("feedId") Long feedId){
         feedService.deleteFeed(feedId);
         return ResponseEntity.status(HttpStatus.OK).body("ok");
+    }
+
+    @GetMapping("/feed/search/{query}")
+    public ResponseEntity searchFeed (@PathVariable("query") String query) {
+        List<ServerFeed> feeds = feedService.searchFeed(query);
+        return ResponseEntity.status(HttpStatus.OK).body(feeds);
     }
 }

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Future;
 
- @Service
+@Service
 @RequiredArgsConstructor
 public class ClientFeedService implements FeedService{
 
@@ -48,13 +48,13 @@ public class ClientFeedService implements FeedService{
     @CacheEvict(value = "clientFeedCaching", allEntries = true)
     public void createFeed(FeedRequestDto feedRequestDto, User feedUser) throws Exception {
 
-            Item requestItem = itemRepository.findById(feedRequestDto.getItemId()).get();
+            Optional<Item> requestItem = itemRepository.findById(feedRequestDto.getItemId());
 
             ClientFeed feed = ClientFeed.builder()
                     .writer(feedUser)
                     .title(feedRequestDto.getTitle())
                     .body(feedRequestDto.getBody())
-                    .item(requestItem)
+                    .item(requestItem.orElseThrow(DataNotFoundException::new))
                     .build();
             clientFeedRepository.save(feed);
     }
@@ -71,7 +71,7 @@ public class ClientFeedService implements FeedService{
     @Cacheable(value = "clientFeedCaching", key = "#feedId")
     @Async
     public Future<ClientFeed> readFeed(Long feedId) throws InterruptedException {
-        Optional<ClientFeed> feed=clientFeedRepository.findById(feedId);
+        Optional<ClientFeed> feed = clientFeedRepository.findById(feedId);
         if (feed.isPresent()){
             return new AsyncResult<ClientFeed>(feed.get());
         }else {
@@ -82,7 +82,7 @@ public class ClientFeedService implements FeedService{
     @Transactional
     @CachePut(value = "clientFeedCaching", key = "#feedId")
     public ClientFeed patchFeed(Long feedId, FeedRequestDto requestDto){
-        final Optional<ClientFeed> clientFeed= clientFeedRepository.findById(feedId);
+        final Optional<ClientFeed> clientFeed = clientFeedRepository.findById(feedId);
             if(clientFeed.isPresent()){
                 if(requestDto.getTitle()!=null){
                     clientFeed.get().setTitle(requestDto.getTitle());
@@ -104,11 +104,16 @@ public class ClientFeedService implements FeedService{
     @Transactional
     @CacheEvict(value = "clientFeedCaching", allEntries = true)
     public void deleteFeed(Long feedId){
-        Optional<ClientFeed> clientFeed=clientFeedRepository.findById(feedId);
+        Optional<ClientFeed> clientFeed = clientFeedRepository.findById(feedId);
         if(clientFeed.isPresent()){
             clientFeedRepository.delete(clientFeed.get());
         }else{
             throw new DataNotFoundException();
         }
+    }
+
+    @Transactional
+    public List<ClientFeed> searchFeed(String query) {
+        return clientFeedRepository.findAllByTitleContains(query);
     }
 }
