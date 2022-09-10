@@ -4,11 +4,14 @@ import com.onjung.onjung.feed.domain.Category;
 import com.onjung.onjung.user.domain.User;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 public class ServerFeedRequestDto {
 
     Long categoryId;
