@@ -52,15 +52,15 @@ public class Item implements Serializable {
     
     @ManyToOne
     @JoinColumn(name="CATEGORY_ID")
-    private com.onjung.onjung.feed.domain.Category category;
+    private Category category;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "item")
-    private ClientFeed clientFeed;
+//    @JsonIgnore
+//    @OneToOne(mappedBy = "item")
+//    private ClientFeed clientFeed;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "item")
-    private ServerFeed serverFeed;
+//    @JsonIgnore
+//    @OneToOne(mappedBy = "item")
+//    private ServerFeed serverFeed;
 
     @Builder
     public Item(
