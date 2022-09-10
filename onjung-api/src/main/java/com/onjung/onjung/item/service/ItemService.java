@@ -1,7 +1,7 @@
 package com.onjung.onjung.item.service;
 
 import com.onjung.onjung.exception.DataNotFoundException;
-import com.onjung.onjung.item.domain.Category;
+import com.onjung.onjung.feed.domain.Category;
 import com.onjung.onjung.item.domain.Item;
 import com.onjung.onjung.item.dto.ItemDto;
 import com.onjung.onjung.item.repository.CategoryRepository;

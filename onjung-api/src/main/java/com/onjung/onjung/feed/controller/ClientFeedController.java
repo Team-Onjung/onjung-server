@@ -3,7 +3,7 @@ package com.onjung.onjung.feed.controller;
 import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.exception.InvalidParameterException;
 import com.onjung.onjung.feed.domain.ClientFeed;
-import com.onjung.onjung.feed.dto.FeedRequestDto;
+import com.onjung.onjung.feed.dto.ClientFeedRequestDto;
 import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.feed.service.ClientFeedService;
 import com.onjung.onjung.user.domain.User;
@@ -25,14 +25,14 @@ import java.util.concurrent.TimeoutException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/client")
-public class ClientFeedController implements FeedController{
+public class ClientFeedController{
 
     private final ClientFeedService feedService;
     private final ClientFeedRepository feedRepository;
     private final UserRepository userRepository;
 
     @PostMapping("/feed")
-    public ResponseEntity createFeed(@RequestBody @Valid  FeedRequestDto requestDto, BindingResult result) throws Exception{
+    public ResponseEntity createFeed(@RequestBody @Valid ClientFeedRequestDto requestDto, BindingResult result) throws Exception{
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if ((String)principal!= "anonymousUser") {
@@ -40,7 +40,7 @@ public class ClientFeedController implements FeedController{
 
             if (_user.isPresent()) {
                 User user = _user.get();
-//                System.out.println("user = " + user);
+
                 feedService.createFeed(requestDto, user);
 
                 if (result.hasErrors()) {
@@ -73,7 +73,7 @@ public class ClientFeedController implements FeedController{
     }
 
     @PatchMapping("/feed/{feedId}")
-    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @RequestBody @Valid FeedRequestDto requestDto, BindingResult result) throws DataNotFoundException {
+    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @RequestBody @Valid ClientFeedRequestDto requestDto, BindingResult result) throws DataNotFoundException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if ((String)principal!= "anonymousUser") {
@@ -81,7 +81,7 @@ public class ClientFeedController implements FeedController{
             Optional<ClientFeed> _feed = feedRepository.findById(feedId);
 
             if (_user.isPresent() && _user.get().equals(_feed.get().getWriter())) {
-                feedService.patchFeed(feedId, requestDto);
+                feedService.putFeed(feedId, requestDto);
 
                 if (result.hasErrors()) {
                     throw new InvalidParameterException(result);
