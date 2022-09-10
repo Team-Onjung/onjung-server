@@ -19,7 +19,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name="Category1")
+@Table(name="Category")
 @DynamicInsert
 @NoArgsConstructor
 public class Category implements Serializable {

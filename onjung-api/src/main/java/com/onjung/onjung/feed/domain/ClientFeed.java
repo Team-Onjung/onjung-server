@@ -1,7 +1,7 @@
 package com.onjung.onjung.feed.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.onjung.onjung.item.domain.Item;
+import com.onjung.onjung.feed.domain.staus.ItemStatus;
 import com.onjung.onjung.user.domain.User;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -68,14 +68,14 @@ public class ClientFeed implements Feed{
     //    수령 안됨(가능) / 수령 대기(예약) / 수령 중(배송 중)/ 수령 취소/ 수령 완료
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private ItemStatus status;
 
     @NotNull
     private String image;
 
     @PrePersist
     public void setDefault(){
-        this.status = this.status == null ? Status.STATUS_POSSIBLE : this.status;
+        this.status = this.status == null ? ItemStatus.STATUS_POSSIBLE : this.status;
     }
 
     @Builder
@@ -105,7 +105,7 @@ public class ClientFeed implements Feed{
         this.feedbackCnt+=1;
     }
 
-    public void changeStatus(Status status){
+    public void changeStatus(ItemStatus status){
         this.status=status;
     }
 }

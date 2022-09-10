@@ -1,6 +1,7 @@
 package com.onjung.onjung.user.controller;
 
 import com.onjung.onjung.user.domain.User;
+import com.onjung.onjung.user.dto.AdditionalInfoRequestDTO;
 import com.onjung.onjung.user.dto.UserRequestDto;
 import com.onjung.onjung.user.service.UserSecurityService;
 import com.onjung.onjung.user.service.UserService;
@@ -56,6 +57,11 @@ public class UserController {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @PostMapping("/etc")
+    public void collectAdditionalInfo(@RequestBody AdditionalInfoRequestDTO additionalInfoRequestDTO){
+        userService.collectAdditionalInfo(additionalInfoRequestDTO);
     }
 
     @GetMapping

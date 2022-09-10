@@ -3,7 +3,7 @@
 import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.feed.domain.Category;
 import com.onjung.onjung.feed.domain.ClientFeed;
-import com.onjung.onjung.feed.domain.Status;
+import com.onjung.onjung.feed.domain.staus.ItemStatus;
 import com.onjung.onjung.feed.dto.ClientFeedRequestDto;
 import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.item.repository.CategoryRepository;
@@ -36,11 +36,11 @@ public class ClientFeedService {
     @CachePut(value = "clientFeedCaching", key = "#feedId")
     public void lendFeed(Long feedId) throws Exception {
         Optional<ClientFeed> clientFeed = clientFeedRepository.findById(feedId);
-        if (clientFeed.isPresent() && clientFeed.get().getStatus() == Status.STATUS_POSSIBLE) {
+        if (clientFeed.isPresent() && clientFeed.get().getStatus() == ItemStatus.STATUS_POSSIBLE) {
             User LentUser = clientFeed.get().getWriter();
             LentUser.earnPoints();
 
-            clientFeed.get().changeStatus(Status.STATUS_RESERVED);
+            clientFeed.get().changeStatus(ItemStatus.STATUS_RESERVED);
             clientFeedRepository.save(clientFeed.get());
         } else {
             throw new DataNotFoundException();

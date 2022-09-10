@@ -2,6 +2,7 @@ package com.onjung.onjung.user.domain;
 
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
+import com.onjung.onjung.feed.domain.UserRentalFeed;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +29,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //    사용자 닉네임 (UNIQUE)
+    //    사용자 닉네임 (UNIQUE, 예:미네르바킹)
     @Column(length = 100, unique = true, nullable = false)
     private String username;
 
@@ -45,10 +46,30 @@ public class User {
     @JoinColumn(name="writer_id")
     private List<ServerFeed> serverFeedList = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "snapshot_id")
+    private UserRentalFeed snapshot;
+
     @Column(length = 20, nullable = false)
     private String email;
 
-//    Social Login 에서 받아오는 문자열값
+//    사용자의 풀네임(예:김멋사)
+    @Column(length = 30, nullable = true)
+    private String fullName;
+
+//    프로필 이미지
+    @Column(name ="profile_img", length = 256, nullable = true)
+    private String profileImg;
+
+//    전화번호
+    @Column(length = 30, nullable = true)
+    private String phone;
+
+//    프로필 소개
+    @Column(name ="profile_intro", length = 256, nullable = true)
+    private String profileIntro;
+
+//    Social Login 에서 받아오는 문자열값(->필요? password 있으니까 삭제?)
     @Column(length = 32, nullable = false)
     private String uuid;
 
@@ -67,18 +88,6 @@ public class User {
 //    소셜로그인 제공사
     @Column(length = 20, nullable = false)
     private String provider;
-
-//    프로필 이미지
-    @Column(name ="profile_img", length = 256)
-    private String profileImg;
-
-//    프로필 소개
-    @Column(name ="profile_intro", length = 256)
-    private String profileIntro;
-
-//    전화번호
-    @Column(length = 30, nullable = false)
-    private String phone;
 
 //    휴면 계정 여부(DEFAULT = 1)
     @Column(name ="is_active")
@@ -132,7 +141,9 @@ public class User {
                 String phone,
                 String username,
                 LocalDate birth,
-                String university) {
+                String university,
+                String fullName
+                ) {
 
         this.email = email;
         this.password=password;
@@ -145,6 +156,7 @@ public class User {
         this.username = username;
         this.birth = birth;
         this.university = university;
+        this.fullName=fullName;
     }
 
     //lastLogin 업데이트, 이후 로그인 구현시 테스트 필요
@@ -174,5 +186,21 @@ public class User {
 
     public String getPassword(){
         return this.password;
+    }
+
+    public void setFullName(String fullName){
+        this.fullName=fullName;
+    }
+
+    public void setUniversity(String university){
+        this.university=university;
+    }
+
+    public void setPhone(String phone){
+        this.phone=phone;
+    }
+
+    public void setProfileImg(String profileImg){
+        this.profileImg=profileImg;
     }
 }

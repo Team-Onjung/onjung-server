@@ -4,12 +4,11 @@ import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.feed.domain.Category;
 import com.onjung.onjung.feed.domain.Feed;
 import com.onjung.onjung.feed.domain.ServerFeed;
-import com.onjung.onjung.feed.domain.Status;
+import com.onjung.onjung.feed.domain.staus.ItemStatus;
 import com.onjung.onjung.feed.dto.ServerFeedRequestDto;
 import com.onjung.onjung.feed.repository.ServerFeedRepository;
 import com.onjung.onjung.item.repository.CategoryRepository;
 import com.onjung.onjung.user.domain.User;
-import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.scheduling.annotation.Async;
@@ -33,11 +32,11 @@ public class ServerFeedService {
     @CachePut(value = "clientFeedCaching", key = "#feedId")
     public void borrowFeed(Long feedId) throws Exception {
         Optional<ServerFeed> serverFeed=serverFeedRepository.findById(feedId);
-            if(serverFeed.isPresent() && serverFeed.get().getStatus()==Status.STATUS_POSSIBLE){
+            if(serverFeed.isPresent() && serverFeed.get().getStatus()== ItemStatus.STATUS_POSSIBLE){
                 User borrowedUser=serverFeed.get().getWriter();
                 borrowedUser.discountPoints();
 
-                serverFeed.get().changeStatus(Status.STATUS_RESERVED);
+                serverFeed.get().changeStatus(ItemStatus.STATUS_RESERVED);
                 serverFeedRepository.save(serverFeed.get());
             }else {
                 throw new DataNotFoundException();
