@@ -95,3 +95,14 @@ project(':onjung-batch') {
 		implementation 'org.springframework.boot:spring-boot-starter-quartz'
 	}
 }
+
+project(':onjung-chatting') {
+	// 공통 코드
+
+	bootJar { enabled = true }
+	jar { enabled = false }
+
+	dependencies {
+		implementation project(':onjung-core') // 컴파일 시 onjung-core project 로딩
+	}
+}
