@@ -13,7 +13,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableCaching
 @EnableScheduling
 @EnableAsync
-@EnableAutoConfiguration
 @SpringBootApplication
 @EnableEncryptableProperties
 public class CoreApplication {

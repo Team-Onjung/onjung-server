@@ -21,8 +21,8 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+//    @Autowired
+//    private AuthenticationManager authenticationManager;
 
     @Autowired
     private UserSecurityService userSecurityService;
@@ -39,28 +39,27 @@ public class UserController {
         }
     }
 
-    @PostMapping(value = "/login")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody UserRequestDto requestDto) throws Exception {
+//    @PostMapping(value = "/login")
+//    public ResponseEntity<?> createAuthenticationToken(@RequestBody UserRequestDto requestDto) throws Exception {
+//
+//        final UserDetails userDetails = userSecurityService
+//                .loadUserByUsername(requestDto.getUsername());
+//
+//        authenticate(requestDto.getUsername(), requestDto.getPassword());
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(userDetails);
+//    }
 
-        final UserDetails userDetails = userSecurityService
-                .loadUserByUsername(requestDto.getUsername());
-
-        authenticate(requestDto.getUsername(), requestDto.getPassword());
-
-        return ResponseEntity.status(HttpStatus.OK).body(userDetails);
-    }
-
-    private void authenticate(String username, String password) throws Exception {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+//    private void authenticate(String username, String password) throws Exception {
+//        try {
+//            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
 
     @GetMapping
     public List<User> readAllUser(){
         return  userService.findAllUsers();
     }
-
 }
