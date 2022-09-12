@@ -8,7 +8,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class ClientFeedRequestDto {
+public class ClientFeedRequestDto extends FeedRequestDto{
 
     Long categoryId;
     User writer;

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class ServerFeedRequestDto {
+public class ServerFeedRequestDto extends FeedRequestDto{
 
     Long categoryId;
 
