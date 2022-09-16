@@ -1,5 +1,6 @@
 package com.onjung.onjung.user.domain;
 
+import com.onjung.onjung.domain.Chat;
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.review.domain.Review;
@@ -55,6 +56,11 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="receiver_id")
     private List<Review> receievedReviewList = new ArrayList<>();
+
+    // 유저가 보낸 채팅 목록 (말풍선 하나하나)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="sender_id")
+    private List<Chat> sentChatList = new ArrayList<>();
 
 
     @Column(length = 20, nullable = false)
