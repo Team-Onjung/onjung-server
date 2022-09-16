@@ -16,8 +16,8 @@ dependencies {
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation (project(":onjung-chatting"))
+
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
