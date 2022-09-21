@@ -3,7 +3,7 @@
 import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.feed.domain.Category;
 import com.onjung.onjung.feed.domain.ClientFeed;
-import com.onjung.onjung.feed.domain.staus.ItemStatus;
+import com.onjung.onjung.feed.domain.status.ItemStatus;
 import com.onjung.onjung.feed.dto.ClientFeedRequestDto;
 import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.item.repository.CategoryRepository;
@@ -16,6 +16,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -70,8 +71,22 @@ public class ClientFeedService {
     @Transactional(readOnly = true)
     @Cacheable("clientFeedCaching")
     @Async
-    public Future<List<ClientFeed>> readAllFeed(){
-        return new AsyncResult<List<ClientFeed>>(clientFeedRepository.findAll());
+    public Future<List<ClientFeed>> readAllFeed(String price, String created, String category, String status){
+//      쿼리파라미터: ASC 또는 DESC
+        if(category == null){
+            category="";
+        }
+        if(status == null){
+            status="";
+        }
+
+        if(created == null){
+            created=null;
+        }
+        if(price == null){
+            price=null;
+        }
+        return new AsyncResult<List<ClientFeed>>(clientFeedRepository.findByFilteringCondition(category,status).get());
     }
 
 

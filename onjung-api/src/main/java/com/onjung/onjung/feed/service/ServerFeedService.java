@@ -4,7 +4,7 @@ import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.feed.domain.Category;
 import com.onjung.onjung.feed.domain.Feed;
 import com.onjung.onjung.feed.domain.ServerFeed;
-import com.onjung.onjung.feed.domain.staus.ItemStatus;
+import com.onjung.onjung.feed.domain.status.ItemStatus;
 import com.onjung.onjung.feed.dto.ServerFeedRequestDto;
 import com.onjung.onjung.feed.repository.ServerFeedRepository;
 import com.onjung.onjung.item.repository.CategoryRepository;

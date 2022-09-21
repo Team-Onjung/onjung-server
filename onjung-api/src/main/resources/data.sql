@@ -1,3 +1,6 @@
+
+
+
 insert into user (password, report_cnt, id, uuid, location_id, provider, profile_img, profile_intro, phone, birth, username, university, created_at, updated_at, last_logined, is_active, is_blocked, is_university, email) values (1234, 100, 1, 'Purple', 'Aquamarine', 'Yellow', 'Teal', 'Crimson', 'Turquoise', '2021-12-01', '79fb35c5c8edd9a84863f16f8283d0a831bc2ad9', 'Red', '2021-11-18', '2022-03-10', '2021-09-18', true, true, false, 'Blue');
 insert into user (password, report_cnt, id, uuid, location_id, provider, profile_img, profile_intro, phone, birth, username, university, created_at, updated_at, last_logined, is_active, is_blocked, is_university, email) values (1234, 10, 2, 'Teal', 'Yellow', 'Green', 'Purple', 'Maroon', 'Puce', '2022-06-24', '7cf55e439a726647e07672483034450b4da0d7b0', 'Indigo', '2021-10-26', '2022-04-04', '2021-08-11', true, true, true, 'Red');
 insert into user (password, report_cnt, id, uuid, location_id, provider, profile_img, profile_intro, phone, birth, username, university, created_at, updated_at, last_logined, is_active, is_blocked, is_university, email) values (1234, 1, 3, 'Aquamarine', 'Puce', 'Crimson', 'Puce', 'Pink', 'Teal', '2021-09-10', '7d526b934490b4188ce383386fd42d2dc7f2649a', 'Mauv', '2022-04-28', '2022-05-05', '2021-09-25', true, true, true, 'Crimson');
@@ -2021,25 +2024,25 @@ insert into user (password, report_cnt, id, uuid, location_id, provider, profile
 --insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (21, 'Cassandry', 32, '2021-10-25 11:45:00', '2021-09-22 15:49:11', '2022-06-16 09:03:45', 21, 50);
 --insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (22, 'Genovera', 27, '2022-02-21 11:13:35', '2022-02-23 02:03:00', '2021-09-10 14:46:06', 22, 56);
 --insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (23, 'Sophi', 29, '2022-05-09 23:41:15', '2022-01-19 20:18:24', '2022-05-05 07:34:58', 23, 93);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (24, 'Sarine', 77, '2022-07-08 14:13:57', '2021-08-21 01:34:03', '2022-07-09 20:31:27', 24, 67);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (25, 'Theo', 56, '2022-03-07 01:36:37', '2022-02-14 08:52:40', '2021-10-19 15:36:09', 25, 68);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (26, 'Aurelea', 26, '2022-01-10 00:39:13', '2022-01-03 13:48:33', '2022-06-14 17:32:59', 26, 59);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (27, 'Kellina', 7, '2022-01-07 14:24:26', '2021-09-19 06:20:47', '2022-04-16 21:51:14', 27, 81);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (28, 'Shani', 63, '2022-05-26 10:13:30', '2022-07-29 00:17:00', '2021-10-28 19:15:04', 28, 68);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (29, 'Orly', 31, '2022-04-03 06:52:43', '2022-06-13 01:13:01', '2022-03-13 01:20:57', 29, 15);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (30, 'Hedvig', 24, '2021-12-22 18:47:13', '2022-06-24 14:55:47', '2021-09-09 03:00:00', 30, 81);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (31, 'Ema', 65, '2022-08-02 18:09:01', '2021-12-21 18:17:30', '2022-03-16 02:35:17', 31, 62);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (32, 'Lilith', 28, '2021-12-28 02:04:26', '2021-11-24 00:04:52', '2021-09-25 17:19:30', 32, 49);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (33, 'Marrissa', 62, '2022-01-19 11:28:46', '2022-07-30 11:42:49', '2022-03-08 19:43:22', 33, 85);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (34, 'Phyllys', 28, '2021-09-27 07:13:55', '2022-01-12 06:31:36', '2022-01-17 14:26:08', 34, 27);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (35, 'Lanny', 25, '2022-06-21 23:42:23', '2021-09-01 18:16:02', '2022-07-04 07:43:49', 35, 63);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (36, 'Thomasin', 41, '2022-07-14 05:05:41', '2021-12-05 16:09:44', '2022-02-03 23:44:53', 36, 74);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (37, 'Nelly', 14, '2021-12-11 12:13:45', '2022-05-17 00:38:00', '2022-02-12 03:32:14', 37, 52);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (38, 'Sharai', 97, '2022-05-27 19:41:54', '2021-08-31 20:29:59', '2022-01-07 21:07:36', 38, 41);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (39, 'Hadria', 5, '2021-11-03 23:41:45', '2022-08-14 17:30:36', '2022-03-30 08:56:20', 39, 80);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (40, 'Marinna', 66, '2022-05-29 03:19:02', '2022-07-11 13:12:28', '2022-01-21 12:05:41', 40, 42);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (41, 'Mirabel', 36, '2022-04-28 16:28:18', '2022-02-23 15:12:22', '2021-09-22 14:07:02', 41, 27);
---insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (42, 'Anastassia', 40, '2022-02-24 15:54:30', '2021-08-20 18:57:12', '2022-07-03 05:54:36', 42, 45);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Sarine', 77, '2022-07-08 14:13:57', '2021-08-21 01:34:03', '2022-07-09 20:31:27',  67);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Theo', 56, '2022-03-07 01:36:37', '2022-02-14 08:52:40', '2021-10-19 15:36:09', 68);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Aurelea', 26, '2022-01-10 00:39:13', '2022-01-03 13:48:33', '2022-06-14 17:32:59',  59);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Kellina', 7, '2022-01-07 14:24:26', '2021-09-19 06:20:47', '2022-04-16 21:51:14', 81);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Shani', 63, '2022-05-26 10:13:30', '2022-07-29 00:17:00', '2021-10-28 19:15:04', 68);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Orly', 31, '2022-04-03 06:52:43', '2022-06-13 01:13:01', '2022-03-13 01:20:57', 15);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Hedvig', 24, '2021-12-22 18:47:13', '2022-06-24 14:55:47', '2021-09-09 03:00:00', 81);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Ema', 65, '2022-08-02 18:09:01', '2021-12-21 18:17:30', '2022-03-16 02:35:17',  62);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Lilith', 28, '2021-12-28 02:04:26', '2021-11-24 00:04:52', '2021-09-25 17:19:30', 49);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Marrissa', 62, '2022-01-19 11:28:46', '2022-07-30 11:42:49', '2022-03-08 19:43:22', 85);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Phyllys', 28, '2021-09-27 07:13:55', '2022-01-12 06:31:36', '2022-01-17 14:26:08', 27);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Lanny', 25, '2022-06-21 23:42:23', '2021-09-01 18:16:02', '2022-07-04 07:43:49', 63);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Thomasin', 41, '2022-07-14 05:05:41', '2021-12-05 16:09:44', '2022-02-03 23:44:53',  74);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Nelly', 14, '2021-12-11 12:13:45', '2022-05-17 00:38:00', '2022-02-12 03:32:14', 52);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Sharai', 97, '2022-05-27 19:41:54', '2021-08-31 20:29:59', '2022-01-07 21:07:36', 41);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Hadria', 5, '2021-11-03 23:41:45', '2022-08-14 17:30:36', '2022-03-30 08:56:20',80);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Marinna', 66, '2022-05-29 03:19:02', '2022-07-11 13:12:28', '2022-01-21 12:05:41',  42);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Mirabel', 36, '2022-04-28 16:28:18', '2022-02-23 15:12:22', '2021-09-22 14:07:02',27);
+insert into item ( name, deposit, start_date, end_date, duration, rental_fee) values ( 'Anastassia', 40, '2022-02-24 15:54:30', '2021-08-20 18:57:12', '2022-07-03 05:54:36', 45);
 --insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (43, 'Gusty', 42, '2022-05-25 09:05:48', '2022-05-29 19:18:11', '2021-08-22 17:02:27', 43, 80);
 --insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (44, 'Vinita', 85, '2021-12-20 06:41:10', '2021-10-25 13:10:16', '2021-09-15 11:32:27', 44, 47);
 --insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (45, 'Shaine', 63, '2022-05-14 11:59:31', '2022-01-11 17:57:11', '2021-08-25 08:14:30', 45, 63);
@@ -2997,8 +3000,8 @@ insert into user (password, report_cnt, id, uuid, location_id, provider, profile
 --insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (997, 'Damara', 37, '2022-01-17 19:10:12', '2021-11-13 22:54:04', '2022-05-11 10:11:54', 997, 50);
 --insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (998, 'Johanna', 37, '2021-11-12 11:22:37', '2022-06-20 00:22:28', '2022-01-29 21:05:23', 998, 61);
 --insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (999, 'Merralee', 38, '2022-05-06 08:26:45', '2021-12-26 13:45:54', '2021-09-11 04:12:31', 999, 42);
+
 --insert into item (item_id, name, deposit, start_date, end_date, duration, category_id, rental_fee) values (1000, 'Pearline', 35, '2022-05-28 17:47:25', '2021-09-09 15:26:44', '2021-10-08 07:36:25', 1000, 13);
---insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (1, 1, 1, '2022-06-03 12:57:41', '2021-10-08 13:10:33', 'Salome', 'Orange', 1, 'STATUS_POSSIBLE');
 --insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (2, 2, 2, '2021-11-28 04:38:25', '2021-10-24 18:32:01', 'Hayley', 'Blue', 2, 'STATUS_POSSIBLE');
 --insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (3, 3, 3, '2022-04-14 19:27:36', '2021-09-09 19:02:19', 'Juliane', 'Pink', 3, 'STATUS_POSSIBLE');
 --insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (4, 4, 4, '2022-04-22 01:44:51', '2021-11-01 07:40:21', 'Goldarina', 'Red', 4, 'STATUS_POSSIBLE');
@@ -3112,15 +3115,6 @@ insert into user (password, report_cnt, id, uuid, location_id, provider, profile
 --insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (112, 112, 112, '2021-10-13 06:40:20', '2022-08-09 20:08:32', 'Camile', 'Teal', 112, 'STATUS_POSSIBLE');
 --insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (113, 113, 113, '2022-04-14 17:49:26', '2021-09-04 23:04:00', 'Sonya', 'Fuscia', 113, 'STATUS_POSSIBLE');
 --insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (114, 114, 114, '2022-02-08 00:32:02', '2022-08-09 03:03:43', 'Coriss', 'Fuscia', 114, 'STATUS_POSSIBLE');
---insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (115, 115, 115, '2021-11-24 19:20:26', '2022-05-03 23:15:43', 'Ophelia', 'Teal', 115, 'STATUS_POSSIBLE');
---insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (116, 116, 116, '2022-05-04 08:42:45', '2021-10-17 02:15:01', 'Cheslie', 'Maroon', 116, 'STATUS_POSSIBLE');
---insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (117, 117, 117, '2021-10-13 21:56:02', '2022-06-16 06:32:15', 'Rebecka', 'Red', 117, 'STATUS_POSSIBLE');
---insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (118, 118, 118, '2021-12-07 08:52:35', '2022-02-19 10:31:18', 'Sofie', 'Fuscia', 118, 'STATUS_POSSIBLE');
---insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (119, 119, 119, '2022-06-24 08:47:27', '2022-04-22 00:30:03', 'Winonah', 'Turquoise', 119, 'STATUS_POSSIBLE');
---insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (120, 120, 120, '2021-11-25 20:33:55', '2022-02-25 23:45:13', 'Nicholle', 'Puce', 120, 'STATUS_POSSIBLE');
---insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (121, 121, 121, '2021-12-26 06:15:37', '2022-08-12 01:51:02', 'Dela', 'Blue', 121, 'STATUS_POSSIBLE');
---insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (122, 122, 122, '2022-08-13 14:54:41', '2022-06-05 01:32:08', 'Milena', 'Pink', 122, 'STATUS_POSSIBLE');
---insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (123, 123, 123, '2022-06-01 00:41:57', '2022-02-16 19:44:44', 'Avivah', 'Pink', 123, 'STATUS_POSSIBLE');
 --insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (124, 124, 124, '2021-09-05 20:35:48', '2022-05-30 02:22:11', 'Pollyanna', 'Goldenrod', 124, 'STATUS_POSSIBLE');
 --insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (125, 125, 125, '2022-01-16 22:16:25', '2022-03-14 04:40:53', 'Wylma', 'Aquamarine', 125, 'STATUS_POSSIBLE');
 --insert into client_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (126, 126, 126, '2021-12-25 13:08:56', '2022-03-15 17:55:20', 'Millisent', 'Yellow', 126, 'STATUS_POSSIBLE');
@@ -4998,4 +4992,4 @@ insert into user (password, report_cnt, id, uuid, location_id, provider, profile
 --insert into server_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (998, 998, 998, '2022-08-14 05:04:16', '2022-06-29 07:16:52', 'Juieta', 'Green', 998, 'STATUS_POSSIBLE');
 --insert into server_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (999, 999, 999, '2022-05-14 18:20:40', '2021-11-02 16:39:57', 'Ingunna', 'Crimson', 999, 'STATUS_POSSIBLE');
 --insert into server_feed (id, writer_id, item_id, created_at, updated_at, title, body, visited_cnt, status) values (1000, 1000, 1000, '2021-08-29 08:49:21', '2022-04-23 08:12:58', 'Aridatha', 'Purple', 1000, 'STATUS_POSSIBLE');
---
+

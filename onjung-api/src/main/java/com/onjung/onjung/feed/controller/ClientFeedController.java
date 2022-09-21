@@ -56,8 +56,11 @@ public class ClientFeedController{
     }
 
     @GetMapping("/feed")
-    public List<ClientFeed> readAllFeed() throws ExecutionException, InterruptedException, TimeoutException {
-        return feedService.readAllFeed().get(200L, TimeUnit.MILLISECONDS);
+    public List<ClientFeed> readAllFeed(@RequestParam(value="price", required = false) String price,
+                                        @RequestParam(value="created", required = false) String created,
+                                        @RequestParam(value="category", required = false) String category,
+                                        @RequestParam(value="status", required = false) String status) throws ExecutionException, InterruptedException, TimeoutException {
+        return feedService.readAllFeed(price, created, category, status).get(1000L, TimeUnit.MILLISECONDS);
     }
 
     @PostMapping("/feed/{feedId}")
