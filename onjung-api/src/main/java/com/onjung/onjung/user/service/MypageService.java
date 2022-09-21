@@ -3,7 +3,7 @@ package com.onjung.onjung.user.service;
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.domain.UserRentalFeed;
-import com.onjung.onjung.feed.domain.staus.FeedStatus;
+import com.onjung.onjung.feed.domain.status.FeedStatus;
 import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.feed.repository.ServerFeedRepository;
 import com.onjung.onjung.feed.repository.UserRentalFeedRepository;

@@ -1,7 +1,7 @@
 package com.onjung.onjung.feed.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.onjung.onjung.feed.domain.staus.ItemStatus;
+import com.onjung.onjung.feed.domain.status.ItemStatus;
 import com.onjung.onjung.user.domain.User;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;

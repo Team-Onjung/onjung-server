@@ -22,10 +22,10 @@ public class CoreApplication {
 		SpringApplication.run(CoreApplication.class, args);
 
 //		BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
-//
+
 //		textEncryptor.setPassword("onjung");
-//
-//		String url = textEncryptor.encrypt("");
+
+//		String url = textEncryptor.encrypt();
 //		String username = textEncryptor.encrypt("");
 //		String password = textEncryptor.encrypt("");
 //		System.out.println("url = " + url);

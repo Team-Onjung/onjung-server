@@ -1,7 +1,7 @@
 package com.onjung.onjung.feed.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.onjung.onjung.feed.domain.staus.FeedStatus;
+import com.onjung.onjung.feed.domain.status.FeedStatus;
 import com.onjung.onjung.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

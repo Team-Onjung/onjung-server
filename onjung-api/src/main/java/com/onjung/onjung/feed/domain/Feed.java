@@ -1,6 +1,6 @@
 package com.onjung.onjung.feed.domain;
 
-import com.onjung.onjung.feed.domain.staus.ItemStatus;
+import com.onjung.onjung.feed.domain.status.ItemStatus;
 
 public interface Feed {
 
