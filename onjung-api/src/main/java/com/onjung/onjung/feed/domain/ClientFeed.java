@@ -31,6 +31,8 @@ public class ClientFeed implements Feed{
     @JoinColumn(name = "writer_id")
     private User writer;
 
+    private int price;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;

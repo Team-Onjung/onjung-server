@@ -59,7 +59,7 @@ public class ClientFeedController{
     public List<ClientFeed> readAllFeed(@RequestParam(value="price", required = false) String price,
                                         @RequestParam(value="created", required = false) String created,
                                         @RequestParam(value="category", required = false) String category,
-                                        @RequestParam(value="status", required = false) String status) throws ExecutionException, InterruptedException, TimeoutException {
+                                        @RequestParam(value="status", required = false) String status) throws Exception {
         return feedService.readAllFeed(price, created, category, status).get(1000L, TimeUnit.MILLISECONDS);
     }
 
