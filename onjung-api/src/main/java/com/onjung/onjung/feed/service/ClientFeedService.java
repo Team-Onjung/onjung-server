@@ -17,6 +17,7 @@ import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -29,8 +30,6 @@ public class ClientFeedService {
     private final ClientFeedRepository clientFeedRepository;
 
     private final CategoryRepository categoryRepository;
-
-
 
     @Transactional
     @CachePut(value = "clientFeedCaching", key = "#feedId")
@@ -121,5 +120,22 @@ public class ClientFeedService {
         }else{
             throw new DataNotFoundException();
         }
+    }
+
+    @Transactional
+    @CacheEvict(value = "clientFeedCaching", allEntries = true)
+     public List<ClientFeed> getFeedOrderByCmd (String cmd){
+        List<ClientFeed> clientFeedList = new ArrayList<ClientFeed>();
+        switch (cmd) {
+            case "price":
+                clientFeedList = clientFeedRepository.findAllOrderByPriceDesc();
+            case "recent":
+                clientFeedList = clientFeedRepository.findAllOrderByCreatedAtDesc();
+            case "able":
+                clientFeedList = clientFeedRepository.getFeedOrderByStatus(Status.STATUS_POSSIBLE);
+            case "unable":
+                clientFeedList = clientFeedRepository.getFeedOrderByStatus(Status.STATUS_FINISHED);
+        }
+        return clientFeedList;
     }
 }
