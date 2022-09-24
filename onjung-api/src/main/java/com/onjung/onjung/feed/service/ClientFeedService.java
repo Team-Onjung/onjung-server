@@ -6,12 +6,14 @@ import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.status.ItemStatus;
 import com.onjung.onjung.feed.dto.ClientFeedRequestDto;
 import com.onjung.onjung.feed.repository.ClientFeedRepository;
+import com.onjung.onjung.feed.repository.QueryRepository;
 import com.onjung.onjung.item.repository.CategoryRepository;
 import com.onjung.onjung.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,8 @@ public class ClientFeedService {
     private final ClientFeedRepository clientFeedRepository;
 
     private final CategoryRepository categoryRepository;
+
+    private final QueryRepository queryRepository;
 
 
 
@@ -71,22 +75,13 @@ public class ClientFeedService {
     @Transactional(readOnly = true)
     @Cacheable("clientFeedCaching")
     @Async
-    public Future<List<ClientFeed>> readAllFeed(String price, String created, String category, String status){
-//      쿼리파라미터: ASC 또는 DESC
-        if(category == null){
-            category="";
+    public Future<List<ClientFeed>> readAllFeed(String price, String created, String category, String status) throws Exception {
+        // 쿼리파라미터: ASC 또는 DESC
+        if(price!=null || created!=null || category!=null || status!=null){
+            System.out.println("!!!!!!");
+            return new AsyncResult<List<ClientFeed>>(queryRepository.getclientFeedList(price,created,category,status));
         }
-        if(status == null){
-            status="";
-        }
-
-        if(created == null){
-            created=null;
-        }
-        if(price == null){
-            price=null;
-        }
-        return new AsyncResult<List<ClientFeed>>(clientFeedRepository.findByFilteringCondition(category,status).get());
+        return new AsyncResult<List<ClientFeed>>(clientFeedRepository.findAll());
     }
 
 
