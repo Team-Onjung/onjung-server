@@ -17,8 +17,9 @@ public interface ClientFeedRepository extends JpaRepository<ClientFeed,Long> {
 
     Optional<ClientFeed> findByTitle(String title);
 
-    List<ClientFeed> findAllOrderByPriceDesc();
-    List<ClientFeed> findAllOrderByCreatedAtDesc();
+//    List<ClientFeed> findAllOrderByPrice();
+    @Query("SELECT f from ClientFeed f order by  f.createdAt")
+    List<ClientFeed> findAllOrderByCreatedAt();
 
     @Query("SELECT f from ClientFeed f where f.status = :status order by  f.createdAt")
     List<ClientFeed> getFeedOrderByStatus(@Param("status") Status status);
