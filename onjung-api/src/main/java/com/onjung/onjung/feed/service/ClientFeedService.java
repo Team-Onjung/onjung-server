@@ -128,10 +128,10 @@ public class ClientFeedService {
      public List<ClientFeed> getFeedOrderByCmd (String cmd){
         List<ClientFeed> clientFeedList = new ArrayList<ClientFeed>();
         switch (cmd) {
-            case "price":
-                clientFeedList = clientFeedRepository.findAllOrderByPriceDesc();
+//            case "price":
+//                clientFeedList = clientFeedRepository.findAllOrderByPrice();
             case "recent":
-                clientFeedList = clientFeedRepository.findAllOrderByCreatedAtDesc();
+                clientFeedList = clientFeedRepository.findAllOrderByCreatedAt();
             case "able":
                 clientFeedList = clientFeedRepository.getFeedOrderByStatus(Status.STATUS_POSSIBLE);
             case "unable":

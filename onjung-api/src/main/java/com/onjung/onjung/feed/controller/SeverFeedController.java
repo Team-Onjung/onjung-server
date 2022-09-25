@@ -23,13 +23,13 @@ import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/server")
+@RequestMapping("/server/feed")
 public class SeverFeedController {
 
     private final ServerFeedService feedService;
     private final UserRepository userRepository;
 
-    @PostMapping("/feed")
+    @PostMapping("")
     public ResponseEntity createFeed(@RequestBody @Valid ServerFeedRequestDto requestDto, BindingResult result) throws Exception{
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -53,18 +53,18 @@ public class SeverFeedController {
         }
     }
 
-    @GetMapping("/feed")
+    @GetMapping("")
     public List<ServerFeed> readAllFeed() throws ExecutionException, InterruptedException, TimeoutException {
         return feedService.readAllFeed().get(200L, TimeUnit.MILLISECONDS);
     }
 
-    @PostMapping("/feed/{feedId}")
+    @PostMapping("/{feedId}")
     public ResponseEntity borrowFeed(@PathVariable("feedId") Long feedId) throws DataNotFoundException, Exception {
         feedService.borrowFeed(feedId);
         return ResponseEntity.status(HttpStatus.OK).body("borrowing is succeed");
     }
 
-    @GetMapping("/feed/{feedId}")
+    @GetMapping("/{feedId}")
     public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) throws ExecutionException, TimeoutException {
         try {
             ServerFeed feed = feedService.readFeed(feedId).get(200L, TimeUnit.MILLISECONDS);
@@ -75,7 +75,7 @@ public class SeverFeedController {
         }
     }
 
-    @PatchMapping("/feed/{feedId}")
+    @PatchMapping("/{feedId}")
     public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @RequestBody @Valid ServerFeedRequestDto requestDto, BindingResult result) throws DataNotFoundException {
             feedService.putFeed(feedId, requestDto);
 
@@ -86,9 +86,15 @@ public class SeverFeedController {
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
-    @DeleteMapping("/feed/{feedId}")
+    @DeleteMapping("/{feedId}")
     public ResponseEntity deleteFeed (@PathVariable("feedId") Long feedId){
         feedService.deleteFeed(feedId);
         return ResponseEntity.status(HttpStatus.OK).body("ok");
+    }
+
+    @GetMapping("filter/")
+    public ResponseEntity readFeedOrdered (@RequestParam("cmd") String cmd){
+        List<ServerFeed> feedOrderByCmd = feedService.getFeedOrderByCmd(cmd);
+        return ResponseEntity.status(HttpStatus.OK).body(feedOrderByCmd);
     }
 }

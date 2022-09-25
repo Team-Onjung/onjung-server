@@ -10,12 +10,14 @@ import com.onjung.onjung.feed.repository.ServerFeedRepository;
 import com.onjung.onjung.item.repository.CategoryRepository;
 import com.onjung.onjung.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -121,5 +123,20 @@ public class ServerFeedService {
         }else{
             throw new DataNotFoundException();
         }
+    }
+
+    public List<ServerFeed> getFeedOrderByCmd (String cmd){
+        List<ServerFeed> serverFeedList = new ArrayList<ServerFeed>();
+        switch (cmd) {
+//            case "price":
+//                serverFeedList = serverFeedRepository.findAllOrderByPrice();
+            case "recent":
+                serverFeedList = serverFeedRepository.findAllOrderByCreatedAt();
+//            case "able":
+//                serverFeedList = serverFeedRepository.getFeedOrderByStatus(Status.STATUS_POSSIBLE);
+//            case "unable":
+//                serverFeedList = serverFeedRepository.getFeedOrderByStatus(Status.STATUS_FINISHED);
+        }
+        return serverFeedList;
     }
 }
