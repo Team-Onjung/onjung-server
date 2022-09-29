@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,7 +18,7 @@ public class Chat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "chat_id")
+    @Column(name = "chat_id", nullable = false)
     private Long id;
 
     @JsonIgnore
@@ -38,6 +37,10 @@ public class Chat {
     @CreatedDate
     @Column(updatable = false, name="send_date")
     private LocalDateTime sendDate;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     @Builder
     public Chat(

@@ -1,6 +1,7 @@
 package com.onjung.onjung.dto;
 
 import com.onjung.onjung.domain.Room;
+import com.onjung.onjung.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 
