@@ -1,39 +1,35 @@
- package com.onjung.onjung.feed.service;
+package com.onjung.onjung.feed.service;
 
 import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.feed.domain.Category;
 import com.onjung.onjung.feed.domain.ClientFeed;
+
 import com.onjung.onjung.feed.domain.status.ItemStatus;
 import com.onjung.onjung.feed.dto.ClientFeedRequestDto;
 import com.onjung.onjung.feed.repository.ClientFeedRepository;
-import com.onjung.onjung.feed.repository.QueryRepository;
 import com.onjung.onjung.item.repository.CategoryRepository;
 import com.onjung.onjung.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.Future;
 
- @Service
+@Service
 @RequiredArgsConstructor
 public class ClientFeedService {
 
     private final ClientFeedRepository clientFeedRepository;
 
     private final CategoryRepository categoryRepository;
-
-    private final QueryRepository queryRepository;
 
 
 
@@ -58,29 +54,24 @@ public class ClientFeedService {
 
         Category requestCategory = categoryRepository.findById(feedRequestDto.getCategoryId()).get();
 
-            ClientFeed feed = ClientFeed.builder()
-                    .writer(feedUser)
-                    .title(feedRequestDto.getTitle())
-                    .content(feedRequestDto.getContent())
-                    .category(requestCategory)
-                    .startDate(feedRequestDto.getStartDate())
-                    .endDate(feedRequestDto.getEndDate())
-                    .duration(feedRequestDto.getDuration())
-                    .image(feedRequestDto.getImage())
-                    .build();
+        ClientFeed feed = ClientFeed.builder()
+                .writer(feedUser)
+                .title(feedRequestDto.getTitle())
+                .content(feedRequestDto.getContent())
+                .category(requestCategory)
+                .startDate(feedRequestDto.getStartDate())
+                .endDate(feedRequestDto.getEndDate())
+                .duration(feedRequestDto.getDuration())
+                .image(feedRequestDto.getImage())
+                .build();
 
-            clientFeedRepository.save(feed);
+        clientFeedRepository.save(feed);
     }
 
     @Transactional(readOnly = true)
     @Cacheable("clientFeedCaching")
     @Async
-    public Future<List<ClientFeed>> readAllFeed(String price, String created, String category, String status) throws Exception {
-        // 쿼리파라미터: ASC 또는 DESC
-        if(price!=null || created!=null || category!=null || status!=null){
-            System.out.println("!!!!!!");
-            return new AsyncResult<List<ClientFeed>>(queryRepository.getclientFeedList(price,created,category,status));
-        }
+    public Future<List<ClientFeed>> readAllFeed(){
         return new AsyncResult<List<ClientFeed>>(clientFeedRepository.findAll());
     }
 
