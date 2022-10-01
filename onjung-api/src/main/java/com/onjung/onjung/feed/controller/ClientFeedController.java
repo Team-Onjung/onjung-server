@@ -56,23 +56,20 @@ public class ClientFeedController{
     }
 
     @GetMapping("/feed")
-    public List<ClientFeed> readAllFeed(@RequestParam(value="price", required = false) String price,
-                                        @RequestParam(value="created", required = false) String created,
-                                        @RequestParam(value="category", required = false) String category,
-                                        @RequestParam(value="status", required = false) String status) throws Exception {
-        return feedService.readAllFeed(price, created, category, status).get(1000L, TimeUnit.MILLISECONDS);
+    public List<ClientFeed> readAllFeed() throws ExecutionException, InterruptedException, TimeoutException {
+        return feedService.readAllFeed().get(200L, TimeUnit.MILLISECONDS);
     }
 
     @PostMapping("/feed/{feedId}")
     public ResponseEntity lendFeed(@PathVariable("feedId") Long feedId) throws DataNotFoundException, Exception{
-            feedService.lendFeed(feedId);
-            return ResponseEntity.status(HttpStatus.OK).body("lending is succeed");
+        feedService.lendFeed(feedId);
+        return ResponseEntity.status(HttpStatus.OK).body("lending is succeed");
     }
 
     @GetMapping("/feed/{feedId}")
     public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) throws ExecutionException, TimeoutException, InterruptedException {
-            ClientFeed feed = feedService.readFeed(feedId).get(200L, TimeUnit.MILLISECONDS);
-            return ResponseEntity.status(HttpStatus.OK).body(feed);
+        ClientFeed feed = feedService.readFeed(feedId).get(200L, TimeUnit.MILLISECONDS);
+        return ResponseEntity.status(HttpStatus.OK).body(feed);
     }
 
     @PatchMapping("/feed/{feedId}")

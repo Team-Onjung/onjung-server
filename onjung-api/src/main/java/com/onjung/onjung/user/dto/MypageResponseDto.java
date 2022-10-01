@@ -15,16 +15,16 @@ import java.util.ArrayList;
 @Setter
 public class MypageResponseDto implements Serializable {
 
-//    닉네임 예: 얼리어답터 지우
+    //    닉네임 예: 얼리어답터 지우
     String username;
 
-//    나의 상품
+    //    나의 상품
     ArrayList<ServerFeed> myLentFeeds;
 
-//    대여한 상품
+    //    대여한 상품
     ArrayList<ServerFeed> myBorrowedFeeds;
 
-//    대여 요청
+    //    대여 요청
     ArrayList<ClientFeed> myRequesteddFeeds;
 
 //    나의 정

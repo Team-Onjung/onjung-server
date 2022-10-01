@@ -1,4 +1,4 @@
-package com.onjung.onjung.feed.repository;
+package com.onjung.onjung.user.repository;
 
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.QClientFeed;
