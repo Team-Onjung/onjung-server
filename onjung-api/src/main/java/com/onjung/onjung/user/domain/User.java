@@ -6,6 +6,7 @@ import com.onjung.onjung.review.domain.Review;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
