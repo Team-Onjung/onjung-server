@@ -29,6 +29,8 @@ public class UserRequestDto {
 
     String username;
 
+    String locationId;
+
     LocalDate birth;
 
     String university;
@@ -41,6 +43,7 @@ public class UserRequestDto {
                           String profileImg,
                           String profileIntro,
                           String phone,
+                          String locationId,
                           String username,
                           LocalDate birth,
                           String university) {
@@ -54,5 +57,6 @@ public class UserRequestDto {
         this.username = username;
         this.birth = birth;
         this.university = university;
+        this.locationId = locationId;
     }
 }

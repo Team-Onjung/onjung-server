@@ -33,12 +33,13 @@ public class UserService {
                     .profileIntro(userRequestDto.getProfileIntro())
                     .phone(userRequestDto.getPhone())
                     .birth(userRequestDto.getBirth())
+                    .locationId(userRequestDto.getLocationId())
                     .university(userRequestDto.getUniversity())
                     .build();
 
             validateDuplicateMember(user);
             userRepository.save(user);
-            System.out.println("user = " + userRepository.findByUsername("username").get().getUsername());
+            System.out.println("user = " + userRepository.findByUsername("username").isPresent());
         }catch (Exception e){
             e.printStackTrace();
         }
