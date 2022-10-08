@@ -10,13 +10,16 @@ import java.util.concurrent.TimeoutException;
 
 public interface FeedController {
 
-//    ResponseEntity createFeed(FeedRequestDto requestDto, BindingResult result) throws Exception;
-//
-//    List readAllFeed() throws ExecutionException, InterruptedException, TimeoutException;
-//
-//    ResponseEntity readFeed(Long feedId) throws ExecutionException, TimeoutException, InterruptedException;
-//
-//    ResponseEntity updateFeed(Long feedId, FeedRequestDto requestDto, BindingResult result);
-//
-//    ResponseEntity deleteFeed (Long feedId);
+
+    ResponseEntity createFeed(FeedRequestDto requestDto, BindingResult result) throws Exception;
+
+    List readAllFeed() throws ExecutionException, InterruptedException, TimeoutException;
+
+    ResponseEntity readFeed(Long feedId) throws ExecutionException, TimeoutException, InterruptedException;
+
+    ResponseEntity updateFeed(Long feedId, FeedRequestDto requestDto, BindingResult result);
+
+    ResponseEntity deleteFeed (Long feedId);
+
+    ResponseEntity getAllOrderByCmd (String cmd);
 }
