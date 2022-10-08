@@ -19,4 +19,6 @@ public interface FeedController {
     ResponseEntity updateFeed(Long feedId, FeedRequestDto requestDto, BindingResult result);
 
     ResponseEntity deleteFeed (Long feedId);
+
+    ResponseEntity getAllOrderByCmd (String cmd);
 }
