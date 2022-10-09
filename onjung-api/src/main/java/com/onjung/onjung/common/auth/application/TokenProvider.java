@@ -40,7 +40,7 @@ public class TokenProvider {
                 .withClaim("username", user.getUsername())
                 .withClaim("email", user.getEmail())
                 .sign(Algorithm.HMAC512(secret));
-        return jwtToken;
+        return TOKEN_PREFIX + jwtToken;
     }
 
     /*
@@ -51,10 +51,6 @@ public class TokenProvider {
         String token = JwtToken.replace(TOKEN_PREFIX, "");
         String email = JWT.require(Algorithm.HMAC512(secret)).build().verify(token)
                 .getClaim("email").asString();
-        String username = JWT.require(Algorithm.HMAC512(secret)).build().verify(token)
-                .getClaim("username").asString();
-        Long id = JWT.require(Algorithm.HMAC512(secret)).build().verify(token)
-                .getClaim("id").asLong();
 
         if(email != null) {
             Optional<User> userEntity = userRepository.findByEmail(email);
