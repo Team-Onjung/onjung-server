@@ -6,6 +6,7 @@ import com.onjung.onjung.review.domain.Review;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
@@ -66,6 +67,7 @@ public class User {
 
 //    주소 Table에서 입력한 후 받아오는 값, 이후 수정 필요
     @NotNull
+    @Column(name = "location_id")
     private String locationId;
 
     @CreationTimestamp
