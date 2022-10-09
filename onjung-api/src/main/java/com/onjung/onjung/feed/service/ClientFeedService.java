@@ -1,6 +1,7 @@
  package com.onjung.onjung.feed.service;
 
 import com.onjung.onjung.exception.DataNotFoundException;
+import com.onjung.onjung.exception.UnauthorizedException;
 import com.onjung.onjung.feed.domain.Category;
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.Status;
@@ -88,25 +89,26 @@ public class ClientFeedService {
 
     @Transactional
     @CachePut(value = "clientFeedCaching", key = "#feedId")
-    public ClientFeed putFeed(Long feedId, ClientFeedRequestDto feedRequestDto){
+    public ClientFeed putFeed(Long feedId, ClientFeedRequestDto feedRequestDto, User user){
         try{
             ClientFeed feed = clientFeedRepository.findById(feedId).get();
-
             Category requestCategory = categoryRepository.findById(feedRequestDto.getCategoryId()).get();
+            if (user.getEmail().equals(feed.getWriter().getEmail())) {
 
-            feed.setCategory(requestCategory);
-            feed.setTitle(feedRequestDto.getTitle());
-            feed.setStartDate(feedRequestDto.getStartDate());
-            feed.setEndDate(feedRequestDto.getEndDate());
-            feed.setDuration(feedRequestDto.getDuration());
-            feed.setContent(feedRequestDto.getContent());
-            feed.setImage(feedRequestDto.getImage());
-
-            clientFeedRepository.save(feed);
-
-            return feed;
-
-        }catch(NoSuchElementException e){
+                feed.setCategory(requestCategory);
+                feed.setTitle(feedRequestDto.getTitle());
+                feed.setStartDate(feedRequestDto.getStartDate());
+                feed.setEndDate(feedRequestDto.getEndDate());
+                feed.setDuration(feedRequestDto.getDuration());
+                feed.setContent(feedRequestDto.getContent());
+                feed.setImage(feedRequestDto.getImage());
+                feed.setPricePerDay(feedRequestDto.getPricePerDay());
+                clientFeedRepository.save(feed);
+                return feed;
+            } else {
+                throw new UnauthorizedException("요청하신 피드 (id = " + feed.getId() + " )는 요청자의 소유가 아닙니다.");
+            }
+        } catch (NoSuchElementException e) {
             throw new DataNotFoundException();
         }
     }

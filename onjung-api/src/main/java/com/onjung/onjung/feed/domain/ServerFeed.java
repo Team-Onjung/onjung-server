@@ -14,8 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @Table(name = "ServerFeed")
 @DynamicInsert
 @NoArgsConstructor
@@ -54,7 +53,10 @@ public class ServerFeed implements Feed{
     private LocalDateTime endDate;
 
     @NotNull
-    private LocalDateTime duration;
+    private Long duration;
+
+    @NotNull
+    private Long minimumDuration;
 
     @NotNull
     private String content;
@@ -90,33 +92,6 @@ public class ServerFeed implements Feed{
     @PrePersist
     public void setDefault(){
         this.status = this.status == null ? Status.STATUS_POSSIBLE : this.status;
-    }
-
-    @Builder
-    public ServerFeed(
-            Category category,
-            User writer,
-            String title,
-            String content,
-            LocalDateTime startDate,
-            LocalDateTime endDate,
-            LocalDateTime duration,
-            String image,
-            int rentalFee,
-            int deposit,
-            double commissionFee
-            ) {
-        this.writer = writer;
-        this.category = category;
-        this.content = content;
-        this.title = title;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.duration = duration;
-        this.image = image;
-        this.rentalFee = rentalFee;
-        this.deposit = deposit;
-        this.commissionFee = commissionFee;
     }
 
     public void addFeedbackCnt(){

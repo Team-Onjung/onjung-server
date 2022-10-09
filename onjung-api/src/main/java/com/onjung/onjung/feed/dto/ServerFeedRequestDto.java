@@ -13,44 +13,23 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class ServerFeedRequestDto extends FeedRequestDto{
-
-    Long categoryId;
-
-    User writer;
-
-    String title;
-
-    LocalDateTime startDate;
-
-    LocalDateTime endDate;
-
-    LocalDateTime duration;
-
-    String content;
-
-    String image;
-
+    Long minimumDuration;
     int rentalFee;
-
     int deposit;
-
-
 
     @Builder
     public ServerFeedRequestDto(
             Long categoryId,
-            User writer,
             String title,
             String content,
             LocalDateTime startDate,
             LocalDateTime endDate,
-            LocalDateTime duration,
+            Long duration,
             String image,
             int rentalFee,
             int deposit
     )
     {
-        this.writer = writer;
         this.categoryId = categoryId;
         this.content = content;
         this.title = title;
@@ -60,7 +39,6 @@ public class ServerFeedRequestDto extends FeedRequestDto{
         this.image = image;
         this.rentalFee = rentalFee;
         this.deposit = deposit;
-
     }
 
 }

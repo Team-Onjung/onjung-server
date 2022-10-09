@@ -1,5 +1,6 @@
 package com.onjung.onjung.feed.controller;
 
+import com.onjung.onjung.common.auth.PrincipalDetails;
 import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.exception.InvalidParameterException;
 import com.onjung.onjung.feed.domain.ClientFeed;
@@ -11,6 +12,7 @@ import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -32,27 +34,10 @@ public class ClientFeedController{
     private final UserRepository userRepository;
 
     @PostMapping("")
-    public ResponseEntity createFeed(@RequestBody @Valid ClientFeedRequestDto requestDto, BindingResult result) throws Exception{
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if ((String)principal!= "anonymousUser") {
-            Optional<User> _user = userRepository.findByUsername((String) principal);
-
-            if (_user.isPresent()) {
-                User user = _user.get();
-
-                feedService.createFeed(requestDto, user);
-
-                if (result.hasErrors()) {
-                    throw new InvalidParameterException(result);
-                }
-
-                return ResponseEntity.status(HttpStatus.OK).body("ok");
-            }
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("user not found");
-        }else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you need to login");
-        }
+    public ResponseEntity createFeed(@RequestBody @Valid ClientFeedRequestDto requestDto, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception{
+        User user = principalDetails.getUser();
+        feedService.createFeed(requestDto, user);
+        return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
     @GetMapping("")
@@ -73,26 +58,10 @@ public class ClientFeedController{
     }
 
     @PatchMapping("{feedId}")
-    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @RequestBody @Valid ClientFeedRequestDto requestDto, BindingResult result) throws DataNotFoundException {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if ((String)principal!= "anonymousUser") {
-            Optional<User> _user = userRepository.findByUsername((String) principal);
-            Optional<ClientFeed> _feed = feedRepository.findById(feedId);
-
-            if (_user.isPresent() && _user.get().equals(_feed.get().getWriter())) {
-                feedService.putFeed(feedId, requestDto);
-
-                if (result.hasErrors()) {
-                    throw new InvalidParameterException(result);
-                }
-                return ResponseEntity.status(HttpStatus.OK).body("ok");
-
-            }
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you can not patch feed that you did not write");
-        }else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you need to login");
-        }
+    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @RequestBody @Valid ClientFeedRequestDto requestDto, @AuthenticationPrincipal PrincipalDetails principalDetails) throws DataNotFoundException {
+        User user = principalDetails.getUser();
+        feedService.putFeed(feedId, requestDto, user);
+        return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
     @DeleteMapping("{feedId}")

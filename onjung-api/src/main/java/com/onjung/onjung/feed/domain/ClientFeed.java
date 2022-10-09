@@ -52,7 +52,7 @@ public class ClientFeed implements Feed{
     private LocalDateTime endDate;
 
     @NotNull
-    private LocalDateTime duration;
+    private Long duration;
 
     @Column(length = 32, nullable = false)
     private String title;
@@ -70,6 +70,9 @@ public class ClientFeed implements Feed{
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @ColumnDefault("0")
+    private Long pricePerDay;
+
     @NotNull
     private String image;
 
@@ -85,9 +88,10 @@ public class ClientFeed implements Feed{
             String title,
             LocalDateTime startDate,
             LocalDateTime endDate,
-            LocalDateTime duration,
+            Long duration,
             String content,
-            String image
+            String image,
+            Long pricePerDay
     )
     {
         this.writer = writer;
@@ -98,6 +102,7 @@ public class ClientFeed implements Feed{
         this.duration = duration;
         this.content = content;
         this.image = image;
+        this.pricePerDay = pricePerDay;
     }
 
     public void addFeedbackCnt(){
