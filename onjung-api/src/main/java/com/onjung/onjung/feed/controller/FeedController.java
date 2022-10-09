@@ -1,6 +1,7 @@
 package com.onjung.onjung.feed.controller;
 
 //import com.onjung.onjung.feed.dto.FeedRequestDto;
+import com.onjung.onjung.feed.dto.FeedRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
