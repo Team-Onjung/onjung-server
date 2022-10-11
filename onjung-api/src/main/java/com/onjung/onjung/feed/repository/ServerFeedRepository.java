@@ -1,6 +1,5 @@
 package com.onjung.onjung.feed.repository;
 
-import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.domain.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,8 +17,9 @@ public interface ServerFeedRepository extends JpaRepository<ServerFeed,Long>{
 
     Optional<ServerFeed> findByTitle(String title);
 
-    //    List<ServerFeed> findAllOrderByPrice();
-    @Query("SELECT f from ServerFeed f order by  f.createdAt")
+    @Query("SELECT f from ServerFeed f order by f.rentalFee")
+    List<ServerFeed> findAllOrderByRentalFee();
+    @Query("SELECT f from ServerFeed f order by f.createdAt")
     List<ServerFeed> findAllOrderByCreatedAt();
 
     @Query("SELECT f from ServerFeed f where f.status = :status order by  f.createdAt")

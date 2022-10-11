@@ -16,6 +16,5 @@ public class FeedRequestDto {
     LocalDateTime endDate;
     Long duration;
     String content;
-
     String image;
 }

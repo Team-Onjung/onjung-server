@@ -6,4 +6,8 @@ public class DataNotFoundException extends CustomException{
     public DataNotFoundException() {
         super(ErrorCode.NOT_FOUND);
     }
+
+    public DataNotFoundException(String message){
+        super(ErrorCode.INVALID_PARAMETER, message);
+    }
 }

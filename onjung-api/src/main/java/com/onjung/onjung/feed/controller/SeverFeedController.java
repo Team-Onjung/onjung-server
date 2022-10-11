@@ -1,5 +1,6 @@
 package com.onjung.onjung.feed.controller;
 
+import com.onjung.onjung.common.auth.PrincipalDetails;
 import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.exception.InvalidParameterException;
 import com.onjung.onjung.feed.domain.ServerFeed;
@@ -10,6 +11,7 @@ import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +61,7 @@ public class SeverFeedController {
     }
 
     @PostMapping("/{feedId}")
-    public ResponseEntity borrowFeed(@PathVariable("feedId") Long feedId) throws DataNotFoundException, Exception {
+    public ResponseEntity borrowFeed(@PathVariable("feedId") Long feedId) throws Exception {
         feedService.borrowFeed(feedId);
         return ResponseEntity.status(HttpStatus.OK).body("borrowing is succeed");
     }
@@ -76,13 +78,12 @@ public class SeverFeedController {
     }
 
     @PatchMapping("/{feedId}")
-    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @RequestBody @Valid ServerFeedRequestDto requestDto, BindingResult result) throws DataNotFoundException {
-            feedService.putFeed(feedId, requestDto);
-
+    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @RequestBody @Valid ServerFeedRequestDto requestDto, @AuthenticationPrincipal PrincipalDetails principalDetails, BindingResult result) throws DataNotFoundException {
+        User user = principalDetails.getUser();
+        feedService.putFeed(feedId, requestDto, user);
         if (result.hasErrors()) {
             throw new InvalidParameterException(result);
         }
-
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
