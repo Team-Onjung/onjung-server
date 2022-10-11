@@ -1,13 +1,9 @@
 package com.onjung.onjung.feed.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.onjung.onjung.item.domain.Item;
 import com.onjung.onjung.user.domain.User;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,48 +14,14 @@ import java.time.LocalDateTime;
 @Table(name = "ServerFeed")
 @DynamicInsert
 @NoArgsConstructor
-public class ServerFeed implements Feed{
+public class ServerFeed extends Feed {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "writer_id")
-    private User writer;
-
-    @CreationTimestamp
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @ManyToOne
-    @JoinColumn(name="CATEGORY_ID")
-    private Category category;
-
-    @Column(length = 32, nullable = false)
-    private String title;
-
-    @NotNull
-    @Column(name="start_date", nullable = false)
-    private LocalDateTime startDate;
-
-    @NotNull
-    @Column(name="end_date", nullable = false)
-    private LocalDateTime endDate;
-
-    @NotNull
-    private Long duration;
-
     @NotNull
     private Long minimumDuration;
-
-    @NotNull
-    private String content;
 
     @NotNull
     private int deposit;
@@ -76,7 +38,7 @@ public class ServerFeed implements Feed{
     @NotNull
     @ColumnDefault("0")
     @Column(name="commission_cnt", nullable = false)
-    private double commissionFee;
+    private Long commissionFee;
 
     //    방문자 수
 //    @Column(columnDefinition = "bigint default 0")
@@ -92,6 +54,35 @@ public class ServerFeed implements Feed{
     @PrePersist
     public void setDefault(){
         this.status = this.status == null ? Status.STATUS_POSSIBLE : this.status;
+    }
+
+    @Builder
+    public ServerFeed(
+            Category category,
+            User writer,
+            String title,
+            String content,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            Long duration,
+            Long minimumDuration,
+            String image,
+            int rentalFee,
+            int deposit,
+            Long commissionFee
+    ) {
+        this.writer = writer;
+        this.category = category;
+        this.content = content;
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.duration = duration;
+        this.minimumDuration = minimumDuration;
+        this.image = image;
+        this.rentalFee = rentalFee;
+        this.deposit = deposit;
+        this.commissionFee = commissionFee;
     }
 
     public void addFeedbackCnt(){
