@@ -1,15 +1,22 @@
 package com.onjung.onjung.exception;
 
-import org.springframework.validation.Errors;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-public class UnauthorizedException extends CustomException{
-
-    private static final long serialVersionUID = -21166714305194101L;
-
+@Component
+public class UnauthorizedException extends CustomException implements AuthenticationEntryPoint  {
 
     public UnauthorizedException() {
         super(ErrorCode.UNAUTHORIZED);
     }
 
-
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+    }
 }

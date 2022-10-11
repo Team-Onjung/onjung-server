@@ -1,6 +1,7 @@
 package com.onjung.onjung.item.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.onjung.onjung.feed.domain.Category;
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
 import lombok.Builder;
@@ -53,13 +54,13 @@ public class Item implements Serializable {
     @JoinColumn(name="CATEGORY_ID")
     private Category category;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "item")
-    private ClientFeed clientFeed;
+//    @JsonIgnore
+//    @OneToOne(mappedBy = "item")
+//    private ClientFeed clientFeed;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "item")
-    private ServerFeed serverFeed;
+//    @JsonIgnore
+//    @OneToOne(mappedBy = "item")
+//    private ServerFeed serverFeed;
 
     @Builder
     public Item(
