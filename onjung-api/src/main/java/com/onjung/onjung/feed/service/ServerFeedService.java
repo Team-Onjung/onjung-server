@@ -8,13 +8,10 @@ import com.onjung.onjung.item.repository.CategoryRepository;
 import com.onjung.onjung.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
 
 @Service
 @RequiredArgsConstructor
@@ -42,19 +39,15 @@ public class ServerFeedService {
         serverFeedRepository.save(feed);
     }
 
-    @Async
-    public Future<List<ServerFeed>> readAllFeed(){
-        return new AsyncResult<List<ServerFeed>>(
-            serverFeedRepository.findAll()
-        );
+    public List<ServerFeed> readAllFeed(){
+        return serverFeedRepository.findAll();
     }
 
-    @Async
-    public Future<ServerFeed> readFeed(Long feedId){
+    public ServerFeed readFeed(Long feedId){
         ServerFeed feed = serverFeedRepository.findById(feedId).orElseThrow(DataNotFoundException::new);
         feed.addAccessCnt();
         serverFeedRepository.save(feed);
-        return new AsyncResult<ServerFeed>(feed);
+        return feed;
     }
 
     public Feed putFeed(Long feedId, ServerFeedRequestDto feedRequestDto, User user){

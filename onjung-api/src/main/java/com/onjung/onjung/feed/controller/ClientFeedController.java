@@ -2,14 +2,12 @@ package com.onjung.onjung.feed.controller;
 
 import com.onjung.onjung.common.auth.PrincipalDetails;
 import com.onjung.onjung.exception.DataNotFoundException;
-import com.onjung.onjung.exception.InvalidParameterException;
 import com.onjung.onjung.exception.UnauthorizedException;
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.dto.ClientFeedRequestDto;
 import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.feed.service.ClientFeedService;
 import com.onjung.onjung.user.domain.User;
-import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 @RestController
@@ -30,7 +27,7 @@ public class ClientFeedController{
     private final ClientFeedRepository feedRepository;
 
     @PostMapping("")
-    public ResponseEntity createFeed(@RequestBody @Valid ClientFeedRequestDto requestDto, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception{
+    public ResponseEntity createFeed(@RequestBody @Valid ClientFeedRequestDto requestDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         User user = principalDetails.getUser();
         feedService.createFeed(requestDto, user);
         return ResponseEntity.status(HttpStatus.OK).body("ok");

@@ -4,10 +4,8 @@ import com.onjung.onjung.user.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 public class PrincipalDetails implements UserDetails {
 

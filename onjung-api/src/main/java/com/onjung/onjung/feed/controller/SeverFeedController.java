@@ -15,13 +15,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,49 +28,27 @@ public class SeverFeedController {
     private final UserRepository userRepository;
 
     @PostMapping("")
-    public ResponseEntity createFeed(@RequestBody @Valid ServerFeedRequestDto requestDto, BindingResult result) throws Exception{
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if ((String)principal!= "anonymousUser") {
-            Optional<User> _user = userRepository.findByUsername((String) principal);
-
-            if (_user.isPresent()) {
-                User user = _user.get();
-                System.out.println("user = " + user);
-                feedService.createFeed(requestDto, user);
-
-                if (result.hasErrors()) {
-                    throw new InvalidParameterException(result);
-                }
-                return ResponseEntity.status(HttpStatus.OK).body("OK");
-
-            }
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("user not found");
-        }else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you need to login");
-        }
+    public ResponseEntity createFeed(@RequestBody @Valid ServerFeedRequestDto requestDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        User user = principalDetails.getUser();
+        feedService.createFeed(requestDto, user);
+        return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
     @GetMapping("")
-    public List<ServerFeed> readAllFeed() throws ExecutionException, InterruptedException, TimeoutException {
-        return feedService.readAllFeed().get(200L, TimeUnit.MILLISECONDS);
+    public List<ServerFeed> readAllFeed() {
+        return feedService.readAllFeed();
     }
 
     @PostMapping("/{feedId}")
-    public ResponseEntity borrowFeed(@PathVariable("feedId") Long feedId) throws Exception {
+    public ResponseEntity borrowFeed(@PathVariable("feedId") Long feedId) {
         feedService.borrowFeed(feedId);
         return ResponseEntity.status(HttpStatus.OK).body("borrowing is succeed");
     }
 
     @GetMapping("/{feedId}")
-    public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) throws ExecutionException, TimeoutException {
-        try {
-            ServerFeed feed = feedService.readFeed(feedId).get(200L, TimeUnit.MILLISECONDS);
-            return ResponseEntity.status(HttpStatus.OK).body(feed);
-        }
-        catch (InterruptedException e) {
-            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(e.getMessage());
-        }
+    public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) {
+        ServerFeed feed = feedService.readFeed(feedId);
+        return ResponseEntity.status(HttpStatus.OK).body(feed);
     }
 
     @PatchMapping("/{feedId}")
