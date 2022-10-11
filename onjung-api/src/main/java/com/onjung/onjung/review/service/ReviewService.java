@@ -1,5 +1,7 @@
 package com.onjung.onjung.review.service;
 
+import com.onjung.onjung.exception.DataNotFoundException;
+import com.onjung.onjung.exception.UnauthorizedException;
 import com.onjung.onjung.review.domain.Review;
 import com.onjung.onjung.review.dto.ReviewRequestDto;
 import com.onjung.onjung.review.repository.ReviewRepository;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -35,5 +38,15 @@ public class ReviewService {
                 .build();
     }
 
+    @Transactional
+    public void deleteReview(Long reviewId){
+
+        Optional<Review> review = reviewRepository.findById(reviewId);
+
+        if (review.isPresent()){
+                reviewRepository.delete(review.get());
+        }else
+            throw new DataNotFoundException();
+    }
 
 }

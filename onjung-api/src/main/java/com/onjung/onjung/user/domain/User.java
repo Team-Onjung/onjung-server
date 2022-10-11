@@ -216,6 +216,7 @@ public class User {
 
         this.rateSum = this.rateSum + rate;
         this.reviewCnt = this.reviewCnt + 1;
+        this.rate = this.rateSum / this.reviewCnt;
 
     }
 }
