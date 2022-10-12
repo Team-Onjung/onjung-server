@@ -116,7 +116,7 @@ public class User {
 
     @PrePersist
     public void setDefault(){
-        this.isActive = this.isActive == null ? true : this.isActive;
+        this.isActive = this.isActive == null ? false : this.isActive;
         this.isBlocked = this.isBlocked == null ? false : this.isBlocked;
         this.isUniversity = this.isUniversity == null ? false : this.isUniversity;
     }
