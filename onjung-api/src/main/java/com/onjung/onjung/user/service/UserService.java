@@ -28,18 +28,18 @@ public class UserService {
                     .password(passwordEncoder.encode(userRequestDto.getPassword()))
                     .email(userRequestDto.getEmail())
                     .uuid(userRequestDto.getUuid())
-                    .locationId(userRequestDto.getLocation_id())
                     .provider(userRequestDto.getProvider())
                     .profileImg(userRequestDto.getProfileImg())
                     .profileIntro(userRequestDto.getProfileIntro())
                     .phone(userRequestDto.getPhone())
                     .birth(userRequestDto.getBirth())
+                    .locationId(userRequestDto.getLocationId())
                     .university(userRequestDto.getUniversity())
                     .build();
 
             validateDuplicateMember(user);
             userRepository.save(user);
-//            System.out.println("user = " + userRepository.findByUsername("username").get().getUsername());
+            System.out.println("user = " + userRepository.findByUsername("username").isPresent());
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -2,4 +2,5 @@ rootProject.name = 'onjung'
 include 'onjung-api'
 include 'onjung-batch'
 include 'onjung-core'
+include 'onjung-chatting'
 

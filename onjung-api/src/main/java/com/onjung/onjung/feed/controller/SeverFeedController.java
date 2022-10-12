@@ -3,7 +3,7 @@ package com.onjung.onjung.feed.controller;
 import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.exception.InvalidParameterException;
 import com.onjung.onjung.feed.domain.ServerFeed;
-import com.onjung.onjung.feed.dto.FeedRequestDto;
+import com.onjung.onjung.feed.dto.ServerFeedRequestDto;
 import com.onjung.onjung.feed.service.ServerFeedService;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
@@ -23,16 +23,15 @@ import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/server")
-public class SeverFeedController implements FeedController{
+@RequestMapping("/server/feed")
+public class SeverFeedController {
 
     private final ServerFeedService feedService;
     private final UserRepository userRepository;
 
-    @PostMapping("/feed")
-    public ResponseEntity createFeed(@RequestBody @Valid FeedRequestDto requestDto, BindingResult result) throws Exception{
+    @PostMapping("")
+    public ResponseEntity createFeed(@RequestBody @Valid ServerFeedRequestDto requestDto, BindingResult result) throws Exception{
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
 
         if ((String)principal!= "anonymousUser") {
             Optional<User> _user = userRepository.findByUsername((String) principal);
@@ -54,18 +53,18 @@ public class SeverFeedController implements FeedController{
         }
     }
 
-    @GetMapping("/feed")
+    @GetMapping("")
     public List<ServerFeed> readAllFeed() throws ExecutionException, InterruptedException, TimeoutException {
         return feedService.readAllFeed().get(200L, TimeUnit.MILLISECONDS);
     }
 
-    @PostMapping("/feed/{feedId}")
+    @PostMapping("/{feedId}")
     public ResponseEntity borrowFeed(@PathVariable("feedId") Long feedId) throws DataNotFoundException, Exception {
         feedService.borrowFeed(feedId);
         return ResponseEntity.status(HttpStatus.OK).body("borrowing is succeed");
     }
 
-    @GetMapping("/feed/{feedId}")
+    @GetMapping("/{feedId}")
     public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) throws ExecutionException, TimeoutException {
         try {
             ServerFeed feed = feedService.readFeed(feedId).get(200L, TimeUnit.MILLISECONDS);
@@ -76,9 +75,9 @@ public class SeverFeedController implements FeedController{
         }
     }
 
-    @PatchMapping("/feed/{feedId}")
-    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @RequestBody @Valid FeedRequestDto requestDto, BindingResult result) throws DataNotFoundException {
-            feedService.patchFeed(feedId, requestDto);
+    @PatchMapping("/{feedId}")
+    public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @RequestBody @Valid ServerFeedRequestDto requestDto, BindingResult result) throws DataNotFoundException {
+            feedService.putFeed(feedId, requestDto);
 
         if (result.hasErrors()) {
             throw new InvalidParameterException(result);
@@ -87,9 +86,15 @@ public class SeverFeedController implements FeedController{
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
-    @DeleteMapping("/feed/{feedId}")
+    @DeleteMapping("/{feedId}")
     public ResponseEntity deleteFeed (@PathVariable("feedId") Long feedId){
         feedService.deleteFeed(feedId);
         return ResponseEntity.status(HttpStatus.OK).body("ok");
+    }
+
+    @GetMapping("filter/")
+    public ResponseEntity readFeedOrdered (@RequestParam("cmd") String cmd){
+        List<ServerFeed> feedOrderByCmd = feedService.getFeedOrderByCmd(cmd);
+        return ResponseEntity.status(HttpStatus.OK).body(feedOrderByCmd);
     }
 }

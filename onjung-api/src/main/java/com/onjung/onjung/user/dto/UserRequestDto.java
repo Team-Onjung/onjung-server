@@ -2,10 +2,12 @@ package com.onjung.onjung.user.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Getter
+@NoArgsConstructor
 public class UserRequestDto {
 
     String email;
@@ -14,8 +16,6 @@ public class UserRequestDto {
     String password;
 
     String uuid;
-
-    String location_id;
 
     String provider;
 
@@ -27,6 +27,8 @@ public class UserRequestDto {
 
     String username;
 
+    String locationId;
+
     LocalDate birth;
 
     String university;
@@ -35,18 +37,17 @@ public class UserRequestDto {
     public UserRequestDto(String email,
                           String password,
                           String uuid,
-                          String location_id,
                           String provider,
                           String profileImg,
                           String profileIntro,
                           String phone,
+                          String locationId,
                           String username,
                           LocalDate birth,
                           String university) {
         this.email = email;
         this.password=password;
         this.uuid = uuid;
-        this.location_id = location_id;
         this.provider = provider;
         this.profileImg = profileImg;
         this.profileIntro = profileIntro;
@@ -54,5 +55,6 @@ public class UserRequestDto {
         this.username = username;
         this.birth = birth;
         this.university = university;
+        this.locationId = locationId;
     }
 }

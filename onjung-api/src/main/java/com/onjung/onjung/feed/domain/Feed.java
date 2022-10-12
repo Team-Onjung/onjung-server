@@ -2,7 +2,7 @@ package com.onjung.onjung.feed.domain;
 
 public interface Feed {
 
-    void addCnt();
+    void addFeedbackCnt();
 
     void changeStatus(Status status);
 

@@ -1,5 +1,6 @@
 package com.onjung.onjung.feed.controller;
 
+//import com.onjung.onjung.feed.dto.FeedRequestDto;
 import com.onjung.onjung.feed.dto.FeedRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeoutException;
 
 public interface FeedController {
 
+
     ResponseEntity createFeed(FeedRequestDto requestDto, BindingResult result) throws Exception;
 
     List readAllFeed() throws ExecutionException, InterruptedException, TimeoutException;
@@ -19,4 +21,6 @@ public interface FeedController {
     ResponseEntity updateFeed(Long feedId, FeedRequestDto requestDto, BindingResult result);
 
     ResponseEntity deleteFeed (Long feedId);
+
+    ResponseEntity getAllOrderByCmd (String cmd);
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.onjung.onjung.item.domain.Item;
 import com.onjung.onjung.user.domain.User;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -29,12 +30,6 @@ public class ServerFeed implements Feed{
     @JoinColumn(name = "writer_id")
     private User writer;
 
-    @OneToOne
-    @JsonIgnore
-    @JoinColumn(name = "ITEM_ID")
-    private Item item;
-
-
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -43,20 +38,54 @@ public class ServerFeed implements Feed{
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name="CATEGORY_ID")
+    private Category category;
+
     @Column(length = 32, nullable = false)
     private String title;
 
     @NotNull
-    private String body;
+    @Column(name="start_date", nullable = false)
+    private LocalDateTime startDate;
+
+    @NotNull
+    @Column(name="end_date", nullable = false)
+    private LocalDateTime endDate;
+
+    @NotNull
+    private LocalDateTime duration;
+
+    @NotNull
+    private String content;
+
+    @NotNull
+    private int deposit;
+
+    @NotNull
+    @Column(name="rental_fee", nullable = false)
+    private int rentalFee;
+
+    @NotNull
+    @ColumnDefault("0")
+    @Column(name="feedback_cnt", nullable = false)
+    private int feedbackCnt;
+
+    @NotNull
+    @ColumnDefault("0")
+    @Column(name="commission_cnt", nullable = false)
+    private double commissionFee;
 
     //    방문자 수
-    @Column(columnDefinition = "bigint default 0")
-    private long visitedCnt;
+//    @Column(columnDefinition = "bigint default 0")
+//    private long visitedCnt;
 
     //    수령 안됨(가능) / 수령 대기(예약) / 수령 중(배송 중)/ 수령 취소/ 수령 완료
     @NotNull
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    private String image;
 
     @PrePersist
     public void setDefault(){
@@ -65,18 +94,33 @@ public class ServerFeed implements Feed{
 
     @Builder
     public ServerFeed(
+            Category category,
             User writer,
             String title,
-            String body,
-            Item item) {
+            String content,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            LocalDateTime duration,
+            String image,
+            int rentalFee,
+            int deposit,
+            double commissionFee
+            ) {
         this.writer = writer;
-        this.item = item;
+        this.category = category;
+        this.content = content;
         this.title = title;
-        this.body = body;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.duration = duration;
+        this.image = image;
+        this.rentalFee = rentalFee;
+        this.deposit = deposit;
+        this.commissionFee = commissionFee;
     }
 
-    public void addCnt(){
-        this.visitedCnt+=1;
+    public void addFeedbackCnt(){
+        this.feedbackCnt+=1;
     }
 
     public void changeStatus(Status status){

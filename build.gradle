@@ -43,15 +43,15 @@ subprojects {
 		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 		implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-
 		implementation 'org.springframework.boot:spring-boot-starter-cache'
 		implementation group: 'net.sf.ehcache', name: 'ehcache', version: '2.10.9.2'
 
 		compileOnly 'org.projectlombok:lombok'
 		annotationProcessor 'org.projectlombok:lombok'
-
 		developmentOnly 'org.springframework.boot:spring-boot-devtools'
 		implementation 'org.slf4j:slf4j-api:1.7.31'
+
+		implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
 
 		implementation 'junit:junit:4.13.1'
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -59,6 +59,7 @@ subprojects {
 
 	test {
 		useJUnitPlatform()
+		systemProperty "jasypt.encryptor.password", project.getProperties().get("jasypt.encryptor.password")
 	}
 }
 
@@ -80,6 +81,12 @@ project(':onjung-api') {
 		implementation project(':onjung-core') // 컴파일 시 onjung-core project 로딩
 		implementation 'org.springframework.boot:spring-boot-starter-security'
 		testImplementation 'org.springframework.security:spring-security-test'
+
+		// 회원 인증 토큰 관련
+		implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+		implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+		runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+		implementation 'com.auth0:java-jwt:3.19.1'
 	}
 }
 
@@ -93,5 +100,16 @@ project(':onjung-batch') {
 		implementation 'org.springframework.boot:spring-boot-starter-batch'
 		testImplementation 'org.springframework.batch:spring-batch-test'
 		implementation 'org.springframework.boot:spring-boot-starter-quartz'
+	}
+}
+
+project(':onjung-chatting') {
+	// 공통 코드
+
+	bootJar { enabled = true }
+	jar { enabled = false }
+
+	dependencies {
+		implementation project(':onjung-core') // 컴파일 시 onjung-core project 로딩
 	}
 }

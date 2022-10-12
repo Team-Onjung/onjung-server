@@ -1,33 +1,32 @@
 package com.onjung.onjung.feed.service;
 
 import com.onjung.onjung.exception.DataNotFoundException;
-import com.onjung.onjung.feed.domain.Feed;
-import com.onjung.onjung.feed.domain.ServerFeed;
-import com.onjung.onjung.feed.domain.Status;
-import com.onjung.onjung.feed.dto.FeedRequestDto;
+import com.onjung.onjung.feed.domain.*;
+import com.onjung.onjung.feed.dto.ServerFeedRequestDto;
 import com.onjung.onjung.feed.repository.ServerFeedRepository;
-import com.onjung.onjung.item.domain.Item;
-import com.onjung.onjung.item.repository.ItemRepository;
+import com.onjung.onjung.item.repository.CategoryRepository;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.Future;
 
 @Service
 @RequiredArgsConstructor
-public class ServerFeedService implements FeedService{
+public class ServerFeedService {
 
     private final ServerFeedRepository serverFeedRepository;
-    private final UserRepository userRepository;
-    private final ItemRepository itemRepository;
+    private final CategoryRepository categoryRepository;
 
     @Transactional
     @CachePut(value = "clientFeedCaching", key = "#feedId")
@@ -46,23 +45,35 @@ public class ServerFeedService implements FeedService{
     }
 
     @Transactional
-    public void createFeed(FeedRequestDto feedRequestDto, User feedUser) throws Exception {
+    public void createFeed(ServerFeedRequestDto feedRequestDto, User feedUser) throws Exception {
 
-            Item requestItem = itemRepository.findById(feedRequestDto.getItemId()).get();
+        Category requestCategory = categoryRepository.findById(feedRequestDto.getCategoryId()).get();
+
+        double requestComissionFee = feedRequestDto.getRentalFee() * 0.05;
 
             ServerFeed feed = ServerFeed.builder()
                     .writer(feedUser)
                     .title(feedRequestDto.getTitle())
-                    .body(feedRequestDto.getBody())
-                    .item(requestItem)
+                    .content(feedRequestDto.getContent())
+                    .category(requestCategory)
+                    .startDate(feedRequestDto.getStartDate())
+                    .endDate(feedRequestDto.getEndDate())
+                    .duration(feedRequestDto.getDuration())
+                    .image(feedRequestDto.getImage())
+                    .rentalFee(feedRequestDto.getRentalFee())
+                    .deposit(feedRequestDto.getDeposit())
+                    .commissionFee(requestComissionFee)
                     .build();
+
             serverFeedRepository.save(feed);
 
     }
 
     @Async
     public Future<List<ServerFeed>> readAllFeed(){
-        return new AsyncResult<List<ServerFeed>>(serverFeedRepository.findAll());
+        return new AsyncResult<List<ServerFeed>>(
+                serverFeedRepository.findAll()
+        );
     }
 
     @Async
@@ -75,22 +86,30 @@ public class ServerFeedService implements FeedService{
         }
     }
 
-    public Feed patchFeed(Long feedId, FeedRequestDto requestDto){
-        final Optional<ServerFeed> serverFeed= serverFeedRepository.findById(feedId);
-        if(serverFeed.isPresent()){
-            if(requestDto.getTitle()!=null){
-                serverFeed.get().setTitle(requestDto.getTitle());
-            }
-            if(requestDto.getBody()!=null){
-                serverFeed.get().setBody(requestDto.getBody());
-            }
-            if(requestDto.getItemId()!=null){
-                Item requestItem = itemRepository.findById(requestDto.getItemId()).get();
-                serverFeed.get().setItem(requestItem);
-            }
-            serverFeedRepository.save(serverFeed.get());
-            return serverFeed.get();
-        }else {
+    public Feed putFeed(Long feedId, ServerFeedRequestDto feedRequestDto){
+        try {
+            ServerFeed feed = serverFeedRepository.findById(feedId).get();
+
+            double requestCommissionFee = feedRequestDto.getRentalFee() * 0.05;
+
+            Category requestCategory = categoryRepository.findById(feedRequestDto.getCategoryId()).get();
+
+            feed.setCategory(requestCategory);
+            feed.setContent(feedRequestDto.getContent());
+            feed.setCommissionFee(requestCommissionFee);
+            feed.setDeposit(feedRequestDto.getDeposit());
+            feed.setDuration(feedRequestDto.getDuration());
+            feed.setStartDate(feedRequestDto.getStartDate());
+            feed.setEndDate(feedRequestDto.getEndDate());
+            feed.setTitle(feedRequestDto.getTitle());
+            feed.setImage(feedRequestDto.getImage());
+            feed.setRentalFee(feedRequestDto.getRentalFee());
+
+            serverFeedRepository.save(feed);
+
+            return feed;
+
+        }catch(NoSuchElementException e){
             throw new DataNotFoundException();
         }
     }
@@ -102,5 +121,20 @@ public class ServerFeedService implements FeedService{
         }else{
             throw new DataNotFoundException();
         }
+    }
+
+    public List<ServerFeed> getFeedOrderByCmd (String cmd){
+        List<ServerFeed> serverFeedList = new ArrayList<ServerFeed>();
+        switch (cmd) {
+//            case "price":
+//                serverFeedList = serverFeedRepository.findAllOrderByPrice();
+            case "recent":
+                serverFeedList = serverFeedRepository.findAllOrderByCreatedAt();
+            case "able":
+                serverFeedList = serverFeedRepository.getFeedOrderByStatus(Status.STATUS_POSSIBLE);
+            case "unable":
+                serverFeedList = serverFeedRepository.getFeedOrderByStatus(Status.STATUS_FINISHED);
+        }
+        return serverFeedList;
     }
 }

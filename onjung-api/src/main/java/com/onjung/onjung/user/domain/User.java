@@ -2,15 +2,17 @@ package com.onjung.onjung.user.domain;
 
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
+import com.onjung.onjung.review.domain.Review;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.ToString;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -44,8 +46,20 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="writer_id")
     private List<ServerFeed> serverFeedList = new ArrayList<>();
-
+    
     @Column(length = 20, nullable = true)
+    // 작성한 리뷰 목록
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="sender_id")
+    private List<Review> sentReviewList = new ArrayList<>();
+
+    // 받은 리뷰 목록
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="receiver_id")
+    private List<Review> receievedReviewList = new ArrayList<>();
+
+
+    @Column(length = 20, nullable = false)
     private String email;
 
 //    Social Login 에서 받아오는 문자열값
@@ -53,7 +67,8 @@ public class User {
     private String uuid;
 
 //    주소 Table에서 입력한 후 받아오는 값, 이후 수정 필요
-//    @NotNull
+    @NotNull
+    @Column(name = "location_id")
     private String locationId;
 
     @CreationTimestamp
@@ -113,6 +128,28 @@ public class User {
     @CreationTimestamp
     @Column(name = "last_logined")
     private LocalDateTime lastLogined;
+
+    @ColumnDefault("0")
+    private float rate;
+
+    @ColumnDefault("0")
+    @Column(name = "rate_sum")
+    private float rateSum;
+
+    @ColumnDefault("0")
+    @Column(name = "review_cnt")
+    private int reviewCnt;
+
+    // 찜한 client 피드 아이디 목록
+    @Column(name = "client_feed_like")
+    private String clientFeedLike;
+
+    // 찜한 server 피드 아이디 목록
+    @Column(name = "server_feed_like")
+    private String serverFeedLike;
+
+    @Column(name = "student_card")
+    private String studentCard;
 
     @PrePersist
     public void setDefault(){
@@ -175,5 +212,13 @@ public class User {
 
     public String getPassword(){
         return this.password;
+    }
+
+    public void updateRate(float rate){
+
+        this.rateSum = this.rateSum + rate;
+        this.reviewCnt = this.reviewCnt + 1;
+        this.rate = this.rateSum / this.reviewCnt;
+
     }
 }
