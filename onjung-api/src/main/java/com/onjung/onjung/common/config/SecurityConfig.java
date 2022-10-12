@@ -8,6 +8,7 @@ import com.onjung.onjung.exception.UnauthorizedException;
 import com.onjung.onjung.common.auth.application.TokenProvider;
 import com.onjung.onjung.user.repository.UserRepository;
 import com.onjung.onjung.user.service.UserSecurityService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +31,8 @@ import javax.naming.AuthenticationException;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig{
+
+public class SecurityConfig {
 
     private final UserSecurityService userSecurityService;
     private final TokenProvider tokenProvider;

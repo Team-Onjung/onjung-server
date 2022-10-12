@@ -13,6 +13,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     Optional<User> findByUsername(String username);
 
+    Optional<User> findByEmail(String email);
     @Query("select a from User a join fetch a.clientFeedList")
     List<User> findAllUsers();
     
