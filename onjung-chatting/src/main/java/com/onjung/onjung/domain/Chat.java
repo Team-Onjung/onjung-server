@@ -1,7 +1,6 @@
 package com.onjung.onjung.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mysql.cj.protocol.ColumnDefinition;
 import com.onjung.onjung.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +24,11 @@ public class Chat {
     @ManyToOne(fetch= FetchType.LAZY, optional=false)
     @JoinColumn(name = "sender_id")
     private User sender;
+
+    @JsonIgnore
+    @ManyToOne(fetch= FetchType.LAZY, optional=false)
+    @JoinColumn(name = "receiver_id")
+    private User receiver;
 
     @JsonIgnore
     @ManyToOne(fetch= FetchType.LAZY, optional=false)
