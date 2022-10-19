@@ -1,22 +1,21 @@
 package com.onjung.onjung.feed.service;
 
 import com.onjung.onjung.exception.DataNotFoundException;
-import com.onjung.onjung.feed.domain.Category;
-import com.onjung.onjung.feed.domain.Feed;
-import com.onjung.onjung.feed.domain.ServerFeed;
-import com.onjung.onjung.feed.domain.Status;
+import com.onjung.onjung.feed.domain.*;
 import com.onjung.onjung.feed.dto.ServerFeedRequestDto;
 import com.onjung.onjung.feed.repository.ServerFeedRepository;
 import com.onjung.onjung.item.repository.CategoryRepository;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -123,5 +122,20 @@ public class ServerFeedService {
         }else{
             throw new DataNotFoundException();
         }
+    }
+
+    public List<ServerFeed> getFeedOrderByCmd (String cmd){
+        List<ServerFeed> serverFeedList = new ArrayList<ServerFeed>();
+        switch (cmd) {
+//            case "price":
+//                serverFeedList = serverFeedRepository.findAllOrderByPrice();
+            case "recent":
+                serverFeedList = serverFeedRepository.findAllOrderByCreatedAt();
+            case "able":
+                serverFeedList = serverFeedRepository.getFeedOrderByStatus(Status.STATUS_POSSIBLE);
+            case "unable":
+                serverFeedList = serverFeedRepository.getFeedOrderByStatus(Status.STATUS_FINISHED);
+        }
+        return serverFeedList;
     }
 }

@@ -24,14 +24,14 @@ import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/client")
+@RequestMapping("/client/feed")
 public class ClientFeedController{
 
     private final ClientFeedService feedService;
     private final ClientFeedRepository feedRepository;
     private final UserRepository userRepository;
 
-    @PostMapping("/feed")
+    @PostMapping("")
     public ResponseEntity createFeed(@RequestBody @Valid ClientFeedRequestDto requestDto, BindingResult result) throws Exception{
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -55,24 +55,24 @@ public class ClientFeedController{
         }
     }
 
-    @GetMapping("/feed")
+    @GetMapping("")
     public List<ClientFeed> readAllFeed() throws ExecutionException, InterruptedException, TimeoutException {
         return feedService.readAllFeed().get(200L, TimeUnit.MILLISECONDS);
     }
 
-    @PostMapping("/feed/{feedId}")
-    public ResponseEntity lendFeed(@PathVariable("feedId") Long feedId) throws DataNotFoundException, Exception{
+    @PostMapping("{feedId}")
+    public ResponseEntity lendFeed(@PathVariable("feedId") Long feedId) throws Exception{
             feedService.lendFeed(feedId);
             return ResponseEntity.status(HttpStatus.OK).body("lending is succeed");
     }
 
-    @GetMapping("/feed/{feedId}")
+    @GetMapping("{feedId}")
     public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) throws ExecutionException, TimeoutException, InterruptedException {
             ClientFeed feed = feedService.readFeed(feedId).get(200L, TimeUnit.MILLISECONDS);
             return ResponseEntity.status(HttpStatus.OK).body(feed);
     }
 
-    @PatchMapping("/feed/{feedId}")
+    @PatchMapping("{feedId}")
     public ResponseEntity updateFeed(@PathVariable("feedId") Long feedId, @RequestBody @Valid ClientFeedRequestDto requestDto, BindingResult result) throws DataNotFoundException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -95,7 +95,7 @@ public class ClientFeedController{
         }
     }
 
-    @DeleteMapping("/feed/{feedId}")
+    @DeleteMapping("{feedId}")
     public ResponseEntity deleteFeed (@PathVariable("feedId") Long feedId) throws DataNotFoundException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -111,5 +111,11 @@ public class ClientFeedController{
         }else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you need to login");
         }
+    }
+
+    @GetMapping("filter/")
+    public ResponseEntity readFeedOrdered (@RequestParam("cmd") String cmd){
+        List<ClientFeed> feedOrderByCmd = feedService.getFeedOrderByCmd(cmd);
+        return ResponseEntity.status(HttpStatus.OK).body(feedOrderByCmd);
     }
 }
