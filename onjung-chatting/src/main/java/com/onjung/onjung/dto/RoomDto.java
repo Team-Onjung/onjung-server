@@ -9,7 +9,6 @@ public class RoomDto {
 
     User starter;
 
-    // client 인지 server 인지 저장
     String feedType;
     Long feedId;
 

@@ -8,7 +8,9 @@ import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.feed.repository.ServerFeedRepository;
-import com.onjung.onjung.repository.RoomService;
+import com.onjung.onjung.repository.RoomRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -16,7 +18,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 
 public class ChatController {
 
-    private RoomService roomService;
+    private RoomRepository roomService;
 
     private ServerFeedRepository serverFeedRepository;
 
@@ -33,25 +35,9 @@ public class ChatController {
                 .build();
     }
 
-    public Room createRoom(RoomDto roomDto){
-
-        String feedType =  roomDto.getFeedType();
-
-        if (feedType == "server"){
-            ServerFeed serverFeed = serverFeedRepository.findById(roomDto.getFeedId()).get();
-            return Room.builder()
-                    .serverFeed(serverFeed)
-                    .starter(roomDto.getStarter())
-                    .build();
-
-        }else{
-            ClientFeed clientFeed = clientFeedRepository.findById(roomDto.getFeedId()).get();
-            return Room.builder()
-                    .clientFeed(clientFeed)
-                    .starter(roomDto.getStarter())
-                    .build();
-        }
-
+    public ResponseEntity createRoom(RoomDto roomDto){
+        createRoom(roomDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("채팅방이 생성되었습니다.");
     }
 
 }
