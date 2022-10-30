@@ -57,7 +57,7 @@ public class ClientFeedController{
 
     @GetMapping("")
     public List<ClientFeed> readAllFeed() throws ExecutionException, InterruptedException, TimeoutException {
-        return feedService.readAllFeed().get(200L, TimeUnit.MILLISECONDS);
+        return feedService.readAllFeed().get();
     }
   
     @PostMapping("{feedId}")

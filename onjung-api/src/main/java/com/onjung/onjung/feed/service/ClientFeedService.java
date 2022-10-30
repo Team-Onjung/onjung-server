@@ -133,9 +133,9 @@ public class ClientFeedService {
             case "recent":
                 clientFeedList = clientFeedRepository.findAllOrderByCreatedAt();
             case "able":
-                clientFeedList = clientFeedRepository.getFeedOrderByStatus(Status.STATUS_POSSIBLE);
+                clientFeedList = clientFeedRepository.getFeedOrderByStatus(ItemStatus.STATUS_POSSIBLE);
             case "unable":
-                clientFeedList = clientFeedRepository.getFeedOrderByStatus(Status.STATUS_FINISHED);
+                clientFeedList = clientFeedRepository.getFeedOrderByStatus(ItemStatus.STATUS_FINISHED);
         }
         return clientFeedList;
     }

@@ -78,7 +78,7 @@ public class ItemService {
 
             Category requestCategory = categoryRepository.findById(itemDto.getCategoryId()).get();
 
-            item.setCategory(requestCategory);
+//            item.setCategory(requestCategory);
             item.setDeposit(itemDto.getDeposit());
             item.setDuration(itemDto.getDuration());
             item.setStartDate(item.getStartDate());

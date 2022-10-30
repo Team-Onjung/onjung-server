@@ -134,9 +134,9 @@ public class ServerFeedService {
             case "recent":
                 serverFeedList = serverFeedRepository.findAllOrderByCreatedAt();
             case "able":
-                serverFeedList = serverFeedRepository.getFeedOrderByStatus(Status.STATUS_POSSIBLE);
+                serverFeedList = serverFeedRepository.getFeedOrderByStatus(ItemStatus.STATUS_POSSIBLE);
             case "unable":
-                serverFeedList = serverFeedRepository.getFeedOrderByStatus(Status.STATUS_FINISHED);
+                serverFeedList = serverFeedRepository.getFeedOrderByStatus(ItemStatus.STATUS_FINISHED);
         }
         return serverFeedList;
     }

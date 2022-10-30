@@ -42,7 +42,7 @@ public class ClientFeed implements Feed{
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name="CATEGORY_ID")
+    @JoinColumn(name="CATEGORY_ID", nullable = true)
     private Category category;
 
     @NotNull

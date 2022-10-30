@@ -239,8 +239,9 @@ public class User {
         this.phone=phone;
     }
 
-    public void setProfileImg(String profileImg){
-        this.profileImg=profileImg;
+    public void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
+    }
 
     public void updateRate(float rate){
 
