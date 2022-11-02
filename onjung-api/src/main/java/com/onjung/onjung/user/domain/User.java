@@ -6,12 +6,12 @@ import com.onjung.onjung.feed.domain.UserRentalFeed;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -121,6 +121,28 @@ public class User {
     @CreationTimestamp
     @Column(name = "last_logined")
     private LocalDateTime lastLogined;
+
+    @ColumnDefault("0")
+    private float rate;
+
+    @ColumnDefault("0")
+    @Column(name = "rate_sum")
+    private float rateSum;
+
+    @ColumnDefault("0")
+    @Column(name = "review_cnt")
+    private int reviewCnt;
+
+    // 찜한 client 피드 아이디 목록
+    @Column(name = "client_feed_like")
+    private String clientFeedLike;
+
+    // 찜한 server 피드 아이디 목록
+    @Column(name = "server_feed_like")
+    private String serverFeedLike;
+
+    @Column(name = "student_card")
+    private String studentCard;
 
     @PrePersist
     public void setDefault(){
