@@ -112,4 +112,10 @@ public class ClientFeedController{
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you need to login");
         }
     }
+
+    @GetMapping("/feed/{cmd}")
+    public ResponseEntity readFeedOrdered (@PathVariable("cmd") String cmd){
+        List<ClientFeed> feedOrderByCmd = feedService.getFeedOrderByCmd(cmd);
+        return ResponseEntity.status(HttpStatus.OK).body(feedOrderByCmd);
+    }
 }

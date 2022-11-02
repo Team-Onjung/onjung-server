@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 public interface FeedController {
-
+    
 //    ResponseEntity createFeed(FeedRequestDto requestDto, BindingResult result) throws Exception;
 //
 //    List readAllFeed() throws ExecutionException, InterruptedException, TimeoutException;
