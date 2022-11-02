@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 public class PrincipalDetails implements UserDetails {
+
     private User user;
 
     public PrincipalDetails(User user){
