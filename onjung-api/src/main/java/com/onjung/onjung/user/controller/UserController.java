@@ -50,7 +50,7 @@ public class UserController {
 //
 //        return ResponseEntity.status(HttpStatus.OK).body(userDetails);
 //    }
-
+//
 //    private void authenticate(String username, String password) throws Exception {
 //        try {
 //            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
