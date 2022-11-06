@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class S3Controller {
     private final S3Uploader s3Uploader;
 
-    @PostMapping("/{feefId}/image")
+    @PostMapping("/feed/image")
     public void updateFeedImage(@RequestParam("images") MultipartFile multipartFile) {
         try {
             System.out.println("multipartFile = " + multipartFile);

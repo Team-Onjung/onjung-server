@@ -59,7 +59,7 @@ public class ClientFeedController{
     public List<ClientFeed> readAllFeed() throws ExecutionException, InterruptedException, TimeoutException {
         return feedService.readAllFeed().get();
     }
-  
+
     @PostMapping("{feedId}")
     public ResponseEntity lendFeed(@PathVariable("feedId") Long feedId) throws Exception{
             feedService.lendFeed(feedId);

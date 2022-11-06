@@ -5,9 +5,10 @@ import com.onjung.onjung.common.auth.PrincipalDetails;
 import com.onjung.onjung.common.auth.application.TokenProvider;
 import com.onjung.onjung.exception.UnauthorizedException;
 import com.onjung.onjung.user.domain.User;
+
 import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
 
 /**
  * login 요청(post) 시 username(email), password 전송하면
@@ -66,18 +68,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
-        System.out.println("!!!!!");
-        System.out.println(authResult);
-        System.out.println(authResult.getPrincipal().toString());
+
+//        System.out.println(authResult);
+//        System.out.println(authResult.getPrincipal().toString());
         Optional<User> finduser= userRepository.findByUsername(authResult.getPrincipal().toString());
-        System.out.println("finduser = " + finduser.isPresent());
+//        System.out.println("finduser = " + finduser.isPresent());
 
 //        PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
         PrincipalDetails principalDetails = new PrincipalDetails(finduser.get());
 
         User user = principalDetails.getUser();
 
-        System.out.println("user = " + user);
+//        System.out.println("user = " + user);
 
         String jwtToken = tokenProvider.createToken(user);
         Map<String, String> json = new HashMap<>();
@@ -85,8 +87,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         json.put("token", jwtToken);
         String jsonResponse = mapper.writeValueAsString(ResponseEntity.status(200).body(json));
 
-        System.out.println("jsonResponse = " + jsonResponse);
-
+//        System.out.println("jsonResponse = " + jsonResponse);
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(jsonResponse);

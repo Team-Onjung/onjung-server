@@ -56,7 +56,6 @@ public class UserService {
 
             validateDuplicateMember(user);
             userRepository.save(user);
-            System.out.println("user = " + userRepository.findByUsername("username").isPresent());
         }catch (Exception e){
             e.printStackTrace();
         }
