@@ -56,11 +56,6 @@ public class UserService {
 
             validateDuplicateMember(user);
             userRepository.save(user);
-<<<<<<< HEAD
-            System.out.println("user = " + userRepository.findByUsername("username").isPresent());
-=======
-            System.out.println("user = " + userRepository.findByUsername("username").get().getUsername());
->>>>>>> 8b9b719 (heroku env)
         }catch (Exception e){
             e.printStackTrace();
         }
