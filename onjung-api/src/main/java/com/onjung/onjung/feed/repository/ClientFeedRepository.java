@@ -1,7 +1,7 @@
 package com.onjung.onjung.feed.repository;
 
 import com.onjung.onjung.feed.domain.ClientFeed;
-import com.onjung.onjung.feed.domain.Status;
+import com.onjung.onjung.feed.domain.status.ItemStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,9 +19,10 @@ public interface ClientFeedRepository extends JpaRepository<ClientFeed,Long> {
 
     @Query("SELECT f from ClientFeed f order by f.pricePerDay desc ")
     List<ClientFeed> findAllOrderByPrice();
+
     @Query("SELECT f from ClientFeed f order by  f.createdAt")
     List<ClientFeed> findAllOrderByCreatedAt();
 
     @Query("SELECT f from ClientFeed f where f.status = :status order by  f.createdAt")
-    List<ClientFeed> getFeedOrderByStatus(@Param("status") Status status);
+    List<ClientFeed> getFeedOrderByStatus(@Param("status") ItemStatus status);
 }

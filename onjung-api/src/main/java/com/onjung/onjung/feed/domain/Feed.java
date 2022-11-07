@@ -2,6 +2,7 @@ package com.onjung.onjung.feed.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.onjung.onjung.feed.domain.status.ItemStatus;
 import com.onjung.onjung.user.domain.User;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -58,22 +59,21 @@ public abstract class Feed {
     //    수령 안됨(가능) / 수령 대기(예약) / 수령 중(배송 중)/ 수령 취소/ 수령 완료
     @NotNull
     @Enumerated(EnumType.STRING)
-    protected Status status;
+    protected ItemStatus status;
 
     @ColumnDefault("0")
     @Column(name="access_cnt", nullable = false)
     private Long accessCnt;
 
-
     abstract void addFeedbackCnt();
 
-    abstract void changeStatus(Status status);
+    public abstract void changeStatus(ItemStatus status);
 
     public void addAccessCnt(){
         this.accessCnt += 1;
     }
 
     public boolean isPossible() {
-        return getStatus() == Status.STATUS_POSSIBLE;
+        return getStatus() == ItemStatus.STATUS_POSSIBLE;
     }
 }

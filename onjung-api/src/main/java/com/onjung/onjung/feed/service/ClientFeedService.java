@@ -4,7 +4,7 @@ import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.exception.UnauthorizedException;
 import com.onjung.onjung.feed.domain.Category;
 import com.onjung.onjung.feed.domain.ClientFeed;
-import com.onjung.onjung.feed.domain.Status;
+import com.onjung.onjung.feed.domain.status.ItemStatus;
 import com.onjung.onjung.feed.dto.ClientFeedRequestDto;
 import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.item.repository.CategoryRepository;
@@ -33,7 +33,7 @@ public class ClientFeedService {
         if (clientFeed.isPossible()) {
             User feedWriter = clientFeed.getWriter();
             feedWriter.earnPoints();
-            clientFeed.changeStatus(Status.STATUS_RESERVED);
+            clientFeed.changeStatus(ItemStatus.STATUS_RESERVED);
             clientFeedRepository.save(clientFeed);
         } else {
             throw new DataNotFoundException();
@@ -96,10 +96,10 @@ public class ClientFeedService {
                 clientFeedList = clientFeedRepository.findAllOrderByCreatedAt();
                 break;
             case "able":
-                clientFeedList = clientFeedRepository.getFeedOrderByStatus(Status.STATUS_POSSIBLE);
+                clientFeedList = clientFeedRepository.getFeedOrderByStatus(ItemStatus.STATUS_POSSIBLE);
                 break;
             case "unable":
-                clientFeedList = clientFeedRepository.getFeedOrderByStatus(Status.STATUS_FINISHED);
+                clientFeedList = clientFeedRepository.getFeedOrderByStatus(ItemStatus.STATUS_FINISHED);
                 break;
         }
         return clientFeedList;

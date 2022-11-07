@@ -51,7 +51,7 @@ public class Item implements Serializable {
     private int rentalFee;
     
     @ManyToOne
-    @JoinColumn(name="CATEGORY_ID")
+    @JoinColumn(name="CATEGORY_ID", nullable = true)
     private Category category;
 
 //    @JsonIgnore

@@ -2,6 +2,7 @@ package com.onjung.onjung.feed.service;
 
 import com.onjung.onjung.exception.DataNotFoundException;
 import com.onjung.onjung.feed.domain.*;
+import com.onjung.onjung.feed.domain.status.ItemStatus;
 import com.onjung.onjung.feed.dto.ServerFeedRequestDto;
 import com.onjung.onjung.feed.repository.ServerFeedRepository;
 import com.onjung.onjung.item.repository.CategoryRepository;
@@ -25,7 +26,7 @@ public class ServerFeedService {
         ServerFeed serverFeed = serverFeedRepository.findById(feedId).orElseThrow(DataNotFoundException::new);
         if(serverFeed.isPossible()){
             serverFeed.getWriter().discountPoints();
-            serverFeed.changeStatus(Status.STATUS_RESERVED);
+            serverFeed.changeStatus(ItemStatus.STATUS_RESERVED);
             serverFeedRepository.save(serverFeed);
         } else {
             throw new DataNotFoundException();
@@ -74,10 +75,10 @@ public class ServerFeedService {
                 serverFeedList = serverFeedRepository.findAllOrderByCreatedAt();
                 break;
             case "able":
-                serverFeedList = serverFeedRepository.getFeedOrderByStatus(Status.STATUS_POSSIBLE);
+                serverFeedList = serverFeedRepository.getFeedOrderByStatus(ItemStatus.STATUS_POSSIBLE);
                 break;
             case "unable":
-                serverFeedList = serverFeedRepository.getFeedOrderByStatus(Status.STATUS_FINISHED);
+                serverFeedList = serverFeedRepository.getFeedOrderByStatus(ItemStatus.STATUS_FINISHED);
                 break;
             default:
                 throw new DataNotFoundException(cmd + "는 잘못된 cmd 입니다. (가능한 cmd = {price : 가격, recent : 최신순, able : 대여가능 상태, unable : 대여 불가능 상태} )");

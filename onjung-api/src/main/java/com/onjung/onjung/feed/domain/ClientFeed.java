@@ -1,9 +1,13 @@
 package com.onjung.onjung.feed.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.onjung.onjung.feed.domain.status.ItemStatus;
 import com.onjung.onjung.user.domain.User;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -31,7 +35,7 @@ public class ClientFeed extends Feed {
 
     @PrePersist
     public void setDefault(){
-        this.status = this.status == null ? Status.STATUS_POSSIBLE : this.status;
+        this.status = this.status == null ? ItemStatus.STATUS_POSSIBLE : this.status;
     }
 
     @Builder
@@ -62,7 +66,7 @@ public class ClientFeed extends Feed {
         this.feedbackCnt += 1;
     }
 
-    public void changeStatus(Status status){
+    public void changeStatus(ItemStatus status){
         this.status=status;
     }
 }
