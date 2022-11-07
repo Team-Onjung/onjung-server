@@ -1,5 +1,7 @@
 package com.onjung.onjung.user.domain;
 
+//import com.onjung.onjung.domain.Chat;
+import com.onjung.onjung.domain.Room;
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
 import com.onjung.onjung.feed.domain.UserRentalFeed;
@@ -42,6 +44,14 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="writer_id")
     private List<ClientFeed> clientFeedList = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="sender_id")
+    private List<Room> sendChatRoomList = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="receiver_id")
+    private List<Room> receiveChatRoomList = new ArrayList<>();
 
     @BatchSize(size = 100)
     @OneToMany(cascade = CascadeType.ALL)

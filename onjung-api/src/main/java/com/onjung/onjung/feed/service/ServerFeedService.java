@@ -85,6 +85,7 @@ public class ServerFeedService {
         if (feed.isPresent()){
             return new AsyncResult<ServerFeed>(feed.get());
         }else {
+            System.out.println("여기!");
             throw new DataNotFoundException();
         }
     }

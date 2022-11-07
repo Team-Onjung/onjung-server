@@ -65,7 +65,7 @@ subprojects {
 	}
 }
 
-project(':onjung-core') {
+project(':onjung-api') {
 	// 공통 코드
 
 	bootJar { enabled = false } // core 은 bootJar 로 패키징 할 필요 없음
@@ -75,12 +75,12 @@ project(':onjung-core') {
 	}
 }
 
-project(':onjung-api') {
+project(':onjung-core') {
 	bootJar { enabled = true }
 	jar { enabled = false }
 
 	dependencies {
-		implementation project(':onjung-core') // 컴파일 시 onjung-core project 로딩
+		implementation project(':onjung-api') // 컴파일 시 onjung-api project 로딩
 		implementation 'org.springframework.boot:spring-boot-starter-security'
 		testImplementation 'org.springframework.security:spring-security-test'
 
@@ -97,7 +97,7 @@ project(':onjung-batch') {
 	jar { enabled = false }
 
 	dependencies {
-		implementation project(':onjung-core') // 컴파일 시 onjung-core project 로딩
+		implementation project(':onjung-api') // 컴파일 시 onjung-api project 로딩
 
 		implementation 'org.springframework.boot:spring-boot-starter-batch'
 		testImplementation 'org.springframework.batch:spring-batch-test'
@@ -112,6 +112,6 @@ project(':onjung-chatting') {
 	jar { enabled = false }
 
 	dependencies {
-		implementation project(':onjung-core') // 컴파일 시 onjung-core project 로딩
+		implementation project(':onjung-api') // 컴파일 시 onjung-api project 로딩
 	}
 }
