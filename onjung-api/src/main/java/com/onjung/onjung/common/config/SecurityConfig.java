@@ -83,10 +83,4 @@ public class SecurityConfig{
     public AuthenticationManager authenticationManager() throws Exception {
         return new DummyAuthenticationManager();
     }
-
-
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//        return authenticationConfiguration.getAuthenticationManager();
-//    }
 }
