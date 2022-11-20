@@ -15,6 +15,10 @@ public class UnauthorizedException extends CustomException implements Authentica
         super(ErrorCode.UNAUTHORIZED);
     }
 
+    public UnauthorizedException(String message) {
+        super(ErrorCode.UNAUTHORIZED, message);
+    }
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED);

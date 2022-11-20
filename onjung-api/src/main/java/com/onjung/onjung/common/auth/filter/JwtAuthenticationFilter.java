@@ -5,10 +5,10 @@ import com.onjung.onjung.common.auth.PrincipalDetails;
 import com.onjung.onjung.common.auth.application.TokenProvider;
 import com.onjung.onjung.exception.UnauthorizedException;
 import com.onjung.onjung.user.domain.User;
-
+import com.onjung.onjung.user.dto.LoginVo;
 import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,7 +17,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -25,11 +24,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-
 /**
  * login 요청(post) 시 username(email), password 전송하면
  * UsernamePasswordAuthenticationFilter 동작
  */
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -48,13 +47,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         try {
             ObjectMapper om = new ObjectMapper();
-            User user = om.readValue(request.getInputStream(), User.class);
+            LoginVo user = om.readValue(request.getInputStream(), LoginVo.class);
 
             UsernamePasswordAuthenticationToken authenticationToken
-                    = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-
+                    = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
             return authenticationManager.authenticate(authenticationToken);
         } catch (IOException e) {
+            log.info("로그인 시도에 실패했습니다. " + e);
             e.printStackTrace();
         }
         return null;
@@ -67,27 +66,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-                                            Authentication authResult) throws IOException, ServletException {
+                                            Authentication authResult) throws IOException {
+        Optional<User> user = userRepository.findByEmail(authResult.getPrincipal().toString());
+        PrincipalDetails principalDetails = new PrincipalDetails(user.get());
 
-//        System.out.println(authResult);
-//        System.out.println(authResult.getPrincipal().toString());
-        Optional<User> finduser= userRepository.findByUsername(authResult.getPrincipal().toString());
-//        System.out.println("finduser = " + finduser.isPresent());
+        User userEntity = principalDetails.getUser();
+        log.info("[user : " + userEntity.getEmail() + "] 로그인 성공 후 토큰 반환됨.");
 
-//        PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
-        PrincipalDetails principalDetails = new PrincipalDetails(finduser.get());
-
-        User user = principalDetails.getUser();
-
-//        System.out.println("user = " + user);
-
-        String jwtToken = tokenProvider.createToken(user);
+        String jwtToken = tokenProvider.createToken(userEntity);
         Map<String, String> json = new HashMap<>();
         json.put("msg", "정상적으로 토큰이 발급되었습니다");
         json.put("token", jwtToken);
         String jsonResponse = mapper.writeValueAsString(ResponseEntity.status(200).body(json));
 
-//        System.out.println("jsonResponse = " + jsonResponse);
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(jsonResponse);

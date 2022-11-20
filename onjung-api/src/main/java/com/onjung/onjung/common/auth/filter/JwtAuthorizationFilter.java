@@ -1,10 +1,8 @@
 package com.onjung.onjung.common.auth.filter;
 
 import com.onjung.onjung.common.auth.application.TokenProvider;
-import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -14,13 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class JwtAuthorizationFilter  extends BasicAuthenticationFilter {
+@Slf4j
+public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
-    private TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, TokenProvider tokenProvider) {
         super(authenticationManager);
+        this.tokenProvider = tokenProvider;
     }
 
     @Override

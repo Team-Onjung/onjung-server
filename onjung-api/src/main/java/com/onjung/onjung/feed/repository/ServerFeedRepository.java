@@ -19,8 +19,9 @@ public interface ServerFeedRepository extends JpaRepository<ServerFeed,Long>{
 
     Optional<ServerFeed> findByTitle(String title);
 
-    //    List<ServerFeed> findAllOrderByPrice();
-    @Query("SELECT f from ServerFeed f order by  f.createdAt")
+    @Query("SELECT f from ServerFeed f order by f.rentalFee")
+    List<ServerFeed> findAllOrderByRentalFee();
+    @Query("SELECT f from ServerFeed f order by f.createdAt")
     List<ServerFeed> findAllOrderByCreatedAt();
 
     @Query("SELECT f from ServerFeed f where f.status = :status order by  f.createdAt")

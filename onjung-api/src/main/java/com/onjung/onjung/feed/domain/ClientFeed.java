@@ -8,69 +8,27 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @Table(name = "ClientFeed")
 @DynamicInsert
 @NoArgsConstructor
-public class ClientFeed implements Feed{
-
+public class ClientFeed extends Feed {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @JsonIgnore
-    @ManyToOne(fetch=FetchType.LAZY, optional=false)
-    @JoinColumn(name = "writer_id")
-    private User writer;
-
-    private int price;
-
-    @CreationTimestamp
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @ManyToOne
-    @JoinColumn(name="CATEGORY_ID", nullable = true)
-    private Category category;
-
-    @NotNull
-    @Column(name="start_date", nullable = false)
-    private LocalDateTime startDate;
-
-    @NotNull
-    @Column(name="end_date", nullable = false)
-    private LocalDateTime endDate;
-
-    @NotNull
-    private LocalDateTime duration;
-
-    @Column(length = 32, nullable = false)
-    private String title;
-
-    @NotNull
-    private String content;
-
     @NotNull
     @ColumnDefault("0")
     @Column(name="feedback_cnt", nullable = false)
     private int feedbackCnt;
 
-    //    수령 안됨(가능) / 수령 대기(예약) / 수령 중(배송 중)/ 수령 취소/ 수령 완료
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private ItemStatus status;
+    @ColumnDefault("0")
+    private Long pricePerDay;
 
     @NotNull
     private String image;
@@ -87,9 +45,10 @@ public class ClientFeed implements Feed{
             String title,
             LocalDateTime startDate,
             LocalDateTime endDate,
-            LocalDateTime duration,
+            Long duration,
             String content,
-            String image
+            String image,
+            Long pricePerDay
     )
     {
         this.writer = writer;
@@ -100,11 +59,11 @@ public class ClientFeed implements Feed{
         this.duration = duration;
         this.content = content;
         this.image = image;
+        this.pricePerDay = pricePerDay;
     }
 
     public void addFeedbackCnt(){
-
-        this.feedbackCnt+=1;
+        this.feedbackCnt += 1;
     }
 
     public void changeStatus(ItemStatus status){

@@ -2,13 +2,10 @@ package com.onjung.onjung.user.dto;
 
 import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
-import com.onjung.onjung.user.domain.User;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 @Getter

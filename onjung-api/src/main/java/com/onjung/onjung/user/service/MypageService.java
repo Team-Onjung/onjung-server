@@ -8,7 +8,6 @@ import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.feed.repository.ServerFeedRepository;
 import com.onjung.onjung.feed.repository.UserRentalFeedRepository;
 import com.onjung.onjung.user.domain.User;
-
 import com.onjung.onjung.user.dto.MypageResponseDto;
 import com.onjung.onjung.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,19 +28,19 @@ public class MypageService {
 
     public MypageResponseDto mypageData(){
         //유저를 받아왔다고 가정-> 이후 교체 필요
-        User testUser=userRepository.findById(1L).get();
-        User user=testUser;
+        User testUser = userRepository.findById(1L).get();
+        User user = testUser;
 
-        MypageResponseDto responseDto=new MypageResponseDto();
+        MypageResponseDto responseDto = new MypageResponseDto();
 
         //내가 빌려준 피드
-        ArrayList<ServerFeed> myLentFeeds=new ArrayList<ServerFeed>();
+        ArrayList<ServerFeed> myLentFeeds = new ArrayList<ServerFeed>();
         //내가 빌린 피드
-        ArrayList<ServerFeed> myBorrowedFeeds=new ArrayList<ServerFeed>();
+        ArrayList<ServerFeed> myBorrowedFeeds = new ArrayList<ServerFeed>();
         //내가 요청한 피드
-        ArrayList<ClientFeed> myRequesteddFeeds=new ArrayList<ClientFeed>();
+        ArrayList<ClientFeed> myRequesteddFeeds = new ArrayList<ClientFeed>();
 
-        List<Optional<UserRentalFeed>> snapshots=userRentalFeedRepository.findSnapshots(user);
+        List<Optional<UserRentalFeed>> snapshots = userRentalFeedRepository.findSnapshots(user);
         for (Optional<UserRentalFeed> snapshot : snapshots) {
             if (snapshot.isPresent()){
                 UserRentalFeed s=snapshot.get();
