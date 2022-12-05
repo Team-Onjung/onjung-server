@@ -9,15 +9,15 @@ import com.onjung.onjung.feed.repository.ClientFeedRepository;
 import com.onjung.onjung.feed.service.ClientFeedService;
 import com.onjung.onjung.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/client/feed")
@@ -28,9 +28,14 @@ public class ClientFeedController{
 
     @PostMapping("")
     public ResponseEntity createFeed(@RequestBody @Valid ClientFeedRequestDto requestDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        User user = principalDetails.getUser();
-        feedService.createFeed(requestDto, user);
-        return ResponseEntity.status(HttpStatus.OK).body("ok");
+        try {
+            User user = principalDetails.getUser();
+            feedService.createFeed(requestDto, user);
+            return ResponseEntity.status(HttpStatus.OK).body("ok");
+        } catch (NullPointerException e) {
+            log.error(e.getMessage());
+            throw new UnauthorizedException();
+        }
     }
 
     @GetMapping("")
@@ -39,13 +44,13 @@ public class ClientFeedController{
     }
 
     @PostMapping("{feedId}")
-    public ResponseEntity lendFeed(@PathVariable("feedId") Long feedId) throws Exception{
+    public ResponseEntity lendFeed(@PathVariable("feedId") Long feedId) {
         feedService.lendFeed(feedId);
         return ResponseEntity.status(HttpStatus.OK).body("대여에 성공했습니다.");
     }
 
     @GetMapping("{feedId}")
-    public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) throws ExecutionException, TimeoutException, InterruptedException {
+    public ResponseEntity readFeed(@PathVariable("feedId") Long feedId) {
             ClientFeed feed = feedService.readFeed(feedId);
             return ResponseEntity.status(HttpStatus.OK).body(feed);
     }

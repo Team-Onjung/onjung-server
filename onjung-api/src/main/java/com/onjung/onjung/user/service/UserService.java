@@ -37,10 +37,9 @@ public class UserService {
     }
 
     @Transactional
-    public void saveUser(UserRequestDto userRequestDto){
-
+    public User saveUser(UserRequestDto userRequestDto){
         try {
-            User user= User.builder()
+            User user = User.builder()
                     .username(userRequestDto.getUsername())
                     .password(passwordEncoder.encode(userRequestDto.getPassword()))
                     .email(userRequestDto.getEmail())
@@ -56,8 +55,10 @@ public class UserService {
 
             validateDuplicateMember(user);
             userRepository.save(user);
+            return user;
         }catch (Exception e){
             e.printStackTrace();
+            throw e;
         }
     }
 

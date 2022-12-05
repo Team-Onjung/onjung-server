@@ -1,5 +1,7 @@
 package com.onjung.onjung.user.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onjung.onjung.common.auth.application.TokenProvider;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.dto.AdditionalInfoRequestDTO;
 import com.onjung.onjung.user.dto.UserRequestDto;
@@ -15,49 +17,33 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping(value =  "/user", produces = "application/json; charset=utf8")
 public class UserController {
-
-//    @Autowired
-//    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserSecurityService userSecurityService;
-
     private final UserService userService;
+    private final TokenProvider tokenProvider;
 
     @PostMapping("/signup")
-    public void signup(@Valid @RequestBody UserRequestDto requestDto) {
-
+    public ResponseEntity<String> signup(@Valid @RequestBody UserRequestDto requestDto) {
         try {
-            userService.saveUser(requestDto);
+            User user = userService.saveUser(requestDto);
+            ObjectMapper mapper = new ObjectMapper();
+            String jwtToken = tokenProvider.createToken(user);
+            Map<String, String> json = new HashMap<>();
+            json.put("msg", "정상적으로 토큰이 발급되었습니다");
+            json.put("token", jwtToken);
+            String jsonResponse = mapper.writeValueAsString(ResponseEntity.status(200).body(json));
+            return ResponseEntity.status(HttpStatus.OK).body(jsonResponse);
         }catch (Exception e){
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
-//    @PostMapping(value = "/login")
-//    public ResponseEntity<?> createAuthenticationToken(@RequestBody UserRequestDto requestDto) throws Exception {
-//
-//        final UserDetails userDetails = userSecurityService
-//                .loadUserByUsername(requestDto.getUsername());
-//
-//        authenticate(requestDto.getUsername(), requestDto.getPassword());
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(userDetails);
-//    }
-//
-//    private void authenticate(String username, String password) throws Exception {
-//        try {
-//            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
 
     @PostMapping("/etc")
     public void collectAdditionalInfo(@RequestBody AdditionalInfoRequestDTO additionalInfoRequestDTO){
