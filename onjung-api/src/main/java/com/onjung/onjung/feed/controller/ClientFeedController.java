@@ -74,8 +74,20 @@ public class ClientFeedController{
     }
 
     @GetMapping("filter/")
-    public ResponseEntity readFeedOrdered (@RequestParam("cmd") String cmd) {
+    public ResponseEntity<List<ClientFeed>> readFeedOrdered (@RequestParam("cmd") String cmd) {
         List<ClientFeed> feedOrderByCmd = feedService.getFeedOrderByCmd(cmd);
         return ResponseEntity.status(HttpStatus.OK).body(feedOrderByCmd);
+    }
+
+    /**
+     * 카테고리별 피드 필터링
+     */
+    @GetMapping("category/{categoryId}")
+    public ResponseEntity likeFeed (@PathVariable("categoryId") Long categoryId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails.isEnabled()) {
+            feedService.getFeedByCategory(categoryId);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        };
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 사용자입니다.");
     }
 }

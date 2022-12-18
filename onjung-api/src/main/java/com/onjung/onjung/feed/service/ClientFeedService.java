@@ -104,4 +104,8 @@ public class ClientFeedService {
         }
         return clientFeedList;
     }
+
+    public List<ClientFeed> getFeedByCategory (Long categoryId) {
+        return clientFeedRepository.findAllByCategory(categoryId);
+    }
 }

@@ -25,4 +25,7 @@ public interface ClientFeedRepository extends JpaRepository<ClientFeed,Long> {
 
     @Query("SELECT f from ClientFeed f where f.status = :status order by  f.createdAt")
     List<ClientFeed> getFeedOrderByStatus(@Param("status") ItemStatus status);
+
+    @Query("SELECT f from ClientFeed f where f.category = :categoryId ")
+    List<ClientFeed> findAllByCategory(@Param("categoryId") Long categoryId);
 }
