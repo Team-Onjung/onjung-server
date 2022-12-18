@@ -3,6 +3,7 @@ package com.onjung.onjung.common.auth.application;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.onjung.onjung.common.auth.PrincipalDetails;
+import com.onjung.onjung.exception.UnauthorizedException;
 import com.onjung.onjung.user.domain.User;
 import com.onjung.onjung.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class TokenProvider {
 
         if(email != null) {
             Optional<User> userEntity = userRepository.findByEmail(email);
-            try{
+            if (userEntity.isPresent()) {
                 User user = userEntity.get();
                 PrincipalDetails principalDetails = new PrincipalDetails(user);
                 Authentication authentication =
@@ -64,7 +65,8 @@ public class TokenProvider {
                                 principalDetails.getAuthorities());
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            } catch (NullPointerException e) {
+            } else {
+                throw new UnauthorizedException();
             }
         }
     }

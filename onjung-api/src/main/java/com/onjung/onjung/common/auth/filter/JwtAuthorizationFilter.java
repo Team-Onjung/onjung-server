@@ -1,7 +1,6 @@
 package com.onjung.onjung.common.auth.filter;
 
 import com.onjung.onjung.common.auth.application.TokenProvider;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
