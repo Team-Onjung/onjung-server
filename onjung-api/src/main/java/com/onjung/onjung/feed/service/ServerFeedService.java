@@ -85,4 +85,8 @@ public class ServerFeedService {
         }
         return serverFeedList;
     }
+
+    public List<ClientFeed> getFeedByCategory (Long categoryId) {
+        return serverFeedRepository.findAllByCategory(categoryId);
+    }
 }

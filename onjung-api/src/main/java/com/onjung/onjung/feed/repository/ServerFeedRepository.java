@@ -1,5 +1,6 @@
 package com.onjung.onjung.feed.repository;
 
+import com.onjung.onjung.feed.domain.ClientFeed;
 import com.onjung.onjung.feed.domain.ServerFeed;
 
 import com.onjung.onjung.feed.domain.status.ItemStatus;
@@ -26,4 +27,7 @@ public interface ServerFeedRepository extends JpaRepository<ServerFeed,Long>{
 
     @Query("SELECT f from ServerFeed f where f.status = :status order by  f.createdAt")
     List<ServerFeed> getFeedOrderByStatus(@Param("status") ItemStatus status);
+
+    @Query("SELECT f from ServerFeed f where f.category = :categoryId ")
+    List<ClientFeed> findAllByCategory(Long categoryId);
 }
